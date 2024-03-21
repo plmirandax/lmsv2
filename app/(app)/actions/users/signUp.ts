@@ -44,7 +44,7 @@ export const signUp = async (name: string, email: string, password: string,
     })
 
     await sendEmail({
-        from: 'Admin <admin@modernwebdevelopment.net>',
+        from: 'RD Realty Development Corporation <no-reply@rdhardware.net>',
         to: [email],
         subject: 'Verify your email address',
         react: VerifyEmailEmailTemplate({email, emailVerificationToken}) as React.ReactElement
