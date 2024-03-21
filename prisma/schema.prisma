@@ -1,0 +1,153 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  Administrator
+  SysUser
+  Tenant
+}
+
+model User {
+  id            String       @id @default(cuid()) @unique
+  name          String
+  email         String       @unique
+  password      String
+  role          Role @default(Administrator)
+  image         String?   @db.Text
+  resetPasswordToken String? @unique
+  resetPasswordTokenExpiry DateTime?
+  properties    Properties[]
+  tenants       Tenant[]
+  billing       Billing[]
+  createdAt     DateTime @default(now())
+  createdBy     String?
+  updatedBy     String?
+  deletedAt     DateTime?
+}
+
+model Tenant {
+  id            String       @id @default(cuid())
+  name          String
+  email         String       @unique
+  password      String?
+  contactNo     String?
+  address       String?
+  tenantImage         String?
+  UserId        String?
+  TenantResetPasswordToken String? @unique
+  TenantResetPasswordTokenExpiry DateTime?
+  emailVerified Boolean @default(false)
+  emailVerificationToken String? @unique
+  User          User?      @relation(fields: [UserId], references: [id])
+  spaces        Spaces[]
+  billing       Billing[]
+  createdAt     DateTime @default(now())
+  updatedBy     String?
+  deletedAt     DateTime?
+  accounts      Account[]    @relation("TenantAccounts")
+}
+model Properties {
+  id            String       @id @default(cuid())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime?     @updatedAt
+  propertyCode  String       @unique
+  propertyName  String?
+  regOwnerName  String?
+  titleNo       String?
+  landBuilding  String?
+  lotNo         String?
+  location      String?
+  cityRegion    String?
+  classification String?
+  leasableArea  String?
+  orate         String?
+  taxDecNo      String?
+  propertyImage String?     @db.Text
+  sysUserId     String
+  sysUser       User      @relation(fields: [sysUserId], references: [id])
+  spaces        Spaces[]
+  createdBy     String?
+  updatedBy     String?
+  deletedAt     DateTime?
+}
+
+model Spaces {
+  id            String       @id @default(cuid())
+  spaceName     String
+  oStatus       String
+  leasePeriod   String?
+  expiryDate    DateTime?
+  gFloorArea    Float?
+  mezFloor      Float?
+  secFloor      Float?
+  thirdFloor    Float?
+  roofTop       Float?
+  totalArea     Float
+  monthlyRent   Float
+  spacesImage        String?     @db.Text
+  tenantId      String
+  tenant        Tenant       @relation(fields: [tenantId], references: [id])
+  propertyId    String
+  property      Properties   @relation(fields: [propertyId], references: [id])
+  createdAt DateTime @default(now())
+  createdBy     String
+  updatedBy     String
+  deletedAt     DateTime?
+}
+
+model Billing {
+  id            String       @id @default(cuid())
+  billName      String
+  billAmount    String
+  dueDate       DateTime
+  sysUserId     String
+  sysUser       User      @relation(fields: [sysUserId], references: [id])
+  tenantId      String
+  tenant        Tenant       @relation(fields: [tenantId], references: [id])
+  attachmentId  String?      @unique
+  attachment    Attachment? @relation(fields: [attachmentId], references: [id])
+  createdAt DateTime @default(now())
+  createdBy     String
+  updatedBy     String
+  deletedAt     DateTime?
+}
+
+model Attachment {
+  id        String @id @default(cuid())
+  filePath  String
+  fileName  String
+  fileType  String
+  fileSize  Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  billing   Billing?
+}
+
+model Account {
+  id        String @id @default(cuid())
+  compoundId String @unique
+  tenantId  String
+  providerType String
+  providerId   String
+  providerAccountId String
+  refreshToken String?
+  accessToken  String?
+  accessTokenExpires DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tenant    Tenant @relation("TenantAccounts", fields: [tenantId], references: [id])
+  updatedBy String?
+  deletedAt DateTime?
+}
