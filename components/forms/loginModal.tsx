@@ -100,7 +100,11 @@ export function LoginModal() {
                />
             </div>
             <div className="flex items-center space-x-2 rounded">
-            <Link href='/reset-password'>Forgot your password?</Link>
+            <p className="mt-2 text-sm text-center text-gray-700 mb-2">
+                <Link href="/reset-password" className="text-indigo-500 hover:underline">
+                    Forgot your password?
+                 </Link>
+              </p>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
@@ -126,10 +130,12 @@ export function LoginModal() {
           </div>
 
           <p className="mt-2 text-xs text-center text-gray-700 mb-2">
-            {" "}
-            Dont have an account? <Link className="text-indigo-500 hover:underline" href="/register" />{" "}
-            <span className=" text-blue-600 hover:underline">Sign up</span>
-          </p>
+    {" "}
+    Dont have an account? 
+    <Link href="/signup" className="text-indigo-500 hover:underline">
+        Sign up
+    </Link>{" "}
+</p>
 
       </DialogContent>
     </Dialog>

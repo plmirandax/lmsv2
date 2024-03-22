@@ -121,7 +121,7 @@ export default function LoginAccount() {
             </div>
             <div className="relative flex justify-center text-xs uppercase rounded">
               <span className="bg-background px-2 text-muted-foreground">
-                Or continue with
+                Dont have an account?
               </span>
             </div>
           </div>
@@ -130,7 +130,7 @@ export default function LoginAccount() {
             callbackUrl: `${window.location.origin}/dashboard` })} 
             variant="outline" className="w-full py-2 px-4 text-sm">
               <GoogleIcon className="mr-2 h-6 w-6" />
-            Google
+            Sign U
             </Button>
           </div>
 

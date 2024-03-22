@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { renderEmailHtml } from '@/utils/renderEmailHtml';
 
 interface VerifyEmailEmailTemplateProps {
     email: string;

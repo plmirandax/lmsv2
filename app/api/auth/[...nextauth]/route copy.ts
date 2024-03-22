@@ -36,72 +36,44 @@ const authOptions: NextAuthOptions = {
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials.password) {
-            return null
+          return null
         }
-    
+
         const user = await prisma.user.findUnique({
-            where: {
-                email: credentials.email
-            },
-            select: {
-                id: true,
-                email: true,
-                name: true,
-                role: true, // Make sure to select the role
-                createdAt: true,
-                password: true,
-            }
-        })
-    
-        const tenant = await prisma.tenant.findUnique({
           where: {
-              email: credentials.email
+            email: credentials.email
           },
           select: {
-              id: true,
-              email: true,
-              name: true,
-              createdAt: true,
-              passwordHash: true,
-              emailVerified: true, // Make sure to select the emailVerified field
+            id: true,
+            email: true,
+            name: true,
+            role: true, // Make sure to select the role
+            createdAt: true,
+            password: true,
           }
-      })
-      
-      if (tenant && !tenant.emailVerified) {
-          throw new Error('Email not verified')
-      }
-    
-        if (!user && !tenant) {
-            return null
+        })
+
+        if (!user) {
+          return null
         }
-    
-        const isPasswordValid = user
-            ? await compare(credentials.password, user.password)
-            : tenant && tenant.passwordHash ? await compare(credentials.password, tenant.passwordHash) : false;
-    
+
+        const isPasswordValid = await compare(credentials.password, user.password)
+
         if (!isPasswordValid) {
-            return null
+          return null
         }
-    
+
         const accessToken = randomBytes(40).toString('hex');
-    
-        return user
-            ? {
-                id: user.id,
-                email: user.email,
-                name: user.name,
-                role: user.role, // Return the role
-                createdAt: user.createdAt,
-                accessToken
-            }
-            : tenant ? {
-                id: tenant.id,
-                email: tenant.email,
-                name: tenant.name,
-                createdAt: tenant.createdAt,
-                accessToken
-            } : null;
-    }
+
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          role: user.role, // Return the role
+          createdAt: user.createdAt,
+          accessToken
+        }
+      }
     })
   ],
   callbacks: {

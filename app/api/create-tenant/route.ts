@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma"
 const schema = Joi.object({
     name: Joi.string().required(),
     email: Joi.string().required(),
-    password: Joi.string().required(),
+    passwordHash: Joi.string().required(),
     contactNo: Joi.string().required(),
     address: Joi.string().required(),
     UserId: Joi.string().required()
@@ -14,13 +14,13 @@ const schema = Joi.object({
 
 export async function POST(req: Request) {
     try {
-        const {name, email, password,
+        const {name, email, passwordHash,
         contactNo, address, UserId
         } = await req.json()
 
         // Validate the request body against the schema
         const { error } = schema.validate({
-            name, email, password, contactNo, address, UserId
+            name, email, passwordHash, contactNo, address, UserId
         });
 
         if (error) {
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
             data: {
                 name,
                 email,
-                password,
+                passwordHash,
                 contactNo,
                 address,
                 UserId
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
             tenants: {
                 name: tenants.name,
                 email: tenants.email,
-                password: tenants.password,
+                password: tenants.passwordHash,
                 contactNo: tenants.contactNo,
                 address: tenants.address,
                 UserId: tenants.UserId, 
