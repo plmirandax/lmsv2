@@ -8,24 +8,17 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
-import { labels } from "../data/data"
 import { tenantsSchema } from "../data/schema"
 
-interface DataTableRowActionsProps<TData> {
+interface DataTableRowActionsProps<TData extends { contactNo?: string; address?: string }> {
   row: Row<TData & { createdAt: Date; updatedAt: Date | null }>;
 }
 
-export function DataTableRowActions<TData>({
+export function DataTableRowActions<TData extends { contactNo?: string; address?: string }>({
   row,
 }: DataTableRowActionsProps<TData>) {
   // Convert createdAt and updatedAt fields to Date objects
@@ -33,7 +26,8 @@ export function DataTableRowActions<TData>({
     ...row.original,
     createdAt: new Date(row.original.createdAt),
     updatedAt: row.original.updatedAt ? new Date(row.original.updatedAt) : null,
- // provide a default value if image is undefined
+    contactNo: row.original.contactNo || '', // provide a default value if contactNo is undefined or null
+    address: row.original.address || '', // provide a default value if address is undefined or null
   };
 
   const task = tenantsSchema.parse(originalData);

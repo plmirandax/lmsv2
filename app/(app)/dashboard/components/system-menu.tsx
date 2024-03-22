@@ -31,6 +31,13 @@ const components: { title: string; href: string; description: string; icon: JSX.
       icon: <AiOutlineUsergroupAdd />,
   },
   {
+    title: "Spaces 🏢",
+    href: "/spaces",
+    description:
+      "Spaces are the units or rooms in your properties. They can be apartments, offices, or warehouses.",
+      icon: <AiOutlineUsergroupAdd />,
+  },
+  {
     title: "Tenants 👨‍👩‍👧‍👧" ,
     href: "/tenants",
     description:
