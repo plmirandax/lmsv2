@@ -18,6 +18,7 @@ import { useState } from "react"
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation"
 import GoogleIcon from "@/components/ui/GoogleIcon"
+import { EnvelopeOpenIcon } from "@radix-ui/react-icons"
 
 
 
@@ -82,7 +83,7 @@ export default function LoginAccount() {
           </CardHeader>
           <CardContent className="grid gap-4 rounded">
             <div className="grid gap-2 rounded">
-              <Label htmlFor="email">Email</Label>
+              <EnvelopeOpenIcon />Login with Email
               <Input 
               id="email" 
               type="email"

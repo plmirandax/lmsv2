@@ -13,12 +13,14 @@ import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { signIn } from "next-auth/react"
 import { useState } from "react"
+import { EnvelopeOpenIcon, ReloadIcon } from "@radix-ui/react-icons"
 
 export function LoginModal() {
 
     const router = useRouter()
     const [email, setEmail] = useState<string>('')
     const [password, setPassword] = useState<string>('')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
   
     const isEmailValid = (email: string): boolean => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -27,6 +29,7 @@ export function LoginModal() {
   
     const onSubmit = async (e: React.FormEvent) => {
       e.preventDefault()
+      setIsLoading(true) // Start loading animation
       if (!email.trim()) {
         toast.error('Email is required.')
         return
@@ -60,6 +63,8 @@ export function LoginModal() {
       } catch (error: any) {
         console.error("Sign-in error:", error)
         toast.error('An error occurred during sign-in. Please try again.')
+      } finally {
+        setIsLoading(false) // Stop loading animation
       }
     }
     
@@ -100,7 +105,7 @@ export function LoginModal() {
                />
             </div>
             <div className="flex items-center space-x-2 rounded">
-            <p className="mt-2 text-sm text-center text-gray-700 mb-2">
+               <p className="mt-2 text-sm text-center text-gray-700 mb-2">
                 <Link href="/reset-password" className="text-indigo-500 hover:underline">
                     Forgot your password?
                  </Link>
@@ -108,7 +113,10 @@ export function LoginModal() {
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button className="w-full" onClick={onSubmit}>Login</Button>
+          <Button className="w-full" onClick={onSubmit} >
+          {isLoading ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : <EnvelopeOpenIcon className="mr-2 h-4 w-4" />}
+          {isLoading ? 'Signing in..' : 'Login with Email'}
+        </Button>
           </CardFooter>
           <div className="relative mb-2 rounded">
             <div className="absolute inset-0 flex items-center rounded">

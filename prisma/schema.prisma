@@ -56,7 +56,6 @@ model Tenant {
   createdAt     DateTime @default(now())
   updatedBy     String?
   deletedAt     DateTime?
-  accounts      Account[]    @relation("TenantAccounts")
 }
 model Properties {
   id            String       @id @default(cuid())
@@ -133,21 +132,4 @@ model Attachment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   billing   Billing?
-}
-
-model Account {
-  id        String @id @default(cuid())
-  compoundId String @unique
-  tenantId  String
-  providerType String
-  providerId   String
-  providerAccountId String
-  refreshToken String?
-  accessToken  String?
-  accessTokenExpires DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  tenant    Tenant @relation("TenantAccounts", fields: [tenantId], references: [id])
-  updatedBy String?
-  deletedAt DateTime?
 }
