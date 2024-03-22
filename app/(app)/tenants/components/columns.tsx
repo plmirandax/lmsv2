@@ -38,6 +38,12 @@ export const columns: ColumnDef<Tenants>[] = [
     ),
   },
   {
+    accessorKey: "tenantCode",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Tenant Code" />
+    ),
+  },
+  {
     accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
@@ -50,11 +56,12 @@ export const columns: ColumnDef<Tenants>[] = [
     ),
   },
   {
-    accessorKey: "password",
+    accessorKey: "passwordHash",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Password" />
     ),
-  },
+    cell: () => '••••••••'
+},
   {
     accessorKey: "contactNo",
     header: ({ column }) => (
@@ -65,6 +72,12 @@ export const columns: ColumnDef<Tenants>[] = [
     accessorKey: "address",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Address" />
+    ),
+  },
+  {
+    accessorKey: "emailVerified",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Active?" />
     ),
   },
   {

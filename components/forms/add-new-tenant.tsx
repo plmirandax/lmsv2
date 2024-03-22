@@ -16,6 +16,7 @@ import { SelectSeparator } from "../../components/ui/select"
 import { useSession as useNextAuthSession } from 'next-auth/react'
 import React, { useState, useEffect } from 'react';
 import toast from "react-hot-toast"
+import { CheckCircledIcon, EnvelopeOpenIcon, ReloadIcon } from "@radix-ui/react-icons"
 
 
 interface User {
@@ -51,8 +52,6 @@ export function AddNewTenant() {
   const [passwordValid, setPasswordValid] = useState(true);
   const [contactNoValid, setContactNoValid] = useState(true);
   const [addressValid, setAddressValid] = useState(true);
-  const [tenantImageValid, setTenantImageValid] = useState(true);
-  const [UserIdValid, setUserIdValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
 
@@ -135,8 +134,8 @@ export function AddNewTenant() {
         <DialogTrigger asChild>
           <Button variant="outline">Add New Tenant</Button>
         </DialogTrigger>
-        <form onSubmit={handleSubmit}>
-        <DialogContent className="sm:max-w-[400px]">
+        <DialogContent className="sm:max-w-[600px]">
+          <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Tenants Details</DialogTitle>
             <DialogDescription>
@@ -145,7 +144,7 @@ export function AddNewTenant() {
             <SelectSeparator />
           </DialogHeader>
           <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               <div>
                 <Label htmlFor="propertyCode" className="text-right">
                   Tenant Name
@@ -169,6 +168,10 @@ export function AddNewTenant() {
                   Address
                 </Label>
                 <Input id="landBuilding" required value={address} onChange={(e) => setAddress(e.target.value)} className={addressValid ? '' : 'invalid'}/>
+                <Label htmlFor="tenantCode" className="text-right">
+                  Tenant Code
+                </Label>
+                <Input id="propertyCode"/>
               </div> 
             </div>
             <div className="flex flex-col justify-center items-center">
@@ -176,13 +179,14 @@ export function AddNewTenant() {
           </div>
           <DialogFooter>
                 <div className="flex justify-center w-full">
-                <Button onClick={handleSubmit} disabled={isLoading} className="flex justify-center items-center">
-                  {isLoading ? <div className="spinner"></div> : 'Submit'}
-                </Button>
+                <Button className="w-full" type="submit">
+          {isLoading ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircledIcon className="mr-2 h-4 w-4" />}
+          {isLoading ? 'Adding tenant..' : 'Submit'}
+        </Button>
                 </div>
         </DialogFooter>
+          </form>
     </DialogContent>
-    </form>
       </Dialog>
     )
   }

@@ -31,7 +31,7 @@ const Navbar: React.FC = () => {
 
   return (
     
-    <nav className="fixed mx-auto border top-0 left-0 right-0 z-10 bg-white dark:bg-[#0a0918] light:bg-white">
+    <nav className="fixed mx-auto border top-0 left-0 right-0 z-10 bg-white dark:bg-[#070713] light:bg-white">
       <div className="flex container lg:py-4 flex-wrap items-center justify-center mx-auto px-4 py-2">
         <Link
           href={"/"}

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { DataTableViewOptions } from "@/app/(app)/taskmanager/components/data-table-view-options"
 
-import { priorities, statuses } from "../data/data"
+import { statuses } from "../data/data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 import { AddNewTenant } from '../../../../components/forms/add-new-tenant';
 
@@ -33,9 +33,9 @@ export function DataTableToolbar<TData>({
           className="h-8 w-[150px] lg:w-[250px]"
         />
         
-        {table.getColumn("classification") && (
+        {table.getColumn("emailVerified") && (
           <DataTableFacetedFilter
-            column={table.getColumn("classification")}
+            column={table.getColumn("emailVerified")}
             title="Status"
             options={statuses}
           />

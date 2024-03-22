@@ -18,17 +18,23 @@ import { Search } from "@/app/(app)/dashboard/components/search"
 import { ModeToggle } from "@/components/mode-toggle"
 import { UserNav } from "@/app/(app)/dashboard/components/user-nav"
 import { SystemMenu } from "@/app/(app)/dashboard/components/system-menu"
+import { EnvelopeOpenIcon, ReloadIcon } from "@radix-ui/react-icons"
 
 const RegisterTenant = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [contactNo, setContactNo] = useState('')
+  const [address, setAddress] = useState('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true) // Start loading animation
   
     // Input validation
-    if (!email || !password || !name) {
+    if (!email || !password || !name || !contactNo || !address) {
       toast.error('All fields are required.');
       return;
     }
@@ -49,7 +55,9 @@ const RegisterTenant = () => {
         body: JSON.stringify({
           email,
           password,
-          name
+          name,
+          contactNo,
+          address
         })
       })
   
@@ -65,9 +73,13 @@ const RegisterTenant = () => {
       setEmail('');
       setPassword('');
       setName('');
+      setContactNo('');
+      setAddress('');
     } catch (error: any) {
       // Registration failed
       toast.error(error.message || 'An error occurred while processing your request');
+    } finally {
+      setIsLoading(false) // Stop loading animation
     }
   }
 
@@ -105,8 +117,6 @@ const RegisterTenant = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               />
-            </div>
-            <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input id="email"
                type="email"
@@ -114,6 +124,24 @@ const RegisterTenant = () => {
                  placeholder=""
                  value={email}
                  onChange={(e) => setEmail(e.target.value)}
+                 />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="contactNo">Contact No.</Label>
+              <Input id="contactNo"
+               type="text"
+                required
+                 placeholder=""
+                 value={contactNo}
+                 onChange={(e) => setContactNo(e.target.value)}
+                 />
+                 <Label htmlFor="address">Address</Label>
+              <Input id="address"
+               type="text"
+                required
+                 placeholder=""
+                 value={address}
+                 onChange={(e) => setAddress(e.target.value)}
                  />
             </div>
             <div className="grid gap-2">
@@ -131,11 +159,14 @@ const RegisterTenant = () => {
             </span>
              </CardContent>
            <CardFooter className="flex flex-col">
-             <Button className="w-full" onClick={onSubmit}>Sign Up</Button>
+           <Button className="w-full" onClick={onSubmit} >
+          {isLoading ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : <EnvelopeOpenIcon className="mr-2 h-4 w-4" />}
+          {isLoading ? 'Signing up' : 'Sign up with Email'}
+        </Button>
            </CardFooter>
           <div className="relative mb-2">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+             
             </div>
             <div className="relative flex justify-center text-xs uppercase">
             </div>

@@ -19,7 +19,7 @@ const ResetPasswordPage = async ({ searchParams }: ResetPasswordPageProps) => {
             return (
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                     Invalid token.
-                    <Link href="/signin"><a>Go back to sign in</a></Link> {/* add a link to go back to the sign in page */}
+                    <Link href="/signin"><a>Go back to sign in</a></Link>
                 </div>
             );
         }
@@ -27,14 +27,14 @@ const ResetPasswordPage = async ({ searchParams }: ResetPasswordPageProps) => {
         return (
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                 <ChangePwdModal resetPasswordToken={searchParams.token as string} />
-                <Link href="/login"><a>Go back to sign in</a></Link> {/* add a link to go back to the sign in page */}
+                <Link href="/"><p>Go back to sign in</p></Link>
             </div>
         );
     } else {
         return (
             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
                 <ResetPwdModal />
-                <Link href="/login"><a>Go back to sign in</a></Link> {/* add a link to go back to the sign in page */}
+                <Link href="/"><p>Go back to sign in</p></Link>
             </div>
         );
     }

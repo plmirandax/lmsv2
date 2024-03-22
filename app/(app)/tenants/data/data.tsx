@@ -22,6 +22,17 @@ export const labels = [
 
 export const statuses = [
   {
+    value: "true",
+    label: "Active",
+  },
+  {
+    value: "false",
+    label: "In-active",
+  },
+]
+
+export const classification = [
+  {
     value: "backlog",
     label: "Real Properties",
     icon: CheckCircledIcon,

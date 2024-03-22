@@ -9,27 +9,15 @@ const schema = Joi.object({
     passwordHash: Joi.string().required(),
     contactNo: Joi.string().required(),
     address: Joi.string().required(),
+    tenantImage: Joi.string().optional(),
     UserId: Joi.string().required()
 });
 
 export async function POST(req: Request) {
     try {
         const {name, email, passwordHash,
-        contactNo, address, UserId
+        contactNo, address, UserId, tenantImage
         } = await req.json()
-
-        // Validate the request body against the schema
-        const { error } = schema.validate({
-            name, email, passwordHash, contactNo, address, UserId
-        });
-
-        if (error) {
-            return NextResponse.json ({
-                status: 'error',
-                message: 'Invalid request body. Please provide all required fields.'
-            }, { status: 400});
-            
-        }
       
         const tenants = await prisma.tenant.create({
             data: {
@@ -38,6 +26,7 @@ export async function POST(req: Request) {
                 passwordHash,
                 contactNo,
                 address,
+                tenantImage,
                 UserId
             }
         })
@@ -49,6 +38,7 @@ export async function POST(req: Request) {
                 password: tenants.passwordHash,
                 contactNo: tenants.contactNo,
                 address: tenants.address,
+                tenantImage: tenants.tenantImage,
                 UserId: tenants.UserId, 
                  // Include sysUserId in the response
             }

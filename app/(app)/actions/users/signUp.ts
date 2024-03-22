@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import { sendEmail } from '../email/sendEmail'
-import { VerifyEmailEmailTemplate } from '../../email-templates/verify-email-email'
+import { VerifyEmailEmailTemplate } from '../../../../providers/email-templates/verify-email-email'
 
 
 export const signUp = async (name: string, email: string, password: string,

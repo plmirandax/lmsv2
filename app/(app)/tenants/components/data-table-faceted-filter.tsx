@@ -37,7 +37,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
   const facets = column?.getFacetedUniqueValues()
-  const selectedValues = new Set(column?.getFilterValue() as string[])
+  const [selectedValues, setSelectedValues] = React.useState(new Set(column?.getFilterValue() as string[]))
 
   return (
     <Popover>
@@ -86,23 +86,25 @@ export function DataTableFacetedFilter<TData, TValue>({
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
             <CommandGroup>
-              {options.map((option) => {
-                const isSelected = selectedValues.has(option.value)
-                return (
-                  <CommandItem
-                    key={option.value}
-                    onSelect={() => {
-                      if (isSelected) {
-                        selectedValues.delete(option.value)
-                      } else {
-                        selectedValues.add(option.value)
-                      }
-                      const filterValues = Array.from(selectedValues)
-                      column?.setFilterValue(
-                        filterValues.length ? filterValues : undefined
-                      )
-                    }}
-                  >
+  {options.map((option) => {
+    const isSelected = selectedValues.has(option.value)
+    return (
+      <CommandItem
+        key={option.value}
+        onSelect={() => {
+          const newSelectedValues = new Set(selectedValues);
+          if (isSelected) {
+            newSelectedValues.delete(option.value)
+          } else {
+            newSelectedValues.add(option.value)
+          }
+          setSelectedValues(newSelectedValues);
+          const filterValues = Array.from(newSelectedValues)
+          column?.setFilterValue(
+            filterValues.length ? filterValues : undefined
+          )
+        }}
+      >
                     <div
                       className={cn(
                         "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary",
