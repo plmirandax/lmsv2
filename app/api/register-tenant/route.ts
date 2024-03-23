@@ -1,11 +1,10 @@
 'use server'
 import { hash } from "bcrypt";
 import { NextResponse } from "next/server";
-import { renderAsync } from '@react-email/components'
 import { prisma } from "@/lib/prisma";
 import { sendEmail } from "@/app/(app)/actions/email/sendEmail";
 import crypto from "crypto";
-import { VerifyEmailEmailTemplate } from "@/app/(app)/email-templates/verify-email-email";
+import { VerifyEmailEmailTemplate } from '../../../providers/email-templates/verify-email-email'
 
 export async function POST(req: Request) {
   try {

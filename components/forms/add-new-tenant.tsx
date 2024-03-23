@@ -16,7 +16,7 @@ import { SelectSeparator } from "../../components/ui/select"
 import { useSession as useNextAuthSession } from 'next-auth/react'
 import React, { useState, useEffect } from 'react';
 import toast from "react-hot-toast"
-import { CheckCircledIcon, EnvelopeOpenIcon, ReloadIcon } from "@radix-ui/react-icons"
+import { CheckCircledIcon, ReloadIcon } from "@radix-ui/react-icons"
 
 
 interface User {
