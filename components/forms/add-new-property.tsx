@@ -16,6 +16,7 @@ import { SelectSeparator } from "../../components/ui/select"
 import { useSession as useNextAuthSession } from 'next-auth/react'
 import React, { useState, useEffect } from 'react';
 import toast from "react-hot-toast"
+import { CheckCircledIcon, ReloadIcon } from "@radix-ui/react-icons"
 
 interface User {
   id: string
@@ -104,6 +105,7 @@ export function AddNewProperty() {
           !isclassificationValid || !isleasableAreaCodeValid ||
            !isorateValid || !istaxDecValid) {
             toast.error('All fields are required.');
+            setIsLoading(false);
       return;
     }
     
@@ -158,9 +160,11 @@ export function AddNewProperty() {
   
       // Handle response data...
     } catch (error) {
-      setIsLoading(false);
       toast.error('Property could not be added. Please try again.');
       // Handle error here...
+    }
+    finally {
+      setIsLoading(false);
     }
   };
 
@@ -242,9 +246,10 @@ export function AddNewProperty() {
           </div>
           <DialogFooter>
                 <div className="flex justify-center w-full">
-                <Button onClick={handleSubmit} disabled={isLoading} className="flex justify-center items-center">
-                  {isLoading ? <div className="spinner"></div> : 'Submit'}
-                </Button>
+                <Button className="w-full" onClick={handleSubmit}>
+          {isLoading ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircledIcon className="mr-2 h-4 w-4" />}
+          {isLoading ? 'Adding property..' : 'Submit'}
+        </Button>
                 </div>
         </DialogFooter>
     </DialogContent>
