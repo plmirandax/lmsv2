@@ -70,7 +70,7 @@
     "react-resizable-panels": "^2.0.13",
     "react-type-animation": "^3.2.0",
     "recharts": "^2.12.3",
-    "resend": "^2.0.0",
+    "resend": "^1.1.0",
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.2.2",
     "tailwindcss-animate": "^1.0.7",
