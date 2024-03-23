@@ -32,6 +32,15 @@ export const columns: ColumnDef<Properties>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "propertyImage",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Image" />
+    ),
+    cell: ({ row }) => (
+      <img src={row.original.propertyImage || ''} alt="Property" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+    ),
+  },
+  {
     accessorKey: "propertyCode",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Property Code" />
@@ -68,15 +77,27 @@ export const columns: ColumnDef<Properties>[] = [
     ),
   },
   {
-    accessorKey: "location",
+    accessorKey: "address",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Location" />
+      <DataTableColumnHeader column={column} title="Address" />
     ),
   },
   {
-    accessorKey: "cityRegion",
+    accessorKey: "city",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="City / Region" />
+      <DataTableColumnHeader column={column} title="City" />
+    ),
+  },
+  {
+    accessorKey: "province",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Province" />
+    ),
+  },
+  {
+    accessorKey: "zipCode",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Zip Code" />
     ),
   },
   {

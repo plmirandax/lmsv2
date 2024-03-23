@@ -17,6 +17,28 @@ import { useSession as useNextAuthSession } from 'next-auth/react'
 import React, { useState, useEffect } from 'react';
 import toast from "react-hot-toast"
 import { CheckCircledIcon, ReloadIcon } from "@radix-ui/react-icons"
+import FileUpload from "./file-upload"
+
+import { z } from 'zod';
+
+const PropertySchema = z.object({
+  propertyCode: z.string().nonempty(),
+  propertyName: z.string().nonempty(),
+  regOwnerName: z.string().nonempty(),
+  titleNo: z.string().nonempty(),
+  landBuilding: z.string().nonempty(),
+  lotNo: z.string().nonempty(),
+  address: z.string().nonempty(),
+  province: z.string().nonempty(),
+  city: z.string().nonempty(),
+  zipCode: z.string().nonempty(),
+  classification: z.string().nonempty(),
+  leasableArea: z.number().min(1),
+  orate: z.number().min(1),
+  taxDecNo: z.string().nonempty(),
+  propertyImage: z.string().nonempty(),
+  sysUserId: z.string().nonempty(),
+});
 
 interface User {
   id: string
@@ -29,23 +51,22 @@ interface User {
 export function AddNewProperty() {
 
   const { data: session } = useNextAuthSession()
-
   const userId = (session?.user as User)?.id
-
-  
-  // Create state variables for each input field
   const [propertyCode, setPropertyCode] = useState('');
   const [propertyName, setPropertyName] = useState('');
   const [regOwnerName, setRegOwnerName] = useState('');
   const [titleNo, setTitleNo] = useState('');
   const [landBuilding, setLandBuilding] = useState('');
   const [lotNo, setLotNo] = useState('');
-  const [location, setLocation] = useState('');
-  const [cityRegion, setCityRegion] = useState('');
+  const [address, setAddress] = useState('');
+  const [province, setProvince] = useState('');
+  const [city, setCity] = useState('');
+  const [zipCode, setZipCode] = useState('');
   const [classification, setClassification] = useState('');
-  const [leasableArea, setLeasableArea] = useState('');
-  const [orate, setOrate] = useState('');
+  const [leasableArea, setLeasableArea] = useState<number>(0);
+  const [orate, setOrate] = useState<number>(0);
   const [taxDecNo, setTaxDecNo] = useState('');
+  const [propertyImage, setPropertyImage] = useState('');
   const [sysUserId, setSysUserId] = useState(userId);
 
   useEffect(() => {
@@ -58,122 +79,95 @@ export function AddNewProperty() {
   const [titleNoValid, settitleNoValid] = useState(true);
   const [landBuildingValid, setlandBuildingValid] = useState(true);
   const [lotNoValid, setlotNoValid] = useState(true);
-  const [locationValid, setlocationValid] = useState(true);
-  const [cityRegionValid, setcityRegionValid] = useState(true);
+  const [addressValid, setaddressValid] = useState(true);
+  const [provinceValid, setprovinceValid] = useState(true);
+  const [cityValid, setcityValid] = useState(true);
+  const [zipCodeValid, setzipCodeValid] = useState(true);
   const [classificationValid, setclassificationValid] = useState(true);
   const [leaseAreaValid, setleaseAreaValid] = useState(true);
   const [taxDecNoValid, settaxDecNoValid] = useState(true);
   const [orateValid, setorateValid] = useState(true);
+  const [propertyImageValid, setPropertyImageValid] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault();
+const handleSubmit = async (event: React.FormEvent) => {
+  event.preventDefault();
+  setIsLoading(true);
 
-    setIsLoading(true);
+  const data = {
+    propertyCode,
+    propertyName,
+    regOwnerName,
+    titleNo,
+    landBuilding,
+    lotNo,
+    address,
+    province,
+    city,
+    zipCode,
+    classification,
+    leasableArea,
+    propertyImage,
+    orate,
+    taxDecNo,
+    sysUserId
+  };
 
-    const isPropertyCodeValid = propertyCode.trim() !== '';
-    const isPropertyNameValid = propertyName.trim() !== '';
-    const isregOwnerNameValid = regOwnerName.trim() !== '';
-    const istitleNoValid = titleNo.trim() !== '';
-    const islandBuildingValid = landBuilding.trim() !== '';
-    const islotNoValid = lotNo.trim() !== '';
-    const islocationCodeValid = location.trim() !== '';
-    const iscityRegionValid = cityRegion.trim() !== '';
-    const isclassificationValid = classification.trim() !== '';
-    const isleasableAreaCodeValid = leasableArea.trim() !== '';
-    const isorateValid = orate.trim() !== '';
-    const istaxDecValid = taxDecNo.trim() !== '';
+  const result = PropertySchema.safeParse(data);
 
-    setPropertyCodeValid(isPropertyCodeValid);
-    setPropertyNameValid(isPropertyNameValid);
-    setregOwnerNameValid(isregOwnerNameValid);
-    settitleNoValid(istitleNoValid);
-    setlandBuildingValid(islandBuildingValid);
-    setlotNoValid(islotNoValid);
-    setlocationValid(islocationCodeValid);
-    setcityRegionValid(iscityRegionValid);
-    setclassificationValid(isclassificationValid);
-    setleaseAreaValid(isleasableAreaCodeValid);
-    setorateValid(isorateValid);
-    settaxDecNoValid(istaxDecValid);
+  if (!result.success) {
+    toast.error('All fields are required.');
+    setIsLoading(false);
+    return;
+  }
 
-    if (!isPropertyCodeValid || !isPropertyNameValid ||
-       !isregOwnerNameValid || !istitleNoValid ||
-        !islandBuildingValid || !islotNoValid ||
-         !islocationCodeValid || !iscityRegionValid ||
-          !isclassificationValid || !isleasableAreaCodeValid ||
-           !isorateValid || !istaxDecValid) {
-            toast.error('All fields are required.');
-            setIsLoading(false);
-      return;
+  try {
+    const response = await fetch('/api/create-property', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${(session as { accessToken: string })?.accessToken}`
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      throw new Error(response.statusText);
     }
-    
-    // Create data object with input values
-    const data = {
-      propertyCode,
-      propertyName,
-      regOwnerName,
-      titleNo,
-      landBuilding,
-      lotNo,
-      location,
-      cityRegion,
-      classification,
-      leasableArea,
-      orate,
-      taxDecNo,
-      sysUserId
-    };
-  
-    try {
-      // Send POST request to /api/create-property
-      const response = await fetch('/api/create-property', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(session as { accessToken: string })?.accessToken}` // Include the user's session token in the headers
-        },
-        body: JSON.stringify(data)
-      });
-  
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
 
-      setPropertyCode('');
-      setPropertyName('');
+    setPropertyCode('');
+    setPropertyName('');
     setRegOwnerName('');
     setTitleNo('');
     setLandBuilding('');
     setLotNo('');
-    setLocation('');
-    setCityRegion('');
+    setAddress('');
+    setProvince('');
+    setCity('');
+    setZipCode('');
     setClassification('');
-    setLeasableArea('');
-    setOrate('');
+    setLeasableArea(0);
+    setOrate(0);
     setTaxDecNo('');
+    setPropertyImage('');
     setIsLoading(false);
-  
-      const responseData = await response.json();
-      toast.success('Property added successfully.');
-  
-      // Handle response data...
-    } catch (error) {
-      toast.error('Property could not be added. Please try again.');
-      // Handle error here...
-    }
-    finally {
-      setIsLoading(false);
-    }
-  };
+    const responseData = await response.json();
+    toast.success('Property added successfully.');
+  } catch (error) {
+    toast.error('Property could not be added. Please try again.');
+  }
+  finally {
+    setIsLoading(false);
+  }
+};
 
-    return (
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button variant="outline">Add New Property</Button>
-        </DialogTrigger>
-        <form onSubmit={handleSubmit}>
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Add New Property</Button>
+      </DialogTrigger>
+      <form onSubmit={handleSubmit}>
         <DialogContent className="sm:max-w-[900px]">
           <DialogHeader>
             <DialogTitle>Property Details</DialogTitle>
@@ -199,6 +193,24 @@ export function AddNewProperty() {
                 <Input id="regOwnerName" required value={regOwnerName} onChange={(e) => setRegOwnerName(e.target.value)} className={regOwnerNameValid ? '' : 'invalid'}/>
               </div>
               <div>
+                <Label htmlFor="address" className="text-right">
+                  Address
+                </Label>
+                <Input id="address" required value={address} onChange={(e) => setAddress(e.target.value)} className={addressValid ? '' : 'invalid'}/>
+                <Label htmlFor="city" className="text-right">
+                  City
+                </Label>
+                <Input id="city" required value={city} onChange={(e) => setCity(e.target.value)} className={cityValid ? '' : 'invalid'}/>
+                <Label htmlFor="province" className="text-right">
+                  Province
+                </Label>
+                <Input id="province" required value={province} onChange={(e) => setProvince(e.target.value)} className={provinceValid ? '' : 'invalid'}/>
+                <Label htmlFor="zipCode" className="text-right">
+                  Zip Code
+                </Label>
+                <Input id="zipCode" required value={zipCode} onChange={(e) => setZipCode(e.target.value)} className={zipCodeValid ? '' : 'invalid'}/>
+              </div>
+              <div>
                 <Label htmlFor="titleNo" className="text-right">
                   Title No.
                 </Label>
@@ -211,16 +223,6 @@ export function AddNewProperty() {
                   Lot. No.
                 </Label>
                 <Input id="lotNo" required value={lotNo} onChange={(e) => setLotNo(e.target.value)} className={lotNoValid ? '' : 'invalid'}/>
-              </div>
-              <div>
-                <Label htmlFor="location" className="text-right">
-                  Location
-                </Label>
-                <Input id="location" required value={location} onChange={(e) => setLocation(e.target.value)} className={locationValid ? '' : 'invalid'}/>
-                <Label htmlFor="cityRegion" className="text-right">
-                  City/Region
-                </Label>
-                <Input id="cityRegion" required value={cityRegion} onChange={(e) => setCityRegion(e.target.value)} className={cityRegionValid ? '' : 'invalid'}/>
                 <Label htmlFor="classification" className="text-right">
                   Classification
                 </Label>
@@ -230,15 +232,21 @@ export function AddNewProperty() {
                 <Label htmlFor="leasableArea" className="text-right">
                   Leasable Space
                 </Label>
-                <Input id="leasableArea" required value={leasableArea} onChange={(e) => setLeasableArea(e.target.value)} className={leaseAreaValid ? '' : 'invalid'}/>
+                <Input id="leasableArea" required value={leasableArea} onChange={(e) => setLeasableArea(Number(e.target.value))} className={leaseAreaValid ? '' : 'invalid'}/>
                 <Label htmlFor="orate" className="text-right">
                   Occupancy Rate
                 </Label>
-                <Input id="orate" required value={orate} onChange={(e) => setOrate(e.target.value)} className={orateValid ? '' : 'invalid'}/>
+                <Input id="orate" required value={orate} onChange={(e) => setOrate(Number(e.target.value))} className={orateValid ? '' : 'invalid'}/>
                 <Label htmlFor="taxDecNo" className="text-right">
-                  Tax Declaration
+                  Tax Declaration No.
                 </Label>
                 <Input id="taxDecNo" required value={taxDecNo} onChange={(e) => setTaxDecNo(e.target.value)} className={taxDecNoValid ? '' : 'invalid'}/>
+                <FileUpload 
+                    apiEndpoint="propertyImage"
+                    value={propertyImage} 
+                    onChange={(url) => url && setPropertyImage(url)}
+                    className={propertyImageValid ? '' : 'invalid'}
+                    />
               </div> 
             </div>
             <div className="flex flex-col justify-center items-center">

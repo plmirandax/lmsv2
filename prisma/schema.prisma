@@ -62,23 +62,23 @@ model Properties {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime?     @updatedAt
   propertyCode  String       @unique
-  propertyName  String?
-  regOwnerName  String?
-  titleNo       String?
-  landBuilding  String?
-  lotNo         String?
-  location      String?
-  cityRegion    String?
-  classification String?
-  leasableArea  String?
-  orate         String?
-  taxDecNo      String?
-  propertyImage String?     @db.Text
+  propertyName  String
+  regOwnerName  String
+  titleNo       String
+  landBuilding  String
+  lotNo         String
+  address       String
+  city          String
+  province      String
+  zipCode       String
+  classification String
+  leasableArea  Float
+  orate         Float
+  taxDecNo      String
+  propertyImage String     @db.Text
   sysUserId     String
   sysUser       User      @relation(fields: [sysUserId], references: [id])
   spaces        Spaces[]
-  createdBy     String?
-  updatedBy     String?
   deletedAt     DateTime?
 }
 

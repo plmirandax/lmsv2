@@ -10,27 +10,30 @@ const schema = Joi.object({
     titleNo: Joi.string().required(),
     landBuilding: Joi.string().required(),
     lotNo: Joi.string().required(),
-    location: Joi.string().required(),
-    cityRegion: Joi.string().required(),
+    address: Joi.string().required(),
+    province: Joi.string().required(),
+    city: Joi.string().required(),
+    zipCode: Joi.string().required(),
     classification: Joi.string().required(),
     leasableArea: Joi.number().required(),
     orate: Joi.number().required(),
     taxDecNo: Joi.string().required(),
+    propertyImage: Joi.string().required(),
     sysUserId: Joi.string().required()
 });
 
 export async function POST(req: Request) {
     try {
         const {propertyCode, propertyName, regOwnerName,
-        titleNo, landBuilding, lotNo, location, cityRegion,
-        classification, leasableArea, orate, taxDecNo, sysUserId
+        titleNo, landBuilding, lotNo, address, province, city, zipCode,
+        classification, leasableArea, orate, taxDecNo,propertyImage, sysUserId
         } = await req.json()
 
         // Validate the request body against the schema
         const { error } = schema.validate({
             propertyCode, propertyName, regOwnerName,
-            titleNo, landBuilding, lotNo, location, cityRegion,
-            classification, leasableArea, orate, taxDecNo, sysUserId
+            titleNo, landBuilding, lotNo, address, province, city, zipCode,
+            classification, leasableArea, orate, taxDecNo, propertyImage, sysUserId
         });
 
         if (error) {
@@ -44,8 +47,8 @@ export async function POST(req: Request) {
         const properties = await prisma.properties.create({
             data: {
                 propertyCode, propertyName, regOwnerName,
-                titleNo, landBuilding, lotNo, location, cityRegion,
-                classification, leasableArea, orate, taxDecNo, sysUserId
+                titleNo, landBuilding, lotNo, address, province, city, zipCode,
+                classification, leasableArea, orate, taxDecNo, propertyImage, sysUserId
             }
         })
 
@@ -57,12 +60,15 @@ export async function POST(req: Request) {
                 titleNo: properties.titleNo,
                 landBuilding: properties.landBuilding,
                 lotNo: properties.lotNo,
-                location: properties.location,
-                cityRegion: properties.cityRegion,
+                address: properties.address,
+                province: properties.province,
+                city: properties.city,
+                zipCode: properties.zipCode,
                 classification: properties.classification,
                 leasableArea: properties.leasableArea,
                 orate: properties.orate,
                 taxDecNo: properties.taxDecNo,
+                propertyImage: properties.propertyImage,
                 sysUserId: properties.sysUserId  // Include sysUserId in the response
             }
         })

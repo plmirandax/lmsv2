@@ -1,3 +1,5 @@
+'use client'
+
 import { Metadata } from "next"
 
 import { Button } from "@/components/ui/button"
@@ -16,20 +18,47 @@ import {
 } from "@/components/ui/tabs"
 import { CalendarDateRangePicker } from "@/app/(app)/dashboard/components/date-range-picker"
 import { Overview } from "@/app/(app)/dashboard/components/overview"
-import { RecentSales } from "@/app/(app)/dashboard/components/recent-sales"
+import { ActiveTenants } from "@/app/(app)/dashboard/components/recent-sales"
 import { Search } from "@/app/(app)/dashboard/components/search"
 import TeamSwitcher from "@/app/(app)/dashboard/components/team-switcher"
 import { UserNav } from "@/app/(app)/dashboard/components/user-nav"
 import { ModeToggle } from "@/components/mode-toggle"
 import { TenantAnniv } from "./components/tenant-anniv"
 import { SystemMenu } from "./components/system-menu"
-
-export const metadata: Metadata = {
-  title: "RDRDC Dashboard",
-  description: "Example dashboard app built using the components.",
-}
+import { useEffect, useState } from 'react';
 
 export default function DashboardPage() {
+
+  const [tenants, setTenants] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/fetchtenants', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}), // Send any necessary data in the request body
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch property data');
+        }
+  
+        const responseData = await response.json();
+        setTenants(responseData.tenants); // Set only the properties field to state
+  
+        // Log the properties data to the console
+        console.log(responseData.tenants);
+      } catch (error) {
+        console.error('Error fetching property data:', error);
+      }
+    }
+  
+    fetchData();
+  }, []);// This useEffect will run only once after the initial render
+
   return (
     <>
       <div className="w-full md:h-16">
@@ -188,7 +217,7 @@ export default function DashboardPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <RecentSales />
+                    <ActiveTenants />
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">
@@ -327,7 +356,7 @@ export default function DashboardPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <RecentSales />
+                    <ActiveTenants />
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">
