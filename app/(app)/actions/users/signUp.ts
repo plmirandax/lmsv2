@@ -8,7 +8,7 @@ import { VerifyEmailEmailTemplate } from '../../../../providers/email-templates/
 
 
 export const signUp = async (name: string, email: string, password: string,
-     contactNo: string, address: string, tenantImage: string) => {
+     contactNo: string, address: string, city: string, province: string, zipCode: string, tenantCode: string, tenantImage: string) => {
     const user = await prisma.tenant.findUnique({
         where: {
             email,
@@ -23,11 +23,15 @@ export const signUp = async (name: string, email: string, password: string,
 
     const createdUser = await prisma.tenant.create({
         data: {
+            tenantCode,
             name,
             email,
             passwordHash,
             contactNo,
             address,
+            city,
+            province,
+            zipCode,
             tenantImage
         },
     });
