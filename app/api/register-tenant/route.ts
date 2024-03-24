@@ -8,7 +8,7 @@ import { VerifyEmailEmailTemplate } from '../../../providers/email-templates/ver
 
 export async function POST(req: Request) {
   try {
-    const { email, password, name, contactNo, address, tenantImage } = await req.json();
+    const { tenantCode, province, city, zipCode, email, password, name, contactNo, address, tenantImage } = await req.json();
 
     if (!email || !password || !name) {
       return NextResponse.json({
@@ -30,6 +30,10 @@ export async function POST(req: Request) {
 
     const tenant = await prisma.tenant.create({
       data: {
+        tenantCode,
+        province,
+        city,
+        zipCode,
         email,
         name,
         passwordHash: hashed,

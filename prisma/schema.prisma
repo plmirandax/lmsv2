@@ -43,7 +43,7 @@ model Tenant {
   email         String       @unique
   passwordHash  String?
   contactNo     String
-  tenantCode    String       @unique
+  tenantCode    String?       @unique
   address       String
   city          String
   province      String
