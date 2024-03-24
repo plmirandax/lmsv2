@@ -41,10 +41,14 @@ model Tenant {
   id            String       @id @default(cuid())
   name          String
   email         String       @unique
-  passwordHash      String?
-  contactNo     String?
-  address       String?
-  tenantImage         String?
+  passwordHash  String?
+  contactNo     String
+  tenantCode    String       @unique
+  address       String
+  city          String
+  province      String
+  zipCode       String
+  tenantImage   String?
   UserId        String?
   TenantResetPasswordToken String? @unique
   TenantResetPasswordTokenExpiry DateTime?
@@ -54,7 +58,7 @@ model Tenant {
   spaces        Spaces[]
   billing       Billing[]
   createdAt     DateTime @default(now())
-  updatedBy     String?
+  updatedAt     DateTime?     @updatedAt
   deletedAt     DateTime?
 }
 model Properties {
