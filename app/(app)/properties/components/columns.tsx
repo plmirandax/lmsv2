@@ -5,7 +5,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Properties } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
-import Image from "next/image"
 
 export const columns: ColumnDef<Properties>[] = [
   {
@@ -38,7 +37,7 @@ export const columns: ColumnDef<Properties>[] = [
       <DataTableColumnHeader column={column} title="Image" />
     ),
     cell: ({ row }) => (
-      <Image src={row.original.propertyImage || ''} alt="Property" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+      <img src={row.original.propertyImage || ''} alt="Property" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
     ),
   },
   {

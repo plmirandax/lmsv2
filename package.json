@@ -11,6 +11,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@edgestore/react": "^0.1.6",
+    "@edgestore/server": "^0.1.6",
     "@faker-js/faker": "^8.4.1",
     "@heroicons/react": "^2.1.1",
     "@hookform/resolvers": "^3.3.4",
@@ -66,6 +68,7 @@
     "react-countup": "^6.5.2",
     "react-day-picker": "^8.10.0",
     "react-dom": "^18",
+    "react-dropzone": "^14.2.3",
     "react-email": "^1.10.0",
     "react-hook-form": "^7.51.1",
     "react-hot-toast": "^2.4.1",

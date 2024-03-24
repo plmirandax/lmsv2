@@ -5,6 +5,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "../providers/providers";
 import ToasterProvider from "@/components/ToasterProvider";
 import IdleTimeout from '../components/IdleTimeout' // Import the new component
+import { EdgeStoreProvider } from "@/lib/edgestore";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,7 +31,9 @@ export default function RootLayout({
        <Providers>
         <ToasterProvider />
         <IdleTimeout /> {/* Include the new component */}
+        <EdgeStoreProvider>
         {children}
+        </EdgeStoreProvider>
         </Providers>
         </ThemeProvider>
         </body>

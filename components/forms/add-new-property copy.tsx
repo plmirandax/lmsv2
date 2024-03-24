@@ -18,9 +18,6 @@ import React, { useState, useEffect } from 'react';
 import toast from "react-hot-toast"
 import { CheckCircledIcon, ReloadIcon } from "@radix-ui/react-icons"
 import FileUpload from "./file-upload"
-import "@uploadthing/react/styles.css";
-
-
 
 interface User {
   id: string
@@ -207,119 +204,85 @@ export function AddNewProperty() {
             </DialogDescription>
             <SelectSeparator />
           </DialogHeader>
-          <div className="flex flex-col py-4">
-              <div className="flex">
-                    <div className="w-1/2 pr-4">
-                      <Label htmlFor="propertyCode" className="text-right">
-                            Property Code
-                      </Label>
-                       <Input id="propertyCode" required value={propertyCode} onChange={(e) => setPropertyCode(e.target.value)} className={propertyCodeValid ? '' : 'invalid'}/>
-                    </div>
-                  <div className="w-1/2 pl-4">
-                      <Label htmlFor="propertyName" className="text-right">
-                            Property Name
-                        </Label>
-                      <Input id="propertyName" required value={propertyName} onChange={(e) => setPropertyName(e.target.value)} className={propertyNameValid ? '' : 'invalid'}/>
-                  </div>
-                  <div className="w-1/2 pl-4">
-                      <Label htmlFor="regOwnerName" className="text-right">
-                           Registered Owner
-                      </Label>
-                      <Input id="regOwnerName" required value={regOwnerName} onChange={(e) => setRegOwnerName(e.target.value)} className={regOwnerNameValid ? '' : 'invalid'}/>
-                  </div>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div>
+                <Label htmlFor="propertyCode" className="text-right">
+                  Property Code
+                </Label>
+                <Input id="propertyCode" required value={propertyCode} onChange={(e) => setPropertyCode(e.target.value)} className={propertyCodeValid ? '' : 'invalid'}/>
+                <Label htmlFor="propertyName" className="text-right">
+                  Property Name
+                </Label>
+                <Input id="propertyName" required value={propertyName} onChange={(e) => setPropertyName(e.target.value)} className={propertyNameValid ? '' : 'invalid'}/>
+                <Label htmlFor="regOwnerName" className="text-right">
+                  Registered Owner
+                </Label>
+                <Input id="regOwnerName" required value={regOwnerName} onChange={(e) => setRegOwnerName(e.target.value)} className={regOwnerNameValid ? '' : 'invalid'}/>
               </div>
-              <div className="flex">
-                    <div className="w-1/2 pr-4">
-                    <Label htmlFor="titleNo" className="text-right">
-                        Title No.
-                    </Label>
-                    <Input id="titleNo" required value={titleNo} onChange={(e) => setTitleNo(e.target.value)} className={titleNoValid ? '' : 'invalid'}/>
-                    </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="landBuilding" className="text-right">
+              <div>
+                <Label htmlFor="titleNo" className="text-right">
+                  Title No.
+                </Label>
+                <Input id="titleNo" required value={titleNo} onChange={(e) => setTitleNo(e.target.value)} className={titleNoValid ? '' : 'invalid'}/>
+                <Label htmlFor="landBuilding" className="text-right">
                   Land/Improvement/Building
                 </Label>
                 <Input id="landBuilding" required value={landBuilding} onChange={(e) => setLandBuilding(e.target.value)} className={landBuildingValid ? '' : 'invalid'}/>
-                  </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="lotNo" className="text-right">
+                <Label htmlFor="lotNo" className="text-right">
                   Lot. No.
                 </Label>
                 <Input id="lotNo" required value={lotNo} onChange={(e) => setLotNo(e.target.value)} className={lotNoValid ? '' : 'invalid'}/>
-                  </div>
               </div>
-              <div className="flex">
-                    <div className="w-1/2 pr-4">
-                    <Label htmlFor="address" className="text-right">
+              <div>
+                <Label htmlFor="address" className="text-right">
                   Address
                 </Label>
                 <Input id="address" required value={address} onChange={(e) => setAddress(e.target.value)} className={addressValid ? '' : 'invalid'}/>
-                    </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="city" className="text-right">
+                <Label htmlFor="city" className="text-right">
                   City
                 </Label>
                 <Input id="city" required value={city} onChange={(e) => setCity(e.target.value)} className={cityValid ? '' : 'invalid'}/>
-                  </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="province" className="text-right">
+                <Label htmlFor="province" className="text-right">
                   Province
                 </Label>
                 <Input id="province" required value={province} onChange={(e) => setProvince(e.target.value)} className={provinceValid ? '' : 'invalid'}/>
-                  </div>
               </div>
-              <div className="flex">
-                    <div className="w-1/2 pr-4">
-                    <Label htmlFor="zipCode" className="text-right">
+              <div>
+                <Label htmlFor="zipCode" className="text-right">
                   Zip Code
                 </Label>
                 <Input id="zipCode" required value={zipCode} onChange={(e) => setZipCode(e.target.value)} className={zipCodeValid ? '' : 'invalid'}/>
-                    </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="leasableArea" className="text-right">
+                <Label htmlFor="leasableArea" className="text-right">
                   Leasable Space
                 </Label>
                 <Input id="leasableArea" required value={leasableArea} onChange={(e) => setLeasableArea(Number(e.target.value))} className={leaseAreaValid ? '' : 'invalid'}/>
-                  </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="orate" className="text-right">
+                <Label htmlFor="orate" className="text-right">
                   Occupancy Rate
                 </Label>
                 <Input id="orate" required value={orate} onChange={(e) => setOrate(Number(e.target.value))} className={orateValid ? '' : 'invalid'}/>
-                  </div>
               </div>
-              <div className="flex">
-                    <div className="w-1/2 pr-4">
-                    <Label htmlFor="classification" className="text-right">
+              <div>
+                <Label htmlFor="classification" className="text-right">
                   Classification
                 </Label>
                 <Input id="classification" required value={classification} onChange={(e) => setClassification(e.target.value)} className={classificationValid ? '' : 'invalid'}/>
-                    </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="taxDecNo" className="text-right">
+                <Label htmlFor="taxDecNo" className="text-right">
                   Tax Declaration No.
                 </Label>
                 <Input id="taxDecNo" required value={taxDecNo} onChange={(e) => setTaxDecNo(e.target.value)} className={taxDecNoValid ? '' : 'invalid'}/>
-                  </div>
-                  <div className="w-1/2 pl-4">
-                <div className="w-1/2 pl-4">
-                  <Label htmlFor="taxDecNo" className="text-right">
-                  Status
-                </Label>
-                <Input />
-                  </div>
-                  </div>
-              </div>
-              <div className="flex justify-center w-full">
-              </div>
+              </div> 
+              <FileUpload 
+  apiEndpoint="propertyImage"
+  value={propertyImage} 
+  onChange={(url) => url && setPropertyImage(url)}
+  className={propertyImageValid ? '' : 'invalid'}
+  height="48"
+/>
             </div>
-            <FileUpload 
-                apiEndpoint="propertyImage"
-                value={propertyImage} 
-                onChange={(url) => url && setPropertyImage(url)}
-                className={`${propertyImageValid ? '' : 'invalid'} items-right`}
-                />
-
+            <div className="flex flex-col justify-center items-center">
+            </div>
+          </div>
           <DialogFooter>
                 <div className="flex justify-center w-full">
                 <Button className="w-full" onClick={handleSubmit}>
