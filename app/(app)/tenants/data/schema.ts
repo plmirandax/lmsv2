@@ -4,10 +4,14 @@ import { z } from "zod"
 // IRL, you will have a schema for your data models.
 export const tenantsSchema = z.object({
   id: z.string(),
+  tenantCode: z.string(),
   name: z.string(),
   email: z.string(),
   contactNo: z.string(),
   address: z.string(),
+  city: z.string(),
+  province: z.string(),
+  zipCode: z.string(),
   createdAt: z.date(),
   updatedAt: z.date().nullable(),
   tenantImage: z.string().nullable(),

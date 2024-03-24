@@ -66,12 +66,6 @@ export const columns: ColumnDef<Properties>[] = [
     ),
   },
   {
-    accessorKey: "landBuilding",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Land / Bldg / Improvement" />
-    ),
-  },
-  {
     accessorKey: "lotNo",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Lot No." />

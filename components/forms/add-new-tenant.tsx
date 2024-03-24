@@ -182,56 +182,56 @@ export function AddNewTenant() {
                   <Input id="propertyCode" required value={tenantCode} onChange={(e) => setTenantCode(e.target.value)} className={tenantCodeValid ? '' : 'invalid'}/>
               </div>
               <div className="w-1/2 pr-4">
-                  <Label htmlFor="propertyCode" className="text-right">
+                  <Label htmlFor="propertyName" className="text-right">
                     Tenant Name
                   </Label>
-                  <Input id="propertyCode" required value={name} onChange={(e) => setName(e.target.value)} className={nameValid ? '' : 'invalid'}/>
+                  <Input id="propertyName" required value={name} onChange={(e) => setName(e.target.value)} className={nameValid ? '' : 'invalid'}/>
               </div>
             </div>
             <div className="flex">
               <div className="w-1/2 pr-4">
-                  <Label htmlFor="propertyName" className="text-right">
+                  <Label htmlFor="email" className="text-right">
                     Email
                   </Label>
-                <Input id="propertyName" required value={email} onChange={(e) => setEmail(e.target.value)} className={emailValid ? '' : 'invalid'}/>
+                <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className={emailValid ? '' : 'invalid'}/>
               </div>
               <div className="w-1/2 pr-4">
-                <Label htmlFor="regOwnerName" className="text-right">
+                <Label htmlFor="password" className="text-right">
                   Password
                 </Label>
-                <Input id="regOwnerName" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className={passwordValid ? '' : 'invalid'}/>
+                <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className={passwordValid ? '' : 'invalid'}/>
               </div>
               <div className="w-1/2 pr-4">
-                <Label htmlFor="titleNo" className="text-right">
+                <Label htmlFor="contactNo" className="text-right">
                   Contact No.
                 </Label>
-                <Input id="titleNo" required value={contactNo} onChange={(e) => setContactNo(e.target.value)} className={contactNoValid ? '' : 'invalid'}/>
+                <Input id="contactNo" required value={contactNo} onChange={(e) => setContactNo(e.target.value)} className={contactNoValid ? '' : 'invalid'}/>
               </div>
             </div>
               <div>
-                <Label htmlFor="landBuilding" className="text-right">
+                <Label htmlFor="address" className="text-right">
                   Address
                 </Label>
-                <Input id="landBuilding" required value={address} onChange={(e) => setAddress(e.target.value)} className={addressValid ? '' : 'invalid'}/>
+                <Input id="address" required value={address} onChange={(e) => setAddress(e.target.value)} className={addressValid ? '' : 'invalid'}/>
               </div>
               <div className="flex">
               <div className="w-1/2 pr-4">
-                  <Label htmlFor="propertyName" className="text-right">
+                  <Label htmlFor="city" className="text-right">
                     City
                   </Label>
-                <Input id="propertyName" required value={city} onChange={(e) => setCity(e.target.value)} className={cityValid ? '' : 'invalid'}/>
+                <Input id="city" required value={city} onChange={(e) => setCity(e.target.value)} className={cityValid ? '' : 'invalid'}/>
               </div>
               <div className="w-1/2 pr-4">
-                <Label htmlFor="regOwnerName" className="text-right">
+                <Label htmlFor="province" className="text-right">
                   Province
                 </Label>
-                <Input id="regOwnerName" type="password" required value={province} onChange={(e) => setProvince(e.target.value)} className={provinceValid ? '' : 'invalid'}/>
+                <Input id="province" required value={province} onChange={(e) => setProvince(e.target.value)} className={provinceValid ? '' : 'invalid'}/>
               </div>
               <div className="w-1/2 pr-4">
-                <Label htmlFor="titleNo" className="text-right">
+                <Label htmlFor="zipCode" className="text-right">
                   Zip Code
                 </Label>
-                <Input id="titleNo" required value={zipCode} onChange={(e) => setZipCode(e.target.value)} className={zipCodeValid ? '' : 'invalid'}/>
+                <Input id="zipCode" required value={zipCode} onChange={(e) => setZipCode(e.target.value)} className={zipCodeValid ? '' : 'invalid'}/>
               </div>
             </div>
             </div>

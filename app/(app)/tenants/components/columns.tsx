@@ -5,6 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Tenants } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
+import Image from "next/image"
 
 export const columns: ColumnDef<Tenants>[] = [
   {
@@ -32,9 +33,12 @@ export const columns: ColumnDef<Tenants>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
+    accessorKey: "tenantImage",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
+      <DataTableColumnHeader column={column} title="Image" />
+    ),
+    cell: ({ row }) => (
+      <Image src={row.original.tenantImage || ''} alt="Property" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
     ),
   },
   {
