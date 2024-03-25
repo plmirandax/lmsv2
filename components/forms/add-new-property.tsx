@@ -12,15 +12,14 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { SelectSeparator } from "../../components/ui/select"
+import { SelectSeparator } from "../ui/select"
 import { useSession as useNextAuthSession } from 'next-auth/react'
 import React, { useState, useEffect } from 'react';
 import toast from "react-hot-toast"
 import { CheckCircledIcon, ReloadIcon } from "@radix-ui/react-icons"
 import FileUpload from "./file-upload"
 import "@uploadthing/react/styles.css";
-
-
+import { z } from 'zod';
 
 interface User {
   id: string
@@ -30,125 +29,78 @@ interface User {
   role: string
 }
 
+// Zod schema for data validation
+const propertySchema = z.object({
+  propertyCode: z.string(),
+  propertyName: z.string(),
+  regOwnerName: z.string(),
+  titleNo: z.string(),
+  landBuilding: z.string(),
+  lotNo: z.string(),
+  address: z.string(),
+  province: z.string(),
+  city: z.string(),
+  zipCode: z.string(),
+  classification: z.string(),
+  leasableArea: z.number(),
+  orate: z.number(),
+  taxDecNo: z.string(),
+  propertyImage: z.string(),
+  sysUserId: z.string(),
+});
+
 export function AddNewProperty() {
 
   const { data: session } = useNextAuthSession()
 
   const userId = (session?.user as User)?.id
 
-  
   // Create state variables for each input field
-  const [propertyCode, setPropertyCode] = useState('');
-  const [propertyName, setPropertyName] = useState('');
-  const [regOwnerName, setRegOwnerName] = useState('');
-  const [titleNo, setTitleNo] = useState('');
-  const [landBuilding, setLandBuilding] = useState('');
-  const [lotNo, setLotNo] = useState('');
-  const [address, setAddress] = useState('');
-  const [province, setProvince] = useState('');
-  const [city, setCity] = useState('');
-  const [zipCode, setZipCode] = useState('');
-  const [classification, setClassification] = useState('');
-  const [leasableArea, setLeasableArea] = useState<number>(0);
-  const [orate, setOrate] = useState<number>(0);
-  const [taxDecNo, setTaxDecNo] = useState('');
-  const [propertyImage, setPropertyImage] = useState('');
-  const [sysUserId, setSysUserId] = useState(userId);
+  const [formData, setFormData] = useState({
+    propertyCode: '',
+    propertyName: '',
+    regOwnerName: '',
+    titleNo: '',
+    landBuilding: '',
+    lotNo: '',
+    address: '',
+    province: '',
+    city: '',
+    zipCode: '',
+    classification: '',
+    leasableArea: 0,
+    orate: 0,
+    taxDecNo: '',
+    propertyImage: '',
+    sysUserId: userId,
+  });
 
-  useEffect(() => {
-    setSysUserId(userId);
-  }, [userId]);
-
-  const [propertyCodeValid, setPropertyCodeValid] = useState(true);
-  const [propertyNameValid, setPropertyNameValid] = useState(true);
-  const [regOwnerNameValid, setregOwnerNameValid] = useState(true);
-  const [titleNoValid, settitleNoValid] = useState(true);
-  const [landBuildingValid, setlandBuildingValid] = useState(true);
-  const [lotNoValid, setlotNoValid] = useState(true);
-  const [addressValid, setaddressValid] = useState(true);
-  const [provinceValid, setprovinceValid] = useState(true);
-  const [cityValid, setcityValid] = useState(true);
-  const [zipCodeValid, setzipCodeValid] = useState(true);
-  const [classificationValid, setclassificationValid] = useState(true);
-  const [leaseAreaValid, setleaseAreaValid] = useState(true);
-  const [taxDecNoValid, settaxDecNoValid] = useState(true);
-  const [orateValid, setorateValid] = useState(true);
-  const [propertyImageValid, setPropertyImageValid] = useState(true);
+  const [formErrors, setFormErrors] = useState<Partial<Record<keyof typeof formData, boolean>>>({});
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    setFormData(prevState => ({
+      ...prevState,
+      sysUserId: userId,
+    }));
+  }, [userId]);
+
+  const handleChange = (key: keyof typeof formData, value: string | number) => {
+    setFormData(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
     setIsLoading(true);
 
-    const isPropertyCodeValid = propertyCode.trim() !== '';
-    const isPropertyNameValid = propertyName.trim() !== '';
-    const isregOwnerNameValid = regOwnerName.trim() !== '';
-    const istitleNoValid = titleNo.trim() !== '';
-    const islandBuildingValid = landBuilding.trim() !== '';
-    const islotNoValid = lotNo.trim() !== '';
-    const isAddressValid = address.trim() !== '';
-    const isProvinceValid = province.trim() !== '';
-    const isCityValid = city.trim() !== '';
-    const isZipCodeValid = zipCode.trim() !== '';
-    const isclassificationValid = classification.trim() !== '';
-    const isLeasableAreaCodeValid = leasableArea !== 0;
-    const isorateValid = orate !== 0;
-    const istaxDecValid = taxDecNo.trim() !== '';
-    const ispropertyImageValid = propertyImage.trim() !== '';
-
-    setPropertyCodeValid(isPropertyCodeValid);
-    setPropertyNameValid(isPropertyNameValid);
-    setregOwnerNameValid(isregOwnerNameValid);
-    settitleNoValid(istitleNoValid);
-    setlandBuildingValid(islandBuildingValid);
-    setlotNoValid(islotNoValid);
-    setaddressValid(isAddressValid);
-    setprovinceValid(isProvinceValid);
-    setcityValid(isCityValid);
-    setzipCodeValid(isZipCodeValid);
-    setclassificationValid(isclassificationValid);
-    setleaseAreaValid(isLeasableAreaCodeValid);
-    setorateValid(isorateValid);
-    settaxDecNoValid(istaxDecValid);
-    setPropertyImageValid(ispropertyImageValid);
-
-    if (!isPropertyCodeValid || !isPropertyNameValid ||
-       !isregOwnerNameValid || !istitleNoValid ||
-        !islandBuildingValid || !islotNoValid ||
-          !isAddressValid || !isProvinceValid ||
-            !isCityValid || !isZipCodeValid ||
-          !isclassificationValid || !isLeasableAreaCodeValid ||
-           !isorateValid || !istaxDecValid || !ispropertyImageValid) {
-            toast.error('All fields are required.');
-            setIsLoading(false);
-      return;
-    }
-    
-    // Create data object with input values
-    const data = {
-      propertyCode,
-      propertyName,
-      regOwnerName,
-      titleNo,
-      landBuilding,
-      lotNo,
-      address,
-      province,
-      city,
-      zipCode,
-      classification,
-      leasableArea,
-      propertyImage,
-      orate,
-      taxDecNo,
-      sysUserId
-    };
-
-    console.log(data);
-  
     try {
+      // Validate form data using Zod schema
+      propertySchema.parse(formData);
+
       // Send POST request to /api/create-property
       const response = await fetch('/api/create-property', {
         method: 'POST',
@@ -156,31 +108,32 @@ export function AddNewProperty() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${(session as { accessToken: string })?.accessToken}` // Include the user's session token in the headers
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(formData)
       });
   
       if (!response.ok) {
         throw new Error(response.statusText);
       }
 
-      setPropertyCode('');
-      setPropertyName('');
-    setRegOwnerName('');
-    setTitleNo('');
-    setLandBuilding('');
-    setLotNo('');
-    setAddress('');
-    setProvince('');
-    setCity('');
-    setZipCode('');
-    setClassification('');
-    setLeasableArea(0);
-    setOrate(0);
-    setTaxDecNo('');
-    setPropertyImage('');
-    setIsLoading(false);
-  
-      const responseData = await response.json();
+      setFormData({
+        propertyCode: '',
+        propertyName: '',
+        regOwnerName: '',
+        titleNo: '',
+        landBuilding: '',
+        lotNo: '',
+        address: '',
+        province: '',
+        city: '',
+        zipCode: '',
+        classification: '',
+        leasableArea: 0,
+        orate: 0,
+        taxDecNo: '',
+        propertyImage: '',
+        sysUserId: userId,
+      });
+
       toast.success('Property added successfully.');
   
       // Handle response data...
@@ -192,7 +145,6 @@ export function AddNewProperty() {
       setIsLoading(false);
     }
   };
-
     return (
       <Dialog>
         <DialogTrigger asChild>
@@ -213,19 +165,19 @@ export function AddNewProperty() {
                       <Label htmlFor="propertyCode" className="text-right">
                             Property Code
                       </Label>
-                       <Input id="propertyCode" required value={propertyCode} onChange={(e) => setPropertyCode(e.target.value)} className={propertyCodeValid ? '' : 'invalid'}/>
+                       <Input id="propertyCode" required value={formData.propertyCode} onChange={(e) => handleChange('propertyCode', e.target.value)} className={formErrors.propertyCode ? 'invalid' : ''}/>
                     </div>
                   <div className="w-1/2 pl-4">
                       <Label htmlFor="propertyName" className="text-right">
                             Property Name
                         </Label>
-                      <Input id="propertyName" required value={propertyName} onChange={(e) => setPropertyName(e.target.value)} className={propertyNameValid ? '' : 'invalid'}/>
+                        <Input id="propertyName" required value={formData.propertyName} onChange={(e) => handleChange('propertyName', e.target.value)} className={formErrors.propertyName ? 'invalid' : ''}/>
                   </div>
                   <div className="w-1/2 pl-4">
                       <Label htmlFor="regOwnerName" className="text-right">
                            Registered Owner
                       </Label>
-                      <Input id="regOwnerName" required value={regOwnerName} onChange={(e) => setRegOwnerName(e.target.value)} className={regOwnerNameValid ? '' : 'invalid'}/>
+                      <Input id="regOwnerName" required value={formData.regOwnerName} onChange={(e) => handleChange('regOwnerName', e.target.value)} className={formErrors.regOwnerName ? 'invalid' : ''}/>
                   </div>
               </div>
               <div className="flex">
@@ -233,19 +185,19 @@ export function AddNewProperty() {
                     <Label htmlFor="titleNo" className="text-right">
                         Title No.
                     </Label>
-                    <Input id="titleNo" required value={titleNo} onChange={(e) => setTitleNo(e.target.value)} className={titleNoValid ? '' : 'invalid'}/>
+                    <Input id="titleNo" required value={formData.titleNo} onChange={(e) => handleChange('titleNo', e.target.value)} className={formErrors.titleNo ? 'invalid' : ''}/>
                     </div>
                   <div className="w-1/2 pl-4">
                   <Label htmlFor="landBuilding" className="text-right">
                   Land/Improvement/Building
                 </Label>
-                <Input id="landBuilding" required value={landBuilding} onChange={(e) => setLandBuilding(e.target.value)} className={landBuildingValid ? '' : 'invalid'}/>
+                <Input id="landBuilding" required value={formData.landBuilding} onChange={(e) => handleChange('landBuilding', e.target.value)} className={formErrors.landBuilding ? 'invalid' : ''}/>
                   </div>
                   <div className="w-1/2 pl-4">
                   <Label htmlFor="lotNo" className="text-right">
                   Lot. No.
                 </Label>
-                <Input id="lotNo" required value={lotNo} onChange={(e) => setLotNo(e.target.value)} className={lotNoValid ? '' : 'invalid'}/>
+                <Input id="lotNo" required value={formData.lotNo} onChange={(e) => handleChange('lotNo', e.target.value)} className={formErrors.lotNo ? 'invalid' : ''}/>
                   </div>
               </div>
               <div className="flex">
@@ -253,19 +205,19 @@ export function AddNewProperty() {
                     <Label htmlFor="address" className="text-right">
                   Address
                 </Label>
-                <Input id="address" required value={address} onChange={(e) => setAddress(e.target.value)} className={addressValid ? '' : 'invalid'}/>
+                <Input id="address" required value={formData.address} onChange={(e) => handleChange('address', e.target.value)} className={formErrors.address ? 'invalid' : ''}/>
                     </div>
                   <div className="w-1/2 pl-4">
                   <Label htmlFor="city" className="text-right">
                   City
                 </Label>
-                <Input id="city" required value={city} onChange={(e) => setCity(e.target.value)} className={cityValid ? '' : 'invalid'}/>
+                <Input id="city" required value={formData.city} onChange={(e) => handleChange('city', e.target.value)} className={formErrors.city ? 'invalid' : ''}/>
                   </div>
                   <div className="w-1/2 pl-4">
                   <Label htmlFor="province" className="text-right">
                   Province
                 </Label>
-                <Input id="province" required value={province} onChange={(e) => setProvince(e.target.value)} className={provinceValid ? '' : 'invalid'}/>
+                <Input id="province" required value={formData.province} onChange={(e) => handleChange('province', e.target.value)} className={formErrors.province ? 'invalid' : ''}/>
                   </div>
               </div>
               <div className="flex">
@@ -273,19 +225,19 @@ export function AddNewProperty() {
                     <Label htmlFor="zipCode" className="text-right">
                   Zip Code
                 </Label>
-                <Input id="zipCode" required value={zipCode} onChange={(e) => setZipCode(e.target.value)} className={zipCodeValid ? '' : 'invalid'}/>
+                <Input id="zipCode" required value={formData.zipCode} onChange={(e) => handleChange('zipCode', e.target.value)} className={formErrors.zipCode ? 'invalid' : ''}/>
                     </div>
                   <div className="w-1/2 pl-4">
                   <Label htmlFor="leasableArea" className="text-right">
                   Leasable Space
                 </Label>
-                <Input id="leasableArea" required value={leasableArea} onChange={(e) => setLeasableArea(Number(e.target.value))} className={leaseAreaValid ? '' : 'invalid'}/>
+                <Input id="leasableArea" required value={formData.leasableArea} onChange={(e) => handleChange('leasableArea', Number(e.target.value))} className={formErrors.leasableArea ? 'invalid' : ''}/>
                   </div>
                   <div className="w-1/2 pl-4">
                   <Label htmlFor="orate" className="text-right">
                   Occupancy Rate
                 </Label>
-                <Input id="orate" required value={orate} onChange={(e) => setOrate(Number(e.target.value))} className={orateValid ? '' : 'invalid'}/>
+                <Input id="orate" required value={formData.orate} onChange={(e) => handleChange('orate', Number(e.target.value))} className={formErrors.orate ? 'invalid' : ''}/>
                   </div>
               </div>
               <div className="flex">
@@ -293,13 +245,13 @@ export function AddNewProperty() {
                     <Label htmlFor="classification" className="text-right">
                   Classification
                 </Label>
-                <Input id="classification" required value={classification} onChange={(e) => setClassification(e.target.value)} className={classificationValid ? '' : 'invalid'}/>
+                <Input id="classification" required value={formData.classification} onChange={(e) => handleChange('classification', e.target.value)} className={formErrors.classification ? 'invalid' : ''}/>
                     </div>
                   <div className="w-1/2 pl-4">
                   <Label htmlFor="taxDecNo" className="text-right">
                   Tax Declaration No.
                 </Label>
-                <Input id="taxDecNo" required value={taxDecNo} onChange={(e) => setTaxDecNo(e.target.value)} className={taxDecNoValid ? '' : 'invalid'}/>
+                <Input id="taxDecNo" required value={formData.taxDecNo} onChange={(e) => handleChange('taxDecNo', e.target.value)} className={formErrors.taxDecNo ? 'invalid' : ''}/>
                   </div>
                   <div className="w-1/2 pl-4">
                 <div className="w-1/2 pl-4">
@@ -315,10 +267,10 @@ export function AddNewProperty() {
             </div>
             <FileUpload 
                 apiEndpoint="propertyImage"
-                value={propertyImage} 
-                onChange={(url) => url && setPropertyImage(url)}
-                className={`${propertyImageValid ? '' : 'invalid'} items-right`}
-                />
+                value={formData.propertyImage} 
+                onChange={(url) => url && handleChange('propertyImage', url)}
+                className={`${formErrors.propertyImage ? 'invalid' : ''} items-right`}
+              />
 
           <DialogFooter>
                 <div className="flex justify-center w-full">

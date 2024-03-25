@@ -38,7 +38,7 @@ export const columns: ColumnDef<Tenants>[] = [
       <DataTableColumnHeader column={column} title="Image" />
     ),
     cell: ({ row }) => (
-      <Image src={row.original.tenantImage || ''} alt="Property" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+      <img src={row.original.tenantImage || ''} alt="Property" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
     ),
   },
   {
