@@ -99,12 +99,13 @@ model Spaces {
   roofTop       Float?
   totalArea     Float
   monthlyRent   Float
-  spacesImage        String?     @db.Text
+  spacesImage   String?     @db.Text
   tenantId      String
   tenant        Tenant       @relation(fields: [tenantId], references: [id])
   propertyId    String
   property      Properties   @relation(fields: [propertyId], references: [id])
-  createdAt DateTime @default(now())
+  utilities     Utilities[]
+  createdAt     DateTime @default(now())
   createdBy     String
   updatedBy     String
   deletedAt     DateTime?
@@ -136,4 +137,19 @@ model Attachment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   billing   Billing?
+}
+
+model Utilities {
+  id           String       @id @default(cuid())
+  electrictMeterNo String
+  electrictIdNo String
+  electrictAcctNo String
+  electrictAcctName String
+  waterMeterNo String
+  waterAcctNo String
+  waterAcctName String
+  spaceId      String
+  space        Spaces      @relation(fields: [spaceId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt   DateTime?     @updatedAt
 }

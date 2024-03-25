@@ -77,8 +77,8 @@ export default function DashboardPage() {
           <div className="flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0 md:items-center">
             <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
             <div className="flex items-center space-x-2">
-              <CalendarDateRangePicker />
-              <Button>Download</Button>
+              {/* <CalendarDateRangePicker />
+              <Button>Download</Button> */}
             </div>
           </div>
           <Tabs defaultValue="overview" className="space-y-4">
@@ -211,22 +211,32 @@ export default function DashboardPage() {
                   <CardHeader>
                     <CardTitle>New Tenants. 🥳✨</CardTitle>
                     <CardDescription>
-                      You have 28 new tenants for this month.
+                      You have {tenants.length} new tenants for this month.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <ActiveTenants />
+                  <CardContent className="flex">
+                  <div className="w-1/2">
+                      <ActiveTenants tenants={tenants.slice(0,5)}/>
+                  </div>
+                  <div className="w-1/2">
+                      <ActiveTenants tenants={tenants.slice(5,10)}/>
+                  </div>
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">
                   <CardHeader>
                     <CardTitle>Tenant Anniversaries 🎉🎉</CardTitle>
                     <CardDescription>
-                      You have 15 tenants that is celebrating their anniversary this month.
+                      You have {tenants.length} tenants that is celebrating their anniversary this month.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <TenantAnniv />
+                  <CardContent className="flex">
+                    <div className="w-1/2">
+                    <TenantAnniv tenants={tenants.slice(0,5)}/>
+                    </div>
+                    <div className="w-1/2">
+                    <TenantAnniv tenants={tenants.slice(5,10)}/>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -350,22 +360,22 @@ export default function DashboardPage() {
                   <CardHeader>
                     <CardTitle>New Tenants.</CardTitle>
                     <CardDescription>
-                      You have 28 new tenants for this month.
+                      You have {tenants.length} new tenants for this month.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <ActiveTenants />
+                    <ActiveTenants tenants={tenants}/>
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">
                   <CardHeader>
                     <CardTitle>Tenant Anniversaries 🎉🎉</CardTitle>
                     <CardDescription>
-                      You have 15 tenants that is celebrating their anniversary this month.
+                      You have {tenants.length} tenants that is celebrating their anniversary this month.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <TenantAnniv />
+                    <TenantAnniv tenants={tenants}/>
                   </CardContent>
                 </Card>
               </div>
