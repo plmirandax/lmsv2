@@ -191,7 +191,7 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
+                    <div className="text-2xl font-bold">{tenants.length}</div>
                     <p className="text-xs text-muted-foreground">
                       +201 since last year.
                     </p>
@@ -340,7 +340,7 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
+                    <div className="text-2xl font-bold">{tenants.length}</div>
                     <p className="text-xs text-muted-foreground">
                       +201 since last year.
                     </p>
