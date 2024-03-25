@@ -128,7 +128,7 @@ const CellComponent = ({ row }: { row: RowData }) => {
                       <Input id="sysUser.name" name="sysUser.name" value={selectedProperty?.sysUser?.name || ''} disabled />
                     </div>
                   </div>
-                  <Image src={selectedProperty?.propertyImage || ''} alt="Property" width={400} height={400} className="mt-4 items-center justify-center flex flex-1"/>
+                  {/*<Image src={selectedProperty?.propertyImage || ''} alt="Property" width={400} height={400} className="mt-4 items-center justify-center flex flex-1"/> */}
                 </div>
             </CardTitle>
           </DialogContent>

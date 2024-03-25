@@ -26,7 +26,7 @@ interface User {
 
 }
 
-export function TaxDecDetails() {
+export function TenantsBillingDetails() {
     const { data: session, status } = useSession();
     const loading = status === 'loading';
     const [userData, setUserData] = useState<User | null>(null);
@@ -60,7 +60,7 @@ export function TaxDecDetails() {
   return (
     <Sheet>
             <SheetTrigger asChild>
-        <Button variant="outline" className="bg-transparent border-none">RPT Details</Button>
+            <Button variant="outline" className="bg-transparent border-none">Billing Details</Button>
       </SheetTrigger>
       <SheetContent>
      <SheetHeader>

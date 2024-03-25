@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input"
 import { UtilityDetails } from "@/components/forms/utility-details"
 import { TaxDecDetails } from "@/components/forms/tax-dec"
 import { TenantSpaceDetails } from "@/components/forms/space-details"
+import { TenantsBillingDetails } from "@/components/forms/billings-tenant"
 
 
 type RowData = Row<Tenants>;
@@ -118,6 +119,11 @@ const CellComponent = ({ row }: { row: RowData }) => {
                     <div className="w-1/2 mt-6 pl-4">
                       <Button className="item-right flex" variant="outline">
                         <TaxDecDetails />
+                      </Button>
+                    </div>
+                    <div className="w-1/2 mt-6 pl-4 pr-4">
+                      <Button className="item-right flex" variant='outline'>
+                        <TenantsBillingDetails />
                       </Button>
                     </div>
                   </div>
