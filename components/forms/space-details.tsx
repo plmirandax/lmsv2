@@ -26,7 +26,7 @@ interface User {
     // Add any other properties you expect to receive
 }
 
-export function UtilityDetails() {
+export function TenantSpaceDetails() {
     const { data: session, status } = useSession();
     const loading = status === 'loading';
     const [userData, setUserData] = useState<User | null>(null);
@@ -60,7 +60,7 @@ export function UtilityDetails() {
   return (
     <Sheet>
             <SheetTrigger asChild>
-        <Button variant="outline" className="bg-transparent border-none">Utility Details</Button>
+        <Button variant="outline" className="bg-transparent border-none">Space Details</Button>
       </SheetTrigger>
       <SheetContent>
      <SheetHeader>

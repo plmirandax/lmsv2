@@ -16,11 +16,9 @@ import { CardDescription, CardTitle } from "@/components/ui/card"
 import { SelectSeparator } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
-import { Sheet } from "@/components/ui/sheet"
-import { UserProfile } from "@/components/forms/user-profile"
 import { UtilityDetails } from "@/components/forms/utility-details"
 import { TaxDecDetails } from "@/components/forms/tax-dec"
-import { AddNewProperty } from "@/components/forms/add-new-property"
+import { TenantSpaceDetails } from "@/components/forms/space-details"
 
 
 type RowData = Row<Tenants>;
@@ -72,7 +70,7 @@ const CellComponent = ({ row }: { row: RowData }) => {
                       <Label htmlFor="tenantName" className="text-right">Tenant Name</Label>
                       <Input id="tenantName" name="tenantName" value={selectedTenants?.name || ''} disabled />
                     </div>
-                    <div className="w-1/2 mt-1 pl-4">
+                    <div className="w-1/2 mt-1 pl-4 pr-4">
                       <Label htmlFor="email" className="text-right">Email</Label>
                       <Input id="email" name="email" value={selectedTenants?.email || ''} disabled />
                     </div>
@@ -86,7 +84,7 @@ const CellComponent = ({ row }: { row: RowData }) => {
                       <Label htmlFor="address" className="text-right">Address</Label>
                       <Input id="address" name="address" value={selectedTenants?.address || ''} disabled />
                     </div>
-                    <div className="w-1/2 mt-1 pl-4">
+                    <div className="w-1/2 mt-1 pl-4 pr-4">
                       <Label htmlFor="city" className="text-right">City</Label>
                       <Input id="city" name="city" value={selectedTenants?.city || ''} disabled />
                     </div>
@@ -100,7 +98,7 @@ const CellComponent = ({ row }: { row: RowData }) => {
                       <Label htmlFor="zipCode" className="text-right">Zip Code</Label>
                       <Input id="zipCode" name="zipCode" value={selectedTenants?.zipCode || ''} disabled />
                     </div>
-                    <div className="w-1/2 mt-1 pl-4">
+                    <div className="w-1/2 mt-1 pl-4 pr-4">
                       <Label htmlFor="sysUser.name" className="text-right">Created by</Label>
                       <Input id="sysUser.name" name="sysUser.name" value={selectedTenants?.User?.name || ''} disabled />
                     </div>
@@ -108,7 +106,7 @@ const CellComponent = ({ row }: { row: RowData }) => {
                   <div className="flex">
                     <div className="w-1/2 mt-6 pl-4">
                       <Button className="item-right flex" variant="outline">
-                        <AddNewProperty />
+                        <TenantSpaceDetails />
                       </Button>
                     </div>
 
@@ -123,7 +121,7 @@ const CellComponent = ({ row }: { row: RowData }) => {
                       </Button>
                     </div>
                   </div>
-                  <Image src={selectedTenants?.tenantImage || ''} alt="Property" width={400} height={400} className="mt-4 items-center justify-center flex flex-1"/>
+                  {/* <Image src={selectedTenants?.tenantImage || ''} alt="Property" width={400} height={400} className="mt-4 items-center justify-center flex flex-1"/> */}
                 </div>
             </CardTitle>
           </DialogContent>

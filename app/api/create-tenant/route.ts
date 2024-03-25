@@ -13,7 +13,7 @@ const schema = Joi.object({
     city: Joi.string().required(),
     province: Joi.string().required(),
     zipCode: Joi.string().required(),
-    tenantImage: Joi.array().optional(),
+    tenantImage: Joi.array().items(Joi.string()).optional(),
     UserId: Joi.string().required()
 });
 

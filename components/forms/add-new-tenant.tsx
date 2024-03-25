@@ -238,7 +238,7 @@ export function AddNewTenant() {
             <div className="flex flex-col justify-center items-center">
             </div>
             <FileUpload 
-                apiEndpoint="propertyImage"
+                apiEndpoint="tenantImage"
                 value={tenantImage} 
                 onChange={(url) => url && setTenantImage(url)}
                 className={`${tenantImageValid ? '' : 'invalid'} items-right`}
