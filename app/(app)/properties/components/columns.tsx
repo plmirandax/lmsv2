@@ -4,25 +4,138 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Properties } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
-import { DataTableRowActions } from "./data-table-row-actions"
 import Image from "next/image"
-import { AvatarImage } from "@/components/ui/avatar"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { CardDescription, CardTitle } from "@/components/ui/card"
 import { SelectSeparator } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
-import { IoClose } from "react-icons/io5"
+import { Row } from "@tanstack/react-table";
 
-// Define the handleEditClick function
-const handleEditClick = (row: Properties) => {
-  // handle the edit click here
-  // you can access the row data using the row parameter
-  // show the modal with the row data
+type RowData = Row<Properties>;
+
+const CellComponent = ({ row }: { row: RowData }) => {
+  const property = row.original;
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<Properties | null>(null);
+
+  const handleOpenModal = () => {
+    setSelectedProperty(property);
+    setIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedProperty(null);
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant='ghost' className="w-8 h-8 p-0">
+            <MoreHorizontal className="h-4 w-4"/>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleOpenModal}>
+              View Property Details
+            </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <div className="flex justify-center items-center z-50">
+        <Dialog open={isOpen} onOpenChange={handleCloseModal}>
+          <DialogContent className="sm:max-w-[750px]">
+            <CardTitle>Edit Property Details
+              <CardDescription>Fill in the form below to update property details.</CardDescription>
+              <SelectSeparator />
+              <div className="flex flex-col items-center justify-center py-4">
+                  <div className="flex">
+                    <div className="w-1/2 mt-1 pr-4">
+                      <Label htmlFor="id" className="text-right">Property ID</Label>
+                      <Input id="id" name="id" value={selectedProperty?.id} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="propertyCode" className="text-right">Property Code</Label>
+                      <Input id="propertyCode" name="propertyCode" value={selectedProperty?.propertyCode} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="propertyName" className="text-right">Property Name</Label>
+                      <Input id="propertyName" name="propertyName" value={selectedProperty?.propertyName || ''} disabled />
+                    </div>
+                 
+
+                  </div>
+                  <div className="flex">
+                    <div className="w-1/2 mt-1 pr-4">
+                      <Label htmlFor="regOwnerName" className="text-right">Registered Owner</Label>
+                      <Input id="regOwnerName" name="regOwnerName" value={selectedProperty?.regOwnerName || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="titleNo" className="text-right">Title No.</Label>
+                      <Input id="titleNo" name="titleNo" value={selectedProperty?.titleNo || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="lotNo" className="text-right">Lot No.</Label>
+                      <Input id="lotNo" name="lotNo" value={selectedProperty?.lotNo || ''} disabled />
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <div className="w-1/2 mt-1 pr-4">
+                      <Label htmlFor="address" className="text-right">Address</Label>
+                      <Input id="address" name="address" value={selectedProperty?.address || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="city" className="text-right">City</Label>
+                      <Input id="city" name="city" value={selectedProperty?.city || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="province" className="text-right">Province</Label>
+                      <Input id="province" name="province" value={selectedProperty?.province || ''} disabled />
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <div className="w-1/2 mt-1 pr-4">
+                      <Label htmlFor="zipCode" className="text-right">Zip Code</Label>
+                      <Input id="zipCode" name="zipCode" value={selectedProperty?.zipCode || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="classification" className="text-right">Classification</Label>
+                      <Input id="classification" name="classification" value={selectedProperty?.classification || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="leasableArea" className="text-right">Leasable Area</Label>
+                      <Input id="leasableArea" name="leasableArea" value={selectedProperty?.leasableArea || ''} disabled />
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <div className="w-1/2 mt-1 pr-4">
+                      <Label htmlFor="orate" className="text-right">Occupancy Rate</Label>
+                      <Input id="orate" name="orate" value={selectedProperty?.orate || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="taxDecNo" className="text-right">Tax Declaration</Label>
+                      <Input id="taxDecNo" name="taxDecNo" value={selectedProperty?.taxDecNo || ''} disabled/>
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="sysUser.name" className="text-right">Created by</Label>
+                      <Input id="sysUser.name" name="sysUser.name" value={selectedProperty?.sysUser?.name || ''} disabled />
+                    </div>
+                  </div>
+                  <Image src={selectedProperty?.propertyImage || ''} alt="Property" width={400} height={400} className="mt-4 items-center justify-center flex flex-1"/>
+                </div>
+            </CardTitle>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </>
+  );
 };
 
 export const columns: ColumnDef<Properties>[] = [
@@ -145,124 +258,6 @@ export const columns: ColumnDef<Properties>[] = [
   },
   {
     id: "actions",
-    cell: ({row}) => {
-      const property = row.original;
-      const [isOpen, setIsOpen] = useState(false);
-      const [selectedProperty, setSelectedProperty] = useState<Properties | null>(null);
-
-      const handleOpenModal = () => {
-        setSelectedProperty(property);
-        setIsOpen(true);
-      };
-
-      const handleCloseModal = () => {
-        setSelectedProperty(null);
-        setIsOpen(false);
-      };
-
-      return (
-        <>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant='ghost' className="w-8 h-8 p-0">
-                <MoreHorizontal className="h-4 w-4"/>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem onClick={handleOpenModal}>
-                  View Property Details
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
-   <div className="flex justify-center items-center z-50">
-          <Dialog open={isOpen} onOpenChange={handleCloseModal}>
-            <DialogContent className="sm:max-w-[750px]">
-                    <CardTitle>Edit Property Details
-                      <CardDescription>Fill in the form below to update property details.</CardDescription>
-                      <SelectSeparator />
-                <div className="flex flex-col items-center justify-center py-4">
-                  <div className="flex">
-                    <div className="w-1/2 mt-1 pr-4">
-                      <Label htmlFor="id" className="text-right">Property ID</Label>
-                      <Input id="id" name="id" value={selectedProperty?.id} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="propertyCode" className="text-right">Property Code</Label>
-                      <Input id="propertyCode" name="propertyCode" value={selectedProperty?.propertyCode} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="propertyName" className="text-right">Property Name</Label>
-                      <Input id="propertyName" name="propertyName" value={selectedProperty?.propertyName || ''} disabled />
-                    </div>
-                 
-
-                  </div>
-                  <div className="flex">
-                    <div className="w-1/2 mt-1 pr-4">
-                      <Label htmlFor="regOwnerName" className="text-right">Registered Owner</Label>
-                      <Input id="regOwnerName" name="regOwnerName" value={selectedProperty?.regOwnerName || ''} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="titleNo" className="text-right">Title No.</Label>
-                      <Input id="titleNo" name="titleNo" value={selectedProperty?.titleNo || ''} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="lotNo" className="text-right">Lot No.</Label>
-                      <Input id="lotNo" name="lotNo" value={selectedProperty?.lotNo || ''} disabled />
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <div className="w-1/2 mt-1 pr-4">
-                      <Label htmlFor="address" className="text-right">Address</Label>
-                      <Input id="address" name="address" value={selectedProperty?.address || ''} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="city" className="text-right">City</Label>
-                      <Input id="city" name="city" value={selectedProperty?.city || ''} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="province" className="text-right">Province</Label>
-                      <Input id="province" name="province" value={selectedProperty?.province || ''} disabled />
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <div className="w-1/2 mt-1 pr-4">
-                      <Label htmlFor="zipCode" className="text-right">Zip Code</Label>
-                      <Input id="zipCode" name="zipCode" value={selectedProperty?.zipCode || ''} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="classification" className="text-right">Classification</Label>
-                      <Input id="classification" name="classification" value={selectedProperty?.classification || ''} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="leasableArea" className="text-right">Leasable Area</Label>
-                      <Input id="leasableArea" name="leasableArea" value={selectedProperty?.leasableArea || ''} disabled />
-                    </div>
-                  </div>
-                  <div className="flex">
-                    <div className="w-1/2 mt-1 pr-4">
-                      <Label htmlFor="orate" className="text-right">Occupancy Rate</Label>
-                      <Input id="orate" name="orate" value={selectedProperty?.orate || ''} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="taxDecNo" className="text-right">Tax Declaration</Label>
-                      <Input id="taxDecNo" name="taxDecNo" value={selectedProperty?.taxDecNo || ''} disabled/>
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="sysUser.name" className="text-right">Created by</Label>
-                      <Input id="sysUser.name" name="sysUser.name" value={selectedProperty?.sysUser?.name || ''} disabled />
-                    </div>
-                  </div>
-                  <Image src={selectedProperty?.propertyImage || ''} alt="Property" width={800} height={400} className="mt-4 items-center justify-center flex flex-1"/>
-                </div>
-                    </CardTitle>
-            </DialogContent>
-          </Dialog>
-        </div>
-        </>
-      )
-    } 
+    cell: CellComponent, // Use the component you defined above
   },
 ];
