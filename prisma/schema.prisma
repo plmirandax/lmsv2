@@ -48,7 +48,7 @@ model Tenant {
   city          String
   province      String
   zipCode       String
-  tenantImage   String?
+  tenantImage   String[]     @db.Text
   UserId        String?
   TenantResetPasswordToken String? @unique
   TenantResetPasswordTokenExpiry DateTime?

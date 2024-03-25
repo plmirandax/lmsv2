@@ -62,7 +62,7 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem className="flex flex-col text-center">
+          <DropdownMenuItem className="flex flex-col text-center bg-transparent border-none">
           <div onClick={(e) => e.stopPropagation()}>
                 <UserProfile />
           </div>

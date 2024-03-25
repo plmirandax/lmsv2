@@ -148,7 +148,7 @@ export function AddNewProperty() {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline">Add New Property</Button>
+          <Button variant="outline" className="bg-transparent border-none">Add New Property</Button>
         </DialogTrigger>
         <form onSubmit={handleSubmit}>
         <DialogContent className="sm:max-w-[900px]">
