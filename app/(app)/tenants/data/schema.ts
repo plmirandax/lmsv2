@@ -7,6 +7,7 @@ export const tenantsSchema = z.object({
   tenantCode: z.string(),
   name: z.string(),
   email: z.string(),
+  passwordHash: z.string().nullable(),
   contactNo: z.string(),
   address: z.string(),
   city: z.string(),

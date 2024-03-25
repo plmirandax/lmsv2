@@ -6,6 +6,121 @@ import { Tenants } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
 import Image from "next/image"
+import { Row } from "@tanstack/react-table";
+import { useState } from "react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { MoreHorizontal } from "lucide-react"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
+import { CardDescription, CardTitle } from "@/components/ui/card"
+import { SelectSeparator } from "@/components/ui/select"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+
+
+type RowData = Row<Tenants>;
+
+const CellComponent = ({ row }: { row: RowData }) => {
+  const tenants = row.original;
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedTenants, setSelectedTenants] = useState<Tenants | null>(null);
+
+  const handleOpenModal = () => {
+    setSelectedTenants(tenants);
+    setIsOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setSelectedTenants(null);
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant='ghost' className="w-8 h-8 p-0">
+            <MoreHorizontal className="h-4 w-4"/>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={handleOpenModal}>
+              View Tenant Details
+            </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <div className="flex justify-center items-center z-50">
+        <Dialog open={isOpen} onOpenChange={handleCloseModal}>
+          <DialogContent className="sm:max-w-[750px]">
+            <CardTitle>Edit Tenant Details
+              <CardDescription>Fill in the form below to update tenant details.</CardDescription>
+              <SelectSeparator />
+              <div className="flex flex-col items-center justify-center py-4">
+                  <div className="flex">
+                    <div className="w-1/2 mt-1 pr-4">
+                      <Label htmlFor="id" className="text-right">Tenant ID</Label>
+                      <Input id="id" name="id" value={selectedTenants?.id} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="tenantCode" className="text-right">Tenant Code</Label>
+                      <Input id="tenantCode" name="tenantCode" value={selectedTenants?.tenantCode} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="tenantName" className="text-right">Tenant Name</Label>
+                      <Input id="tenantName" name="tenantName" value={selectedTenants?.name || ''} disabled />
+                    </div>
+                 
+
+                  </div>
+                  <div className="flex">
+                    <div className="w-1/2 mt-1 pr-4">
+                      <Label htmlFor="email" className="text-right">Email</Label>
+                      <Input id="email" name="email" value={selectedTenants?.email || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="password" className="text-right">Password</Label>
+                      <Input id="password" type="password" name="password" value={selectedTenants?.passwordHash || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="contactNo" className="text-right">Contact No.</Label>
+                      <Input id="contactNo" name="contactNo" value={selectedTenants?.contactNo || ''} disabled />
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <div className="w-1/2 mt-1 pr-4">
+                      <Label htmlFor="address" className="text-right">Address</Label>
+                      <Input id="address" name="address" value={selectedTenants?.address || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="city" className="text-right">City</Label>
+                      <Input id="city" name="city" value={selectedTenants?.city || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="province" className="text-right">Province</Label>
+                      <Input id="province" name="province" value={selectedTenants?.province || ''} disabled />
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <div className="w-1/2 mt-1 pr-4">
+                      <Label htmlFor="zipCode" className="text-right">Zip Code</Label>
+                      <Input id="zipCode" name="zipCode" value={selectedTenants?.zipCode || ''} disabled />
+                    </div>
+                    <div className="w-1/2 mt-1 pl-4">
+                      <Label htmlFor="sysUser.name" className="text-right">Created by</Label>
+                      <Input id="sysUser.name" name="sysUser.name" value={selectedTenants?.User?.name || ''} disabled />
+                    </div>
+                  </div>
+                  <Image src={selectedTenants?.tenantImage || ''} alt="Property" width={400} height={400} className="mt-4 items-center justify-center flex flex-1"/>
+                </div>
+            </CardTitle>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </>
+  );
+};
 
 export const columns: ColumnDef<Tenants>[] = [
   {
@@ -79,6 +194,24 @@ export const columns: ColumnDef<Tenants>[] = [
     ),
   },
   {
+    accessorKey: "city",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="City" />
+    ),
+  },
+  {
+    accessorKey: "province",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Province" />
+    ),
+  },
+  {
+    accessorKey: "zipCode",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Zip Code" />
+    ),
+  },
+  {
     accessorKey: "emailVerified",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Active?" />
@@ -93,6 +226,6 @@ export const columns: ColumnDef<Tenants>[] = [
 
   {
     id: "actions",
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: CellComponent, // Use the component you defined above
   },
 ]
