@@ -31,6 +31,7 @@ model User {
   properties    Properties[]
   tenants       Tenant[]
   billing       Billing[]
+  spaces        Spaces[]
   createdAt     DateTime @default(now())
   createdBy     String?
   updatedBy     String?
@@ -55,8 +56,8 @@ model Tenant {
   emailVerified Boolean @default(false)
   emailVerificationToken String? @unique
   User          User?      @relation(fields: [UserId], references: [id])
-  spaces        Spaces[]
   billing       Billing[]
+  spaces        Spaces[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime?     @updatedAt
   deletedAt     DateTime?
@@ -82,12 +83,12 @@ model Properties {
   propertyImage String     @db.Text
   sysUserId     String
   sysUser       User      @relation(fields: [sysUserId], references: [id])
-  spaces        Spaces[]
   deletedAt     DateTime?
 }
 
 model Spaces {
   id            String       @id @default(cuid())
+  spaceCode     String       @unique
   spaceName     String
   oStatus       String
   leasePeriod   String?
@@ -100,14 +101,12 @@ model Spaces {
   totalArea     Float
   monthlyRent   Float
   spacesImage   String?     @db.Text
-  tenantId      String
-  tenant        Tenant       @relation(fields: [tenantId], references: [id])
-  propertyId    String
-  property      Properties   @relation(fields: [propertyId], references: [id])
-  utilities     Utilities[]
-  createdAt     DateTime @default(now())
-  createdBy     String
-  updatedBy     String
+  sysUserId     String
+  sysUser       User      @relation(fields: [sysUserId], references: [id])
+  tenantId      String?
+  tenant        Tenant?       @relation(fields: [tenantId], references: [id])
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime?     @updatedAt
   deletedAt     DateTime?
 }
 
@@ -148,8 +147,6 @@ model Utilities {
   waterMeterNo String
   waterAcctNo String
   waterAcctName String
-  spaceId      String
-  space        Spaces      @relation(fields: [spaceId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt   DateTime?     @updatedAt
 }
