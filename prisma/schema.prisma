@@ -50,14 +50,15 @@ model Tenant {
   province      String
   zipCode       String
   tenantImage   String?     @db.Text
-  UserId        String?
+  sysUserId        String?
   TenantResetPasswordToken String? @unique
   TenantResetPasswordTokenExpiry DateTime?
   emailVerified Boolean @default(false)
   emailVerificationToken String? @unique
-  User          User?      @relation(fields: [UserId], references: [id])
+  sysUser          User?      @relation(fields: [sysUserId], references: [id])
+  spaceId       String
+  space         Spaces      @relation(fields: [spaceId], references: [id])
   billing       Billing[]
-  spaces        Spaces[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime?     @updatedAt
   deletedAt     DateTime?
@@ -83,6 +84,7 @@ model Properties {
   propertyImage String     @db.Text
   sysUserId     String
   sysUser       User      @relation(fields: [sysUserId], references: [id])
+  spaces        Spaces[]
   deletedAt     DateTime?
 }
 
@@ -103,8 +105,9 @@ model Spaces {
   spacesImage   String?     @db.Text
   sysUserId     String
   sysUser       User      @relation(fields: [sysUserId], references: [id])
-  tenantId      String?
-  tenant        Tenant?       @relation(fields: [tenantId], references: [id])
+  tenants       Tenant[]
+  propertyId    String
+  property      Properties   @relation(fields: [propertyId], references: [id])
   createdAt     DateTime      @default(now())
   updatedAt     DateTime?     @updatedAt
   deletedAt     DateTime?

@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import Image from "next/image"
 import { useSession } from 'next-auth/react'
 import { useEffect, useState } from 'react';
+import { CircleDollarSignIcon } from "lucide-react"
 
 interface User {
     name: string;
@@ -60,7 +61,7 @@ export function TenantsBillingDetails() {
   return (
     <Sheet>
             <SheetTrigger asChild>
-            <Button variant="outline" className="bg-transparent border-none">Billing Details</Button>
+            <Button variant="outline" className="bg-transparent border-none"> <CircleDollarSignIcon className="pr-2"/> Billing Details</Button>
       </SheetTrigger>
       <SheetContent>
      <SheetHeader>

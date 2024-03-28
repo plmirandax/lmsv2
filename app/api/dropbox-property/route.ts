@@ -5,27 +5,19 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   try {
-    // Fetch all tenants from the database
-    const property = await prisma.properties.findMany({
-      include: {
-        sysUser: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
+    // Fetch all properties from the database
+    const properties = await prisma.properties.findMany();
 
-    // Return the fetched tenants
+    // Return the fetched properties
     return NextResponse.json({
       status: 'success',
-      property,
+      properties,
     });
   } catch (error) {
-    console.error("Error during tenants fetching:", error);
+    console.error("Error during properties fetching:", error);
     return NextResponse.json({
       status: 'error',
-      message: 'An error occurred while fetching tenants',
+      message: 'An error occurred while fetching properties',
     }, { status: 500 });
   }
 }

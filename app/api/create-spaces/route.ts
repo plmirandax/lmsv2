@@ -1,48 +1,41 @@
-import Joi from 'joi';
+import { z } from 'zod';
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 
 // Define the schema for the request body
-const schema = Joi.object({
-    spaceCode: Joi.string().required(),
-    spaceName: Joi.string().required(),
-    oStatus: Joi.string().required(),
-    leasePeriod: Joi.string().required(),
-    expiryDate: Joi.date().required(),
-    gFloorArea: Joi.number().required(),
-    mezFloor: Joi.number().required(),
-    secFloor: Joi.number().required(),
-    thirdFloor: Joi.number().required(),
-    roofTop: Joi.number().required(),
-    totalArea: Joi.number().required(),
-    monthlyRent: Joi.number().required(),
-    spacesImage: Joi.string().required(),
-    tenantId: Joi.string().required(),
-    sysUserId: Joi.string().required()
+const schema = z.object({
+    spaceCode: z.string(),
+    spaceName: z.string(),
+    oStatus: z.string(),
+    leasePeriod: z.string(),
+    expiryDate: z.string().transform((value) => new Date(value)),
+    gFloorArea: z.number(),
+    mezFloor: z.number(),
+    secFloor: z.number(),
+    thirdFloor: z.number(),
+    roofTop: z.number(),
+    totalArea: z.number(),
+    monthlyRent: z.number(),
+    spacesImage: z.string(),
+    propertyId: z.string(),
+    sysUserId: z.string()
 });
 
 export async function POST(req: Request) {
     try {
-        const {spaceCode, spaceName, oStatus, leasePeriod, expiryDate,
-        gFloorArea, mezFloor, secFloor, thirdFloor, roofTop, totalArea,
-        monthlyRent, spacesImage, tenantId, sysUserId
+        const {
+            spaceCode, spaceName, oStatus, leasePeriod, expiryDate,
+            gFloorArea, mezFloor, secFloor, thirdFloor, roofTop, totalArea,
+            monthlyRent, spacesImage, propertyId, sysUserId
         } = await req.json()
 
         // Validate the request body against the schema
-        const { error } = schema.validate({
+        schema.parse({
             spaceCode, spaceName, oStatus, leasePeriod, expiryDate,
             gFloorArea, mezFloor, secFloor, thirdFloor, roofTop, totalArea,
-            monthlyRent, spacesImage, tenantId, sysUserId
+            monthlyRent, spacesImage, propertyId, sysUserId
         });
 
-        if (error) {
-            console.error('Error:', error);
-            return NextResponse.json({
-                status: 'error',
-                message: 'Invalid request body. Please provide all required fields.'
-            }, { status: 400 });
-        }
-      
         const spaces = await prisma.spaces.create({
             data: {
                 spaceCode,
@@ -58,7 +51,7 @@ export async function POST(req: Request) {
                 totalArea,
                 monthlyRent,
                 spacesImage,
-                tenantId,
+                propertyId,
                 sysUserId
             }
         })
@@ -78,7 +71,7 @@ export async function POST(req: Request) {
                 totalArea: spaces.totalArea,
                 monthlyRent: spaces.monthlyRent,
                 spacesImage: spaces.spacesImage,
-                tenantId: spaces.tenantId,
+                propertyId: spaces.propertyId,
                 sysUserId: spaces.sysUserId
             }
         })

@@ -3,11 +3,8 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function POST(req: Request) {
+export async function GET() {
   try {
-    // Assuming you expect an empty request body for fetching properties
-    const { } = await req.json();
-
     // Fetch all properties from the database
     const spaces = await prisma.spaces.findMany({
       include: {

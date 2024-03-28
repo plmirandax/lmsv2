@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     // Fetch all properties from the database
     const tenants = await prisma.tenant.findMany({
       include: {
-        User: {
+        sysUser: {
           select: {
             name: true,
           },

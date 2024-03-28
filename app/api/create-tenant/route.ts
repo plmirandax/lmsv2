@@ -14,13 +14,14 @@ const schema = Joi.object({
     province: Joi.string().required(),
     zipCode: Joi.string().required(),
     tenantImage: Joi.array().items(Joi.string()).optional(),
-    UserId: Joi.string().required()
+    spaceId: Joi.string().required(),
+    sysUserId: Joi.string().required()
 });
 
 export async function POST(req: Request) {
     try {
         const {tenantCode, name, email, passwordHash,
-        contactNo, address, city, province, zipCode, UserId, tenantImage
+        contactNo, address, city, province, zipCode, sysUserId, spaceId, tenantImage
         } = await req.json()
       
         const tenants = await prisma.tenant.create({
@@ -35,7 +36,8 @@ export async function POST(req: Request) {
                 province,
                 zipCode,
                 tenantImage,
-                UserId
+                spaceId,
+                sysUserId
             }
         })
 
@@ -50,7 +52,8 @@ export async function POST(req: Request) {
                 province: tenants.province,
                 zipCode: tenants.zipCode,
                 tenantImage: tenants.tenantImage,
-                UserId: tenants.UserId, 
+                spaceId: tenants.spaceId,
+                sysUserId: tenants.sysUserId, 
                  // Include sysUserId in the response
             }
         })

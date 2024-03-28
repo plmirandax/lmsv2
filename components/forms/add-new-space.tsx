@@ -15,6 +15,7 @@ import { z } from 'zod';
 import { DatePicker } from "./customCalendar";
 import FileUpload from "./file-upload";
 import { SelectSeparator } from "../ui/select";
+import { PlusCircleIcon, PlusIcon } from "lucide-react";
 
 
 interface User {
@@ -55,7 +56,7 @@ const spaceSchema = z.object({
   monthlyRent: z.number(),
   spacesImage: z.string(),
   tenantId: z.string().nullable(),
-  propertyId: z.string().nullable(),
+  propertyId: z.string(),
   sysUserId: z.string(),
 });
 
@@ -63,7 +64,9 @@ export function AddNewSpace() {
   const { data: session } = useNextAuthSession();
   const userId = (session?.user as User)?.id
   const [selectedTenantId, setSelectedTenantId] = useState<string>('');
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string>('');
   const [tenants, setTenants] = useState<Tenant[]>([]);
+  const [properties, setProperty] = useState<Property[]>([]);
   const [formData, setFormData] = useState({
     spaceCode: '',
     spaceName: '',
@@ -105,6 +108,27 @@ export function AddNewSpace() {
       tenantId: selectedTenantId,
     }));
   }, [selectedTenantId]);
+
+  useEffect(() => {
+    fetch('/api/dropbox-property') // replace with your API route
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => setProperty(data.properties))
+      .catch(error => console.error('Failed to fetch tenants:', error));
+  }, []);
+
+  useEffect(() => {
+    console.log("Selected Tenant ID Updated:", selectedPropertyId);
+    // Update tenantId in formData when selectedTenantId changes
+    setFormData(prevState => ({
+      ...prevState,
+      propertyId: selectedPropertyId,
+    }));
+  }, [selectedPropertyId]);
 
   useEffect(() => {
     setFormData(prevState => ({
@@ -174,7 +198,7 @@ export function AddNewSpace() {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline" className="bg-transparent border-none">Add New Space</Button>
+          <Button variant="outline" className="bg-transparent"> <PlusCircleIcon className="pr-2" /> Add New Space</Button>
         </DialogTrigger>
         <form onSubmit={handleSubmit}>
         <DialogContent className="sm:max-w-[900px]">
@@ -276,36 +300,36 @@ export function AddNewSpace() {
                   <div className="w-1/2 mt-6 pr-4">
                     <Label>Select Tenant</Label>
                     <select 
-  value={selectedTenantId} 
-  onChange={(e) => setSelectedTenantId(e.target.value)}
-  className="w-full mt-2 px-1 py-2 border dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 sm:text-sm dark:bg-gray-800 dark:text-white transition-colors duration-200 ease-in-out"
->
-  <option value="" className="bg-white dark:bg-gray-800 dark:text-white">Select tenant...</option>
-  {tenants.map((tenant) => (
-    <option key={tenant.id} value={tenant.id} className="bg-white dark:bg-gray-800 dark:text-white">
-      {tenant.name}
-    </option>
-  ))}
-</select>
-<Label>Selected Tenant ID {selectedTenantId}</Label>
+                        value={selectedTenantId} 
+                        onChange={(e) => setSelectedTenantId(e.target.value)}
+                        className="w-full mt-2 px-1 py-2 border dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 sm:text-sm dark:bg-gray-800 dark:text-white transition-colors duration-200 ease-in-out"
+                        >
+                        <option value="" className="bg-white dark:bg-gray-800 dark:text-white">Select tenant...</option>
+                        {tenants.map((tenant) => (
+                        <option key={tenant.id} value={tenant.id} className="bg-white dark:bg-gray-800 dark:text-white">
+                        {tenant.name}
+                        </option>
+                        ))}
+                        </select>
+                        <Label>Selected Tenant ID {selectedTenantId}</Label>
                   </div>
                   <div className="w-1/2 mt-6 pl-4">
-                  <Label>Select Tenant</Label>
+                  <Label>Select Property</Label>
                     <select 
-  value={selectedTenantId} 
-  onChange={(e) => setSelectedTenantId(e.target.value)}
-  className="w-full mt-2 px-1 py-2 border dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 sm:text-sm dark:bg-gray-800 dark:text-white transition-colors duration-200 ease-in-out"
->
-  <option value="" className="bg-white dark:bg-gray-800 dark:text-white">Select tenant...</option>
-  {tenants.map((tenant) => (
-    <option key={tenant.id} value={tenant.id} className="bg-white dark:bg-gray-800 dark:text-white">
-      {tenant.name}
-    </option>
-  ))}
-</select>
-<Label>Selected Tenant ID {selectedTenantId}</Label>
-                  </div>
-              </div>
+                      value={selectedPropertyId} 
+                      onChange={(e) => setSelectedPropertyId(e.target.value)}
+                      className="w-full mt-2 px-1 py-2 border dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 sm:text-sm dark:bg-gray-800 dark:text-white transition-colors duration-200 ease-in-out"
+                      >
+                      <option value="" className="bg-white dark:bg-gray-800 dark:text-white">Select tenant...</option>
+                      {properties.map((properties) => (
+                      <option key={properties.id} value={properties.id} className="bg-white dark:bg-gray-800 dark:text-white">
+                      {properties.propertyName}
+                      </option>
+                      ))}
+                      </select>
+                      <Label>Selected Property ID {selectedPropertyId}</Label>
+                      </div>
+                      </div>
               <div className="flex justify-center w-full">
               </div>
             </div>

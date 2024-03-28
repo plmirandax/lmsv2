@@ -20,6 +20,7 @@ import { CheckCircledIcon, ReloadIcon } from "@radix-ui/react-icons"
 import FileUpload from "./file-upload"
 import "@uploadthing/react/styles.css";
 import { z } from 'zod';
+import { PlusCircleIcon } from "lucide-react"
 
 interface User {
   id: string
@@ -148,7 +149,7 @@ export function AddNewProperty() {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline" className="bg-transparent border-none">Add New Property</Button>
+          <Button variant="outline" className="bg-transparent"> <PlusCircleIcon className="pr-2"/>Add New Property</Button>
         </DialogTrigger>
         <form onSubmit={handleSubmit}>
         <DialogContent className="sm:max-w-[900px]">

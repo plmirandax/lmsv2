@@ -4,8 +4,6 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Tenants } from "../data/schema"
 import { DataTableColumnHeader } from "./data-table-column-header"
-import { DataTableRowActions } from "./data-table-row-actions"
-import Image from "next/image"
 import { Row } from "@tanstack/react-table";
 import { useState } from "react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -21,9 +19,7 @@ import { TaxDecDetails } from "@/components/forms/tax-dec"
 import { TenantSpaceDetails } from "@/components/forms/space-details"
 import { TenantsBillingDetails } from "@/components/forms/billings-tenant"
 
-
 type RowData = Row<Tenants>;
-
 const CellComponent = ({ row }: { row: RowData }) => {
   const tenants = row.original;
   const [isOpen, setIsOpen] = useState(false);
@@ -58,7 +54,7 @@ const CellComponent = ({ row }: { row: RowData }) => {
       <div className="flex justify-center items-center z-50">
         <Dialog open={isOpen} onOpenChange={handleCloseModal}>
           <DialogContent className="sm:max-w-[750px]">
-            <CardTitle>Edit Tenant Details
+            <CardTitle>Tenant Details
               <CardDescription>Fill in the form below to update tenant details.</CardDescription>
               <SelectSeparator />
               <div className="flex flex-col items-center justify-center py-4">
