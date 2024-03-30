@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "../providers/providers";
 import ToasterProvider from "@/components/ToasterProvider";
 import IdleTimeout from '../components/IdleTimeout' // Import the new component
+import ModalProvider from "@/providers/modal-provider";
 
 
 
@@ -17,9 +18,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: {
+  children: React.ReactNode
+}) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
@@ -30,8 +31,10 @@ export default function RootLayout({
             disableTransitionOnChange>
        <Providers>
         <ToasterProvider />
+        <ModalProvider>
         <IdleTimeout /> {/* Include the new component */}
         {children}
+        </ModalProvider>
         </Providers>
         </ThemeProvider>
         </body>

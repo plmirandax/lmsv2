@@ -32,6 +32,9 @@ model User {
   tenants       Tenant[]
   billing       Billing[]
   spaces        Spaces[]
+  Pipeline      Pipeline[]
+  Tags          Tag[]
+  ticket        Ticket[]
   createdAt     DateTime @default(now())
   createdBy     String?
   updatedBy     String?
@@ -59,6 +62,7 @@ model Tenant {
   spaceId       String?
   space         Spaces?      @relation(fields: [spaceId], references: [id])
   billing       Billing[]
+  ticket        Ticket[]
   createdAt     DateTime @default(now())
   updatedAt     DateTime?     @updatedAt
   deletedAt     DateTime?
@@ -152,4 +156,66 @@ model Utilities {
   waterAcctName String
   createdAt    DateTime @default(now())
   updatedAt   DateTime?     @updatedAt
+}
+
+model Tag {
+  id           String   @id @default(uuid())
+  name         String
+  color        String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  sysUserId String
+
+  sysUser User @relation(fields: [sysUserId], references: [id], onDelete: Cascade)
+  Ticket     Ticket[]
+
+  @@index([sysUserId])
+}
+
+model Pipeline {
+  id           String     @id @default(uuid())
+  name         String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  Lane         Lane[]
+  sysUser      User @relation(fields: [sysUserId], references: [id], onDelete: Cascade)
+  sysUserId String
+
+  @@index([sysUserId])
+}
+
+model Lane {
+  id         String   @id @default(uuid())
+  name       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Pipeline   Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
+  pipelineId String
+  Tickets    Ticket[]
+  order      Int      @default(0)
+
+  @@index([pipelineId])
+}
+
+model Ticket {
+  id          String   @id @default(uuid())
+  name        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  laneId      String
+  order       Int      @default(0)
+  Lane        Lane     @relation(fields: [laneId], references: [id], onDelete: Cascade)
+  value       Decimal?
+  description String?
+  Tags        Tag[]
+
+  tenantId String?
+  Tenant   Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
+
+  AssignedsysUserId String?
+  AssignedsysUser       User?   @relation(fields: [AssignedsysUserId], references: [id], onDelete: SetNull)
+
+  @@index([laneId])
+  @@index([tenantId])
+  @@index([AssignedsysUserId])
 }
