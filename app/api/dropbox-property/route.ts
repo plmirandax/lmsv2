@@ -3,23 +3,15 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function POST() {
+export async function GET() {
   try {
     // Fetch all properties from the database
-    const spaces = await prisma.spaces.findMany({
-      include: {
-        sysUser: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
+    const properties = await prisma.properties.findMany();
 
     // Return the fetched properties
     return NextResponse.json({
       status: 'success',
-      spaces,
+      properties,
     });
   } catch (error) {
     console.error("Error during properties fetching:", error);

@@ -24,6 +24,7 @@ import { ModeToggle } from "@/components/mode-toggle"
 import { TenantAnniv } from "./components/tenant-anniv"
 import { SystemMenu } from "./components/system-menu"
 import { useEffect, useState } from 'react';
+import { Separator } from "@/components/ui/separator"
 
 export default function DashboardPage() {
 
@@ -62,16 +63,18 @@ export default function DashboardPage() {
       <div className="w-full md:h-16">
          <div className="w-full h-auto md:h-16">
             <div className="flex h-16 items-center px-4">
-            <div className="hidden sm:block">
+            <div className="hidden sm:block pr-2">
                   <TeamSwitcher />
             </div>
-            <SystemMenu />
+            <div className="flex pl-2"> <SystemMenu /></div>
+
               <div className="ml-auto flex items-center space-x-2">
                 <Search />
                 <ModeToggle />
                 <UserNav />
               </div>
           </div>
+          <Separator />
           </div>
         <div className="flex-1 space-y-4 p-8 md:p-4 pt-6">
           <div className="flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0 md:items-center">

@@ -101,24 +101,24 @@ const CellComponent = ({ row }: { row: RowData }) => {
                     </div>
                   </div>
                   <div className="flex">
-                    <div className="w-1/2 mt-6 pl-4">
+                    <div className="w-1/2 mt-6 pr-4">
                       <Button className="item-right flex" variant="outline">
                         <TenantSpaceDetails />
                       </Button>
                     </div>
 
-                    <div className="w-1/2 mt-6 pl-4 ">
-                      <Button className="item-right flex" variant="outline">
+                    <div className="w-1/2 mt-6 pr-4 ">
+                      <Button className="item-right flex pr-4" variant="outline">
                         <UtilityDetails />
                       </Button>
                     </div>
-                    <div className="w-1/2 mt-6 pl-4">
-                      <Button className="item-right flex" variant="outline">
+                    <div className="w-1/2 mt-6 pr-4">
+                      <Button className="item-right flex pr-4" variant="outline">
                         <TaxDecDetails />
                       </Button>
                     </div>
-                    <div className="w-1/2 mt-6 pl-4 pr-4">
-                      <Button className="item-right flex" variant='outline'>
+                    <div className="w-1/2 mt-6 pr-4">
+                      <Button className="item-right flex pr-4" variant='outline'>
                         <TenantsBillingDetails />
                       </Button>
                     </div>
@@ -180,18 +180,17 @@ export const columns: ColumnDef<Tenants>[] = [
     ),
   },
   {
+    accessorKey: "space.spaceName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Space" />
+    ),
+  },
+  {
     accessorKey: "email",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Email" />
     ),
   },
-  {
-    accessorKey: "passwordHash",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Password" />
-    ),
-    cell: () => '••••••••'
-},
   {
     accessorKey: "contactNo",
     header: ({ column }) => (
@@ -229,7 +228,7 @@ export const columns: ColumnDef<Tenants>[] = [
     ),
   },
   {
-    accessorKey: "User.name",
+    accessorKey: "sysUser.name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Created by" />
     ),

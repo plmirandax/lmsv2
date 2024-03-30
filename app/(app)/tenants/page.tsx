@@ -8,6 +8,12 @@ import { Search } from "../dashboard/components/search";
 import { ModeToggle } from "@/components/mode-toggle";
 import { SystemMenu } from "../dashboard/components/system-menu";
 import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Building, ChevronLeft, ChevronRight, Copy, CreditCard, MoreVertical, Truck } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Separator } from '@/components/ui/separator';
+import { Pagination, PaginationContent, PaginationItem } from '@/components/ui/pagination';
 
 
 export default function TenantsPage() {
@@ -45,7 +51,7 @@ export default function TenantsPage() {
     <div className="min-h-screen flex flex-col">
       <div className="w-full h-auto md:h-16">
         <div className="flex h-16 items-center px-4">
-          <div className="hidden sm:block">
+          <div className="hidden sm:block pr-4">
             <TeamSwitcher />
           </div>
           <SystemMenu />
@@ -55,6 +61,7 @@ export default function TenantsPage() {
             <UserNav />
           </div>
         </div>
+        <Separator />
       </div>
       <div className="flex-1 flex flex-col p-4">
         <div className="flex flex-col space-y-5">

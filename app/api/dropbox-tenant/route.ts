@@ -3,10 +3,10 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function POST() {
+export async function GET() {
   try {
-    // Fetch all properties from the database
-    const spaces = await prisma.spaces.findMany({
+    // Fetch all tenants from the database
+    const tenants = await prisma.tenant.findMany({
       include: {
         sysUser: {
           select: {
@@ -16,16 +16,16 @@ export async function POST() {
       },
     });
 
-    // Return the fetched properties
+    // Return the fetched tenants
     return NextResponse.json({
       status: 'success',
-      spaces,
+      tenants,
     });
   } catch (error) {
-    console.error("Error during properties fetching:", error);
+    console.error("Error during tenants fetching:", error);
     return NextResponse.json({
       status: 'error',
-      message: 'An error occurred while fetching properties',
+      message: 'An error occurred while fetching tenants',
     }, { status: 500 });
   }
 }

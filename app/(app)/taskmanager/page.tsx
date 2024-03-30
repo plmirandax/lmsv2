@@ -13,6 +13,7 @@ import { Search } from "../dashboard/components/search"
 import { ModeToggle } from "@/components/mode-toggle"
 import { AdminControl } from "../dashboard/components/admin-settings"
 import { SystemMenu } from "../dashboard/components/system-menu"
+import { Separator } from "@/components/ui/separator"
 
 export const metadata: Metadata = {
   title: "Task Manager",
@@ -37,7 +38,7 @@ export default async function TaskPage() {
     <div className="min-h-screen flex flex-col">
           <div className="w-full h-auto md:h-16">
             <div className="flex h-16 items-center px-4">
-            <div className="hidden sm:block">
+            <div className="hidden sm:block pr-4">
                   <TeamSwitcher />
             </div>
             <SystemMenu />
@@ -47,6 +48,7 @@ export default async function TaskPage() {
                 <UserNav />
               </div>
           </div>
+          <Separator />
           </div>
        <div className="flex-1 flex flex-col p-4">
         <div className="flex flex-col space-y-4">

@@ -8,6 +8,7 @@ import { Search } from "../dashboard/components/search";
 import { ModeToggle } from "@/components/mode-toggle";
 import { SystemMenu } from "../dashboard/components/system-menu";
 import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 
 
 export default function PropertyPage() {
@@ -45,7 +46,7 @@ export default function PropertyPage() {
     <div className="min-h-screen flex flex-col">
       <div className="w-full h-auto md:h-16">
         <div className="flex h-16 items-center px-4">
-          <div className="hidden sm:block">
+          <div className="hidden sm:block pr-4">
             <TeamSwitcher />
           </div>
           <SystemMenu />
@@ -55,6 +56,7 @@ export default function PropertyPage() {
             <UserNav />
           </div>
         </div>
+        <Separator />
       </div>
       <div className="flex-1 flex flex-col p-4">
         <div className="flex flex-col space-y-5">

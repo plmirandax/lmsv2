@@ -16,6 +16,11 @@ export async function POST(req: Request) {
             name: true,
           },
         },
+        space: {
+          select: {
+            spaceName: true,
+          },
+        }
       },
     });
 

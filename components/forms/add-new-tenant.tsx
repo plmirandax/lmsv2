@@ -1,5 +1,4 @@
 'use client'
-
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -12,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { SelectSeparator } from "../../components/ui/select"
+import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from "../../components/ui/select"
 import { useSession as useNextAuthSession } from 'next-auth/react'
 import React, { useState, useEffect } from 'react';
 import toast from "react-hot-toast"
@@ -55,7 +54,7 @@ export function AddNewTenant() {
   const { data: session } = useNextAuthSession();
   const userId = (session?.user as User)?.id
   const [selectedSpaceId, setSelectedSpaceId] = useState<string>('');
-  const [spacex, setSpaces] = useState<Spaces[]>([]);
+  const [spaces, setSpaces] = useState<Spaces[]>([]);
   const [formData, setFormData] = useState({
     tenantCode: '',
     name: '',
@@ -74,20 +73,32 @@ export function AddNewTenant() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    fetch('/api/fetchspaces') // replace with your API route
-      .then(response => {
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/fetchspaces', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({}),
+        });
+  
         if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error('Failed to fetch property data');
         }
-        return response.json();
-      })
-      .then(data => setSpaces(data.spaces))
-      .catch(error => console.error('Failed to fetch tenants:', error));
+  
+        const responseData = await response.json();
+        setSpaces(responseData.spaces);
+        console.log(responseData.spaces);
+      } catch (error) {
+        console.error('Error fetching property data:', error);
+      }
+    }
+  
+    fetchData();
   }, []);
 
   useEffect(() => {
-    console.log("Selected Tenant ID Updated:", selectedSpaceId);
-    // Update tenantId in formData when selectedTenantId changes
     setFormData(prevState => ({
       ...prevState,
       spaceId: selectedSpaceId,
@@ -107,6 +118,13 @@ export function AddNewTenant() {
         ...prevState,
         [key]: value,
       }));
+    }
+  };
+
+  const handleSelectChange = (value: string) => {
+    const selectedSpace = spaces.find(space => space.spaceName === value);
+    if (selectedSpace) {
+      setSelectedSpaceId(selectedSpace.id);
     }
   };
 
@@ -232,21 +250,21 @@ export function AddNewTenant() {
             </div>
           </div>
           <div className="flex">
-              <div className="w-1/2 mt-4 pr-4">
+              <div className="w-1/2 mt-0 pr-4">
               <Label>Select Space</Label>
-                    <select 
-                      value={selectedSpaceId} 
-                      onChange={(e) => setSelectedSpaceId(e.target.value)}
-                      className="w-full mt-2 px-1 py-2 border dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 sm:text-sm dark:bg-gray-800 dark:text-white transition-colors duration-200 ease-in-out"
-                      >
-                      <option value="" className="bg-white dark:bg-gray-800 dark:text-white">Select space...</option>
-                      {spacex.map((spaces) => (
-                      <option key={spaces.id} value={spaces.id} className="mt-1 bg-white dark:bg-gray-800 dark:text-white">
-                      {spaces.spaceName}
-                      </option>
-                      ))}
-                      </select>
-                      <Label>ID: {selectedSpaceId}</Label>
+              <Select onValueChange={(value: string) => handleSelectChange(value)}>
+              <SelectTrigger id="status" aria-label="Select status">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                {spaces.map(space => (
+                  <SelectItem key={space.id} value={space.spaceName}>
+                    {space.spaceName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Label>Space ID: {selectedSpaceId}</Label>
               </div>
           </div>
           </div>

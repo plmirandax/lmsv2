@@ -1,5 +1,4 @@
 'use client'
-
 import * as React from "react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -15,8 +14,8 @@ import { z } from 'zod';
 import { DatePicker } from "./customCalendar";
 import FileUpload from "./file-upload";
 import { SelectSeparator } from "../ui/select";
-import { PlusCircleIcon, PlusIcon } from "lucide-react";
-
+import { PlusCircleIcon } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 
 interface User {
   id: string;
@@ -25,15 +24,6 @@ interface User {
   image: string | null;
   role: string;
 }
-
-interface Tenant {
-  id: string;
-  name: string;
-  email: string;
-  tenantCode: string;
-  tenantImage: string | null;
-}
-
 interface Property {
   id: string;
   propertyName: string;
@@ -63,10 +53,9 @@ const spaceSchema = z.object({
 export function AddNewSpace() {
   const { data: session } = useNextAuthSession();
   const userId = (session?.user as User)?.id
-  const [selectedTenantId, setSelectedTenantId] = useState<string>('');
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>('');
-  const [tenants, setTenants] = useState<Tenant[]>([]);
   const [properties, setProperty] = useState<Property[]>([]);
+  const [selectedPropertyName, setSelectedPropertyName] = useState<string>('');
   const [formData, setFormData] = useState({
     spaceCode: '',
     spaceName: '',
@@ -78,7 +67,7 @@ export function AddNewSpace() {
     secFloor: 0,
     thirdFloor: 0,
     roofTop: 0,
-    totalArea: 0,
+    totalArea: 0, // Initialize total area to 0
     monthlyRent: 0,
     spacesImage: '',
     tenantId: '', // Initialize tenantId here
@@ -87,27 +76,6 @@ export function AddNewSpace() {
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof typeof formData, boolean>>>({});
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    fetch('/api/dropbox-tenant') // replace with your API route
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => setTenants(data.tenants))
-      .catch(error => console.error('Failed to fetch tenants:', error));
-  }, []);
-
-  useEffect(() => {
-    console.log("Selected Tenant ID Updated:", selectedTenantId);
-    // Update tenantId in formData when selectedTenantId changes
-    setFormData(prevState => ({
-      ...prevState,
-      tenantId: selectedTenantId,
-    }));
-  }, [selectedTenantId]);
 
   useEffect(() => {
     fetch('/api/dropbox-property') // replace with your API route
@@ -137,12 +105,29 @@ export function AddNewSpace() {
     }));
   }, [userId]);
 
+  // Function to calculate total area
+  useEffect(() => {
+    const { gFloorArea, mezFloor, secFloor, thirdFloor, roofTop } = formData;
+    const totalArea = gFloorArea + mezFloor + secFloor + thirdFloor + roofTop;
+    setFormData(prevState => ({
+      ...prevState,
+      totalArea,
+    }));
+  }, [formData.gFloorArea, formData.mezFloor, formData.secFloor, formData.thirdFloor, formData.roofTop]);
+
   const handleChange = (key: keyof typeof formData, value: string | number | Date | undefined) => {
     if (value !== undefined) {
       setFormData(prevState => ({
         ...prevState,
         [key]: value,
       }));
+    }
+  };
+
+  const handleSelectChange = (value: string) => {
+    const selectedProperty = properties.find(properties => properties.propertyName === value);
+    if (selectedProperty) {
+      setSelectedPropertyId(selectedProperty.id);
     }
   };
 
@@ -287,7 +272,13 @@ export function AddNewSpace() {
                   <Label htmlFor="totalArea" className="text-right">
                   Total Area
                 </Label>
-                <Input id="totalArea" required value={formData.totalArea} onChange={(e) => handleChange('totalArea', Number(e.target.value))} className={formErrors.totalArea ? 'invalid' : ''}/>
+                <Input 
+                id="totalArea"
+                disabled
+                value={formData.totalArea} // Display totalArea from formData
+                readOnly // Make the input field read-only to prevent user input
+                className="border rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                />
                   </div>
                   <div className="w-1/2 pl-4">
                   <Label htmlFor="monthlyRent" className="text-right">
@@ -297,37 +288,20 @@ export function AddNewSpace() {
                   </div>
               </div>
               <div className="flex">
-                  <div className="w-1/2 mt-6 pr-4">
-                    <Label>Select Tenant</Label>
-                    <select 
-                        value={selectedTenantId} 
-                        onChange={(e) => setSelectedTenantId(e.target.value)}
-                        className="w-full mt-2 px-1 py-2 border dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 sm:text-sm dark:bg-gray-800 dark:text-white transition-colors duration-200 ease-in-out"
-                        >
-                        <option value="" className="bg-white dark:bg-gray-800 dark:text-white">Select tenant...</option>
-                        {tenants.map((tenant) => (
-                        <option key={tenant.id} value={tenant.id} className="bg-white dark:bg-gray-800 dark:text-white">
-                        {tenant.name}
-                        </option>
-                        ))}
-                        </select>
-                        <Label>Selected Tenant ID {selectedTenantId}</Label>
-                  </div>
-                  <div className="w-1/2 mt-6 pl-4">
+                  <div className="w-1/2 mt-2 pl-0">
                   <Label>Select Property</Label>
-                    <select 
-                      value={selectedPropertyId} 
-                      onChange={(e) => setSelectedPropertyId(e.target.value)}
-                      className="w-full mt-2 px-1 py-2 border dark:border-gray-700 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 sm:text-sm dark:bg-gray-800 dark:text-white transition-colors duration-200 ease-in-out"
-                      >
-                      <option value="" className="bg-white dark:bg-gray-800 dark:text-white">Select tenant...</option>
-                      {properties.map((properties) => (
-                      <option key={properties.id} value={properties.id} className="bg-white dark:bg-gray-800 dark:text-white">
-                      {properties.propertyName}
-                      </option>
-                      ))}
-                      </select>
-                      <Label>Selected Property ID {selectedPropertyId}</Label>
+                  <Select onValueChange={(value: string) => handleSelectChange(value)}>
+              <SelectTrigger id="status" aria-label="Select status">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                {properties.map(properties => (
+                  <SelectItem key={properties.id} value={properties.propertyName}>
+                    {properties.propertyName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
                       </div>
                       </div>
               <div className="flex justify-center w-full">
