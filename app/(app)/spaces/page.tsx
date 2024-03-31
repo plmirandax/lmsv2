@@ -8,6 +8,7 @@ import { Search } from "../dashboard/components/search";
 import { ModeToggle } from "@/components/mode-toggle";
 import { SystemMenu } from "../dashboard/components/system-menu";
 import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 
 
 export default function SpacesPage() {
@@ -55,6 +56,7 @@ export default function SpacesPage() {
             <UserNav />
           </div>
         </div>
+        <Separator />
       </div>
       <div className="flex-1 flex flex-col p-4">
         <div className="flex flex-col space-y-5">

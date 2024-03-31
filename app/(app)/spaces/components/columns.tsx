@@ -207,12 +207,17 @@ export const columns: ColumnDef<Spaces>[] = [
       <DataTableColumnHeader column={column} title="Lease Period" />
     ),
 },
-  {
-    accessorKey: "expiryDate",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Expiry Date" />
-    ),
+{
+  accessorKey: "expiryDate",
+  header: ({ column }) => (
+    <DataTableColumnHeader column={column} title="Expiry Date" />
+  ),
+  cell: ({ row }) => {
+    const date = new Date(row.original.expiryDate);
+    const formattedDate = `${date.getMonth()+1}-${date.getDate()}-${date.getFullYear()}`;
+    return <div>{formattedDate}</div>;
   },
+},
   {
     accessorKey: "gFloorArea",
     header: ({ column }) => (
