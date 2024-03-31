@@ -13,7 +13,6 @@ const schema = z.object({
     thirdFloor: z.number(),
     roofTop: z.number(),
     totalArea: z.number(),
-    monthlyRent: z.number(),
     spacesImage: z.string(),
     propertyId: z.string(),
     sysUserId: z.string()
@@ -45,7 +44,6 @@ export async function POST(req: Request) {
                 thirdFloor,
                 roofTop,
                 totalArea,
-                monthlyRent,
                 spacesImage,
                 propertyId,
                 sysUserId
@@ -63,7 +61,6 @@ export async function POST(req: Request) {
                 thirdFloor: spaces.thirdFloor,
                 roofTop: spaces.roofTop,
                 totalArea: spaces.totalArea,
-                monthlyRent: spaces.monthlyRent,
                 spacesImage: spaces.spacesImage,
                 propertyId: spaces.propertyId,
                 sysUserId: spaces.sysUserId

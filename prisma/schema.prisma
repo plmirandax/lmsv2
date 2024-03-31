@@ -54,6 +54,7 @@ model Tenant {
   zipCode       String
   leasePeriod   DateTime?
   expiryDate    DateTime?
+  monthlyRate   Float?
   tenantImage   String?     @db.Text
   sysUserId        String?
   TenantResetPasswordToken String? @unique
@@ -105,7 +106,6 @@ model Spaces {
   thirdFloor    Float?
   roofTop       Float?
   totalArea     Float
-  monthlyRent   Float
   spacesImage   String?     @db.Text
   sysUserId     String
   sysUser       User      @relation(fields: [sysUserId], references: [id])

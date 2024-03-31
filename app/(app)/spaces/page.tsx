@@ -45,8 +45,8 @@ export default function SpacesPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <div className="w-full h-auto md:h-16">
-        <div className="flex h-16 items-center px-4">
-          <div className="hidden sm:block">
+        <div className="flex h-16 items-center px-4 pl-4">
+          <div className="hidden sm:block pr-4">
             <TeamSwitcher />
           </div>
           <SystemMenu />

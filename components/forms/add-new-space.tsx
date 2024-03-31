@@ -16,6 +16,7 @@ import FileUpload from "./file-upload";
 import { SelectGroup, SelectLabel, SelectSeparator } from "../ui/select";
 import { CircleCheck, PlusCircleIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
+import { Card, CardContent } from "../ui/card";
 
 interface User {
   id: string;
@@ -41,7 +42,6 @@ const spaceSchema = z.object({
   thirdFloor: z.number(),
   roofTop: z.number(),
   totalArea: z.number(),
-  monthlyRent: z.number(),
   spacesImage: z.string(),
   tenantId: z.string().nullable(),
   propertyId: z.string(),
@@ -64,7 +64,6 @@ export function AddNewSpace() {
     thirdFloor: 0,
     roofTop: 0,
     totalArea: 0, // Initialize total area to 0
-    monthlyRent: 0,
     spacesImage: '',
     tenantId: '', // Initialize tenantId here
     propertyId: '',
@@ -167,7 +166,6 @@ export function AddNewSpace() {
         thirdFloor: 0,
         roofTop: 0,
         totalArea: 0,
-        monthlyRent: 0,
         spacesImage: '',
         tenantId: '',
         propertyId: '',
@@ -188,16 +186,17 @@ export function AddNewSpace() {
           <Button variant="outline" className="bg-transparent"> <PlusCircleIcon className="pr-2" /> Add New Space</Button>
         </DialogTrigger>
         <form onSubmit={handleSubmit}>
-        <DialogContent className="sm:max-w-[900px]">
+        <DialogContent className="sm:max-w-[650px]">
           <DialogHeader>
             <DialogTitle>Space Details</DialogTitle>
             <DialogDescription>
               Fill all the required fields to add a new space.
             </DialogDescription>
-            <SelectSeparator />
           </DialogHeader>
-          <div className="flex flex-col py-4">
-              <div className="flex">
+          <div className="flex flex-col">
+              <Card>
+                <CardContent>
+                  <div className="flex mt-6">
                     <div className="w-1/2 pr-4">
                       <Label htmlFor="spaceCode" className="text-right">
                             Space Code
@@ -210,67 +209,88 @@ export function AddNewSpace() {
                         </Label>
                         <Input id="spaceName" required value={formData.spaceName} onChange={(e) => handleChange('spaceName', e.target.value)} className={formErrors.spaceName ? 'invalid' : ''}/>
                   </div>
-                  <div className="w-1/2 pl-4">
-<Label htmlFor="oStatus" className="text-right">
-      Status
-    </Label>
-    <Select onValueChange={handleStatusChange}>
-      <SelectTrigger className="w-[200px]">
-        <SelectValue placeholder="Select status" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectItem value="Vacant" onSelect={() => handleStatusChange('Vacant')}>
-            Vacant
-          </SelectItem>
-          <SelectItem value="Occupied" onSelect={() => handleStatusChange('Occupied')}>
-            Occupied
-          </SelectItem>
-          <SelectItem value="Under Renovation" onSelect={() => handleStatusChange('Under Renovation')}>
-            Under Renovation
-          </SelectItem>
-        </SelectGroup>
-      </SelectContent>
-    </Select>
                   </div>
+                  <div className="flex">
+                  <div className="w-1/2 mt-2 pr-4">
+                      <Label htmlFor="oStatus" className="text-right">
+                      Status
+                      </Label>
+                      <Select onValueChange={handleStatusChange}>
+                      <SelectTrigger>
+                      <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                      <SelectGroup>
+                      <SelectItem value="Vacant" onSelect={() => handleStatusChange('Vacant')}>
+                      Vacant
+                      </SelectItem>
+                      <SelectItem value="Occupied" onSelect={() => handleStatusChange('Occupied')}>
+                      Occupied
+                      </SelectItem>
+                      <SelectItem value="Under Renovation" onSelect={() => handleStatusChange('Under Renovation')}>
+                      Under Renovation
+                      </SelectItem>
+                      </SelectGroup>
+                      </SelectContent>
+                      </Select>
+                  </div>
+
+                  <div className="w-1/2 mt-2 pl-4">
+                  <Label>Select Property</Label>
+                  <Select onValueChange={(value: string) => handleSelectChange(value)}>
+                  <SelectTrigger id="status" aria-label="Select status">
+                  <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                  {properties.map(properties => (
+                  <SelectItem key={properties.id} value={properties.propertyName}>
+                  {properties.propertyName}
+                  </SelectItem>
+                  ))}
+                  </SelectContent>
+                  </Select>
               </div>
-              <div className="flex">
-                  <div className="w-1/2 pl-4">
+
+              </div>
+              </CardContent>
+              </Card>
+              <Card className="mt-4">
+                <CardContent>
+              <div className="flex mt-4">
+              <div className="w-1/2 pr-4">
                   <Label htmlFor="gFloorArea" className="text-right">
                   Ground Floor
                 </Label>
                 <Input id="gFloorArea" required value={formData.gFloorArea} onChange={(e) => handleChange('gFloorArea', Number (e.target.value))} className={formErrors.gFloorArea ? 'invalid' : ''}/>
                   </div>
-              </div>
-              <div className="flex">
-                    <div className="w-1/2 pr-4">
+                    <div className="w-1/2 pr-4 pl-2">
                     <Label htmlFor="mezFloor" className="text-right">
                   Mezzanine Floor
                 </Label>
                 <Input id="mezFloor" required value={formData.mezFloor} onChange={(e) => handleChange('mezFloor', Number (e.target.value))} className={formErrors.mezFloor ? 'invalid' : ''}/>
                     </div>
-                  <div className="w-1/2 pl-4">
+                  <div className="w-1/2 pl-2">
                   <Label htmlFor="secFloor" className="text-right">
                   Second Floor
                 </Label>
                 <Input id="secFloor" required value={formData.secFloor} onChange={(e) => handleChange('secFloor', Number (e.target.value))} className={formErrors.secFloor ? 'invalid' : ''}/>
                   </div>
-                  <div className="w-1/2 pl-4">
+              </div>
+              <div className="flex">
+              <div className="w-1/2 mt-2 pr-4">
                   <Label htmlFor="thirdFloor" className="text-right">
                   Third Floor
                 </Label>
                 <Input id="thirdFloor" required value={formData.thirdFloor} onChange={(e) => handleChange('thirdFloor', Number (e.target.value))} className={formErrors.thirdFloor ? 'invalid' : ''}/>
                   </div>
-              </div>
-              <div className="flex">
-                    <div className="w-1/2 pr-4">
-                    <Label htmlFor="roofTop" className="text-right">
+                    <div className="w-1/2 mt-2 pl-2 pr-4">
+                    <Label htmlFor="roofTop" className="text-right pl-12">
                   Roof Top
                 </Label>
                 <Input id="roofTop" required value={formData.roofTop} onChange={(e) => handleChange('roofTop', Number (e.target.value))} className={formErrors.roofTop ? 'invalid' : ''}/>
                     </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="totalArea" className="text-right">
+                  <div className="w-1/2 mt-1 pl-2">
+                  <Label htmlFor="totalArea" className="text-center pl-12">
                   Total Area
                 </Label>
                 <Input 
@@ -281,40 +301,22 @@ export function AddNewSpace() {
                 className="border rounded-md px-3 py-2 mt-1 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
                 />
                   </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="monthlyRent" className="text-right">
-                  Monthly Rent
-                </Label>
-                <Input id="monthlyRent" required value={formData.monthlyRent} onChange={(e) => handleChange('monthlyRent', Number(e.target.value))} className={formErrors.monthlyRent ? 'invalid' : ''}/>
-                  </div>
               </div>
-              <div className="flex">
-                  <div className="w-1/2 mt-2 pl-0">
-                  <Label>Select Property</Label>
-                  <Select onValueChange={(value: string) => handleSelectChange(value)}>
-              <SelectTrigger id="status" aria-label="Select status">
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                {properties.map(properties => (
-                  <SelectItem key={properties.id} value={properties.propertyName}>
-                    {properties.propertyName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-                      </div>
-                      </div>
-              <div className="flex justify-center w-full">
-              </div>
+              </CardContent>
+              </Card>
             </div>
-            <FileUpload 
+            
+            <Card className="item-center justify-center flex flex-col">
+              <CardContent>
+                <Label className="flex flex-col item-center pt-2">Space Image</Label>
+          <FileUpload 
                 apiEndpoint="spacesImage"
                 value={formData.spacesImage} 
                 onChange={(url) => url && handleChange('spacesImage', url)}
-                className={`${formErrors.spacesImage ? 'invalid' : ''} items-right`}
+                className={`${formErrors.spacesImage ? 'invalid' : ''} items-right pt-2`}
               />
-
+              </CardContent>
+              </Card>
           <DialogFooter>
                 <div className="flex justify-center w-full">
                 <Button className="w-full" onClick={handleSubmit}>

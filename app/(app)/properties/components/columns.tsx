@@ -166,10 +166,10 @@ export const columns: ColumnDef<Properties>[] = [
   {
     accessorKey: "propertyImage",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Image" />
+      <DataTableColumnHeader column={column} title="Image" className="pl-4" />
     ),
     cell: ({ row }) => (
-      <img src={row.original.propertyImage || ''} alt="Property" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+      <Image src={row.original.propertyImage || ''} alt="Property" className="ml-4" style={{ width: '30px', height: '30px', borderRadius: '50%' }} width={30} height={30} />
     ),
   },
   {

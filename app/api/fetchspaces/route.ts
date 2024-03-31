@@ -13,6 +13,11 @@ export async function POST() {
             name: true,
           },
         },
+        property: {
+          select: {
+            propertyName: true,
+          },
+        },
       },
     });
 

@@ -18,6 +18,7 @@ import { UtilityDetails } from "@/components/forms/utility-details"
 import { TaxDecDetails } from "@/components/forms/tax-dec"
 import { TenantSpaceDetails } from "@/components/forms/space-details"
 import { TenantsBillingDetails } from "@/components/forms/billings-tenant"
+import Image from "next/image"
 
 type RowData = Row<Tenants>;
 const CellComponent = ({ row }: { row: RowData }) => {
@@ -161,10 +162,10 @@ export const columns: ColumnDef<Tenants>[] = [
   {
     accessorKey: "tenantImage",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Image" />
+      <DataTableColumnHeader column={column} title="Image" className="pl-4" />
     ),
     cell: ({ row }) => (
-      <img src={row.original.tenantImage || ''} alt="Property" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+      <Image src={row.original.tenantImage || ''} alt="Property" className="ml-4"style={{ width: '30px', height: '30px', borderRadius: '50%' }} width={30} height={30} />
     ),
   },
   {
@@ -224,7 +225,7 @@ export const columns: ColumnDef<Tenants>[] = [
   {
     accessorKey: "emailVerified",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Active?" />
+      <DataTableColumnHeader column={column} title="Verified?" />
     ),
   },
   {

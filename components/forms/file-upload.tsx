@@ -56,9 +56,9 @@ const FileUpload = ({ apiEndpoint, onChange, value }: Props) => {
      appearance={{
       button:
         "ut-ready:bg-green-500 ut-uploading:cursor-not-allowed rounded-r-none bg-blue-500 bg-none after:bg-blue-400",
-      container: "w-full h-45 flex rounded-md border-cyan-300 bg-slate-800",
+      container: "w-full h-25 flex rounded-md border-cyan-300 bg-slate-800",
       allowedContent:
-        "flex h-0.5 flex-col items-center justify-center px-2 text-white",
+        "flex h-auto flex-col items-center justify-center px-2 text-white",
     }}
         endpoint={apiEndpoint}
         onClientUploadComplete={(res) => {

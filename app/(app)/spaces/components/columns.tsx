@@ -169,10 +169,10 @@ export const columns: ColumnDef<Spaces>[] = [
   {
     accessorKey: "spacesImage",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Image" />
+      <DataTableColumnHeader column={column} title="Image" className="pl-4" />
     ),
     cell: ({ row }) => (
-      <img src={row.original.spacesImage || ''} alt="Property" style={{ width: '30px', height: '30px', borderRadius: '50%' }} />
+      <Image src={row.original.spacesImage || ''} alt="Property" className="ml-4" style={{ height: '30px', borderRadius: '50%' }} width={30}height={30} />
     ),
   },
   {
@@ -185,6 +185,12 @@ export const columns: ColumnDef<Spaces>[] = [
     accessorKey: "spaceName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Space Name" />
+    ),
+  },
+  {
+    accessorKey: "property.propertyName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Property Name" />
     ),
   },
   {
@@ -227,12 +233,6 @@ export const columns: ColumnDef<Spaces>[] = [
     accessorKey: "totalArea",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Total Area" />
-    ),
-  },
-  {
-    accessorKey: "monthlyRent",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Monthly Rent" />
     ),
   },
   {
