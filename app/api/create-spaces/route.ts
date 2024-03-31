@@ -7,8 +7,6 @@ const schema = z.object({
     spaceCode: z.string(),
     spaceName: z.string(),
     oStatus: z.string(),
-    leasePeriod: z.string(),
-    expiryDate: z.string().transform((value) => new Date(value)),
     gFloorArea: z.number(),
     mezFloor: z.number(),
     secFloor: z.number(),
@@ -24,14 +22,14 @@ const schema = z.object({
 export async function POST(req: Request) {
     try {
         const {
-            spaceCode, spaceName, oStatus, leasePeriod, expiryDate,
+            spaceCode, spaceName, oStatus,
             gFloorArea, mezFloor, secFloor, thirdFloor, roofTop, totalArea,
             monthlyRent, spacesImage, propertyId, sysUserId
         } = await req.json()
 
         // Validate the request body against the schema
         schema.parse({
-            spaceCode, spaceName, oStatus, leasePeriod, expiryDate,
+            spaceCode, spaceName, oStatus,
             gFloorArea, mezFloor, secFloor, thirdFloor, roofTop, totalArea,
             monthlyRent, spacesImage, propertyId, sysUserId
         });
@@ -41,8 +39,6 @@ export async function POST(req: Request) {
                 spaceCode,
                 spaceName,
                 oStatus,
-                leasePeriod,
-                expiryDate,
                 gFloorArea,
                 mezFloor,
                 secFloor,
@@ -61,8 +57,6 @@ export async function POST(req: Request) {
                 spaceCode: spaces.spaceCode,
                 spaceName: spaces.spaceName,
                 oStatus: spaces.oStatus,
-                leasePeriod: spaces.leasePeriod,
-                expiryDate: spaces.expiryDate,
                 gFloorArea: spaces.gFloorArea,
                 mezFloor: spaces.mezFloor,
                 secFloor: spaces.secFloor,

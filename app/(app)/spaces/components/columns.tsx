@@ -77,14 +77,6 @@ const CellComponent = ({ row }: { row: RowData }) => {
                     </div>
                   </div>
                   <div className="flex">
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="contactNo" className="text-right">Lease Period.</Label>
-                      <Input id="contactNo" name="contactNo" value={selectedSpaces?.leasePeriod || ''} disabled />
-                    </div>
-                    <div className="w-1/2 mt-1 pl-4">
-                      <Label htmlFor="address" className="text-right">Expridy Date</Label>
-                      <Input id="address" name="address" value={selectedSpaces?.expiryDate.toString() || ''} disabled />
-                    </div>
                     <div className="w-1/2 mt-1 pl-4 pr-4">
                       <Label htmlFor="city" className="text-right">Ground Floor</Label>
                       <Input id="city" name="city" value={selectedSpaces?.gFloorArea || ''} disabled />
@@ -201,23 +193,6 @@ export const columns: ColumnDef<Spaces>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
   },
-  {
-    accessorKey: "leasePeriod",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Lease Period" />
-    ),
-},
-{
-  accessorKey: "expiryDate",
-  header: ({ column }) => (
-    <DataTableColumnHeader column={column} title="Expiry Date" />
-  ),
-  cell: ({ row }) => {
-    const date = new Date(row.original.expiryDate);
-    const formattedDate = `${date.getMonth()+1}-${date.getDate()}-${date.getFullYear()}`;
-    return <div>{formattedDate}</div>;
-  },
-},
   {
     accessorKey: "gFloorArea",
     header: ({ column }) => (

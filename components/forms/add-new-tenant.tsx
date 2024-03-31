@@ -21,6 +21,7 @@ import "@uploadthing/react/styles.css";
 import { Separator } from "../ui/separator"
 import { z } from "zod"
 import { PlusCircleIcon } from "lucide-react"
+import { DatePicker } from "./customCalendar"
 
 interface User {
   id: string
@@ -45,6 +46,8 @@ const tenantSchema = z.object({
   city: z.string(),
   province: z.string(),
   zipCode: z.string(),
+  leasePeriod: z.date(),
+  expiryDate: z.date(),
   tenantImage: z.string().nullable(),
   sysUserId: z.string(),
   spaceId: z.string(),
@@ -65,6 +68,8 @@ export function AddNewTenant() {
     city: '',
     province: '',
     zipCode: '',
+    leasePeriod: '',
+    expiryDate: '',
     tenantImage: '',
     spaceId: selectedSpaceId,
     sysUserId: (session?.user as User)?.id || '',
@@ -161,6 +166,8 @@ export function AddNewTenant() {
         province: '',
         zipCode: '',
         tenantImage: '',
+        leasePeriod: '',
+        expiryDate: '',
         sysUserId: userId,
         spaceId: '',
       });
@@ -223,11 +230,55 @@ export function AddNewTenant() {
               <Input required value={formData.contactNo} onChange={(e) => handleChange('contactNo', e.target.value)} className={formErrors.contactNo ? 'invalid' : ''} />
             </div>
           </div>
-            <div>
+          <div className="flex">
+            <div className="w-1/2 pr-4">
+            <Label>Select Space</Label>
+              <Select onValueChange={(value: string) => handleSelectChange(value)}>
+              <SelectTrigger id="status" aria-label="Select status">
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                {spaces.map(space => (
+                  <SelectItem key={space.id} value={space.spaceName}>
+                    {space.spaceName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            </div>
+            <div className="w-1/2 pr-4">
+            <Label htmlFor="leasePeriod" className="text-right">
+                  Lease Period
+                </Label>
+                <DatePicker
+                id="leasePeriod" 
+                required 
+                selected={new Date(formData.leasePeriod)}
+                onSelect={(date: Date | undefined) => handleChange('leasePeriod', date)} 
+                className={formErrors.expiryDate ? 'invalid' : ''}
+                />
+
+            </div>
+            <div className="w-1/2 pr-4">
+            <Label htmlFor="expiryDate" className="text-right">
+                  Expiry Date
+                </Label>
+                <DatePicker
+                id="expiryDate" 
+                required 
+                selected={new Date(formData.expiryDate)}
+                onSelect={(date: Date | undefined) => handleChange('expiryDate', date)} 
+                className={formErrors.expiryDate ? 'invalid' : ''}
+                />
+            </div>
+          </div>
+            <div className="flex">
+              <div className="w-full pr-4">
               <Label htmlFor="address" className="text-right">
                 Address
               </Label>
               <Input required value={formData.address} onChange={(e) => handleChange('address', e.target.value)} className={formErrors.address ? 'invalid' : ''}/>
+              </div>
             </div>
             <div className="flex">
             <div className="w-1/2 pr-4">
@@ -248,24 +299,6 @@ export function AddNewTenant() {
               </Label>
               <Input required value={formData.zipCode} onChange={(e) => handleChange('zipCode', e.target.value)} className={formErrors.zipCode ? 'invalid' : ''} />
             </div>
-          </div>
-          <div className="flex">
-              <div className="w-1/2 mt-0 pr-4">
-              <Label>Select Space</Label>
-              <Select onValueChange={(value: string) => handleSelectChange(value)}>
-              <SelectTrigger id="status" aria-label="Select status">
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                {spaces.map(space => (
-                  <SelectItem key={space.id} value={space.spaceName}>
-                    {space.spaceName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Label>Space ID: {selectedSpaceId}</Label>
-              </div>
           </div>
           </div>
           <div className="flex flex-col justify-center items-center">

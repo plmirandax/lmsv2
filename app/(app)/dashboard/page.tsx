@@ -23,8 +23,9 @@ import { UserNav } from "@/app/(app)/dashboard/components/user-nav"
 import { ModeToggle } from "@/components/mode-toggle"
 import { TenantAnniv } from "./components/tenant-anniv"
 import { SystemMenu } from "./components/system-menu"
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Separator } from "@/components/ui/separator"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export default function DashboardPage() {
 
@@ -218,12 +219,14 @@ export default function DashboardPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex">
+                    <Suspense fallback={<Skeleton />}>
                   <div className="w-1/2">
                       <ActiveTenants tenants={tenants.slice(0,5)}/>
                   </div>
                   <div className="w-1/2">
                       <ActiveTenants tenants={tenants.slice(5,10)}/>
                   </div>
+                   </Suspense>
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">

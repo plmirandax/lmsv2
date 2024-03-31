@@ -13,8 +13,8 @@ import "@uploadthing/react/styles.css";
 import { z } from 'zod';
 import { DatePicker } from "./customCalendar";
 import FileUpload from "./file-upload";
-import { SelectSeparator } from "../ui/select";
-import { PlusCircleIcon } from "lucide-react";
+import { SelectGroup, SelectLabel, SelectSeparator } from "../ui/select";
+import { CircleCheck, PlusCircleIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 
 interface User {
@@ -35,8 +35,6 @@ const spaceSchema = z.object({
   spaceCode: z.string(),
   spaceName: z.string(),
   oStatus: z.string(),
-  leasePeriod: z.string(),
-  expiryDate: z.date(),
   gFloorArea: z.number(),
   mezFloor: z.number(),
   secFloor: z.number(),
@@ -54,14 +52,12 @@ export function AddNewSpace() {
   const { data: session } = useNextAuthSession();
   const userId = (session?.user as User)?.id
   const [selectedPropertyId, setSelectedPropertyId] = useState<string>('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
   const [properties, setProperty] = useState<Property[]>([]);
-  const [selectedPropertyName, setSelectedPropertyName] = useState<string>('');
   const [formData, setFormData] = useState({
     spaceCode: '',
     spaceName: '',
     oStatus: '',
-    leasePeriod: '',
-    expiryDate: new Date(),
     gFloorArea: 0,
     mezFloor: 0,
     secFloor: 0,
@@ -124,6 +120,14 @@ export function AddNewSpace() {
     }
   };
 
+  const handleStatusChange = (value: string) => {
+    setSelectedStatus(value); // Update the selected status
+    setFormData(prevState => ({
+      ...prevState,
+      oStatus: value, // Update the oStatus in formData
+    }));
+  };
+
   const handleSelectChange = (value: string) => {
     const selectedProperty = properties.find(properties => properties.propertyName === value);
     if (selectedProperty) {
@@ -157,8 +161,6 @@ export function AddNewSpace() {
         spaceCode: '',
         spaceName: '',
         oStatus: '',
-        leasePeriod: '',
-        expiryDate: new Date(),
         gFloorArea: 0,
         mezFloor: 0,
         secFloor: 0,
@@ -209,31 +211,30 @@ export function AddNewSpace() {
                         <Input id="spaceName" required value={formData.spaceName} onChange={(e) => handleChange('spaceName', e.target.value)} className={formErrors.spaceName ? 'invalid' : ''}/>
                   </div>
                   <div className="w-1/2 pl-4">
-                      <Label htmlFor="oStatus" className="text-right">
-                          Status
-                      </Label>
-                      <Input id="oStatus" required value={formData.oStatus} onChange={(e) => handleChange('oStatus', e.target.value)} className={formErrors.oStatus ? 'invalid' : ''}/>
+<Label htmlFor="oStatus" className="text-right">
+      Status
+    </Label>
+    <Select onValueChange={handleStatusChange}>
+      <SelectTrigger className="w-[200px]">
+        <SelectValue placeholder="Select status" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
+          <SelectItem value="Vacant" onSelect={() => handleStatusChange('Vacant')}>
+            Vacant
+          </SelectItem>
+          <SelectItem value="Occupied" onSelect={() => handleStatusChange('Occupied')}>
+            Occupied
+          </SelectItem>
+          <SelectItem value="Under Renovation" onSelect={() => handleStatusChange('Under Renovation')}>
+            Under Renovation
+          </SelectItem>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
                   </div>
               </div>
               <div className="flex">
-                    <div className="w-1/2 pr-4">
-                    <Label htmlFor="leasePeriod" className="text-right">
-                        Lease Period
-                    </Label>
-                    <Input id="leasePeriod" required value={formData.leasePeriod} onChange={(e) => handleChange('leasePeriod', e.target.value)} className={formErrors.leasePeriod ? 'invalid' : ''}/>
-                    </div>
-                  <div className="w-1/2 pl-4">
-                  <Label htmlFor="expiryDate" className="text-right">
-                  Expiry Date
-                </Label>
-                <DatePicker
-                        id="expiryDate" 
-                        required 
-                        selected={formData.expiryDate}
-                        onSelect={(date: Date | undefined) => handleChange('expiryDate', date)} 
-                        className={formErrors.expiryDate ? 'invalid' : ''}
-                        />
-                  </div>
                   <div className="w-1/2 pl-4">
                   <Label htmlFor="gFloorArea" className="text-right">
                   Ground Floor

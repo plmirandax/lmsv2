@@ -52,6 +52,8 @@ model Tenant {
   city          String
   province      String
   zipCode       String
+  leasePeriod   DateTime?
+  expiryDate    DateTime?
   tenantImage   String?     @db.Text
   sysUserId        String?
   TenantResetPasswordToken String? @unique
@@ -97,8 +99,6 @@ model Spaces {
   spaceCode     String       @unique
   spaceName     String
   oStatus       String
-  leasePeriod   String?
-  expiryDate    DateTime?
   gFloorArea    Float?
   mezFloor      Float?
   secFloor      Float?
