@@ -54,7 +54,7 @@ model Tenant {
   zipCode       String
   leasePeriod   DateTime?
   expiryDate    DateTime?
-  monthlyRate   Float?
+  monthlyRent   Float?
   tenantImage   String?     @db.Text
   sysUserId        String?
   TenantResetPasswordToken String? @unique

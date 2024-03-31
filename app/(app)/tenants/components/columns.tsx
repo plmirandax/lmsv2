@@ -19,6 +19,7 @@ import { TaxDecDetails } from "@/components/forms/tax-dec"
 import { TenantSpaceDetails } from "@/components/forms/space-details"
 import { TenantsBillingDetails } from "@/components/forms/billings-tenant"
 import Image from "next/image"
+import { format, parseISO } from 'date-fns';
 
 type RowData = Row<Tenants>;
 const CellComponent = ({ row }: { row: RowData }) => {
@@ -185,6 +186,36 @@ export const columns: ColumnDef<Tenants>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Space" />
     ),
+  },
+  {
+    accessorKey: "leasePeriod",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Lease Period" />
+    ),
+    cell: ({ row }) => {
+      if (row.original.leasePeriod) {
+        const date = new Date(row.original.expiryDate);
+        const formattedDate = `${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}-${date.getFullYear()}`;
+        return formattedDate;
+      } else {
+        return ''; // or return a default value
+      }
+    },
+  },
+  {
+    accessorKey: "expiryDate",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Expiry Date" />
+    ),
+    cell: ({ row }) => {
+      if (row.original.expiryDate) {
+        const date = new Date(row.original.expiryDate);
+        const formattedDate = `${('0' + (date.getMonth() + 1)).slice(-2)}-${('0' + date.getDate()).slice(-2)}-${date.getFullYear()}`;
+        return formattedDate;
+      } else {
+        return ''; // or return a default value
+      }
+    },
   },
   {
     accessorKey: "email",

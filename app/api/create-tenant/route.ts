@@ -7,14 +7,14 @@ const schema = z.object({
     tenantCode: z.string(),
     name: z.string(),
     email: z.string(),
-    passwordHash: z.string(),
     contactNo: z.string(),
     address: z.string(),
     city: z.string(),
     province: z.string(),
     zipCode: z.string(),
-    leasePeriod: z.string().transform((value) => new Date(value)),
-    expiryDate: z.string().transform((value) => new Date(value)),
+    monthlyRent: z.number(),
+    leasePeriod: z.string(),
+    expiryDate: z.string(),
     tenantImage: z.string().optional(),
     spaceId: z.string(),
     sysUserId: z.string()
@@ -23,8 +23,8 @@ const schema = z.object({
 export async function POST(req: Request) {
     try {
         const {
-            tenantCode, name, email, passwordHash,
-            contactNo, address, city, province, zipCode, leasePeriod, expiryDate, sysUserId, spaceId, tenantImage
+            tenantCode, name, email,
+            contactNo, address, city, province, zipCode, leasePeriod, expiryDate, sysUserId, monthlyRent, spaceId, tenantImage
         } = schema.parse(await req.json())
       
         const tenants = await prisma.tenant.create({
@@ -32,7 +32,6 @@ export async function POST(req: Request) {
                 name,
                 tenantCode,
                 email,
-                passwordHash,
                 contactNo,
                 address,
                 city,
@@ -41,6 +40,7 @@ export async function POST(req: Request) {
                 leasePeriod,
                 expiryDate,
                 tenantImage,
+                monthlyRent,
                 spaceId,
                 sysUserId
             }
@@ -50,7 +50,6 @@ export async function POST(req: Request) {
             tenants: {
                 name: tenants.name,
                 email: tenants.email,
-                password: tenants.passwordHash,
                 contactNo: tenants.contactNo,
                 address: tenants.address,
                 city: tenants.city,
@@ -59,6 +58,7 @@ export async function POST(req: Request) {
                 leasePeriod: tenants.leasePeriod,
                 expiryDate: tenants.expiryDate,
                 tenantImage: tenants.tenantImage,
+                monthlyRent: tenants.monthlyRent,
                 spaceId: tenants.spaceId,
                 sysUserId: tenants.sysUserId, 
             }

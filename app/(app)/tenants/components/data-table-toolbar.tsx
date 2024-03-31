@@ -1,4 +1,3 @@
-"use client"
 
 import { Cross2Icon } from "@radix-ui/react-icons"
 import { Table } from "@tanstack/react-table"
@@ -10,6 +9,9 @@ import { DataTableViewOptions } from '../components/data-table-view-options'
 import { statuses } from "../data/data"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 import { AddNewTenant } from '../../../../components/forms/add-new-tenant';
+import { downloadToExcel } from "@/lib/xlsx"
+import { prisma } from "@/lib/prisma"
+import { AiFillFileExcel } from "react-icons/ai"
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>
@@ -59,6 +61,7 @@ export function DataTableToolbar<TData>({
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}
+      <Button variant="outline" onClick={async () => await downloadToExcel(prisma)} className="h-8 px-2 lg:px-3">Export to Excel <AiFillFileExcel className="ml-2 h-4 w-4"></AiFillFileExcel></Button>
       </div>
       <DataTableViewOptions table={table} />
     </div>

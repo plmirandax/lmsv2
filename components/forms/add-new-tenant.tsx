@@ -22,6 +22,8 @@ import { Separator } from "../ui/separator"
 import { z } from "zod"
 import { PlusCircleIcon } from "lucide-react"
 import { DatePicker } from "./customCalendar"
+import { DatePicker2 } from "./dpicker"
+import { Card, CardContent } from "../ui/card"
 
 interface User {
   id: string
@@ -40,7 +42,7 @@ const tenantSchema = z.object({
   tenantCode: z.string(),
   name: z.string(),
   email: z.string(),
-  passwordHash: z.string(),
+  monthlyRent: z.number(),
   contactNo: z.string(),
   address: z.string(),
   city: z.string(),
@@ -62,14 +64,14 @@ export function AddNewTenant() {
     tenantCode: '',
     name: '',
     email: '',
-    passwordHash: '',
+    monthlyRent: '',
     contactNo: '',
     address: '',
     city: '',
     province: '',
     zipCode: '',
-    leasePeriod: '',
-    expiryDate: '',
+    leasePeriod: new Date(),
+    expiryDate: new Date(),
     tenantImage: '',
     spaceId: selectedSpaceId,
     sysUserId: (session?.user as User)?.id || '',
@@ -119,13 +121,14 @@ export function AddNewTenant() {
 
   const handleChange = (key: keyof typeof formData, value: string | number | Date | undefined) => {
     if (value !== undefined) {
+      // If the value is a Date object, convert it to a string representation
+      const formattedValue = value instanceof Date ? value.toISOString() : value;
       setFormData(prevState => ({
         ...prevState,
-        [key]: value,
+        [key]: formattedValue,
       }));
     }
   };
-
   const handleSelectChange = (value: string) => {
     const selectedSpace = spaces.find(space => space.spaceName === value);
     if (selectedSpace) {
@@ -159,15 +162,15 @@ export function AddNewTenant() {
         tenantCode: '',
         name: '',
         email: '',
-        passwordHash: '',
+        monthlyRent: '',
         contactNo: '',
         address: '',
         city: '',
         province: '',
         zipCode: '',
         tenantImage: '',
-        leasePeriod: '',
-        expiryDate: '',
+        leasePeriod: new Date(),
+        expiryDate: new Date(),
         sysUserId: userId,
         spaceId: '',
       });
@@ -186,15 +189,16 @@ export function AddNewTenant() {
       <DialogTrigger asChild>
         <Button variant="outline"> <PlusCircleIcon className="pr-2"/> Add New Tenant</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[650px]">
+      <DialogContent className="sm:max-w-[700px] pr-6">
         <form onSubmit={handleSubmit}>
         <DialogHeader>
           <DialogTitle>Tenants Details</DialogTitle>
           <DialogDescription>
             Fill all the required fields to add a new tenant.
           </DialogDescription>
-          <SelectSeparator />
         </DialogHeader>
+        <Card className="sm:max-auto flex flex-col justify-center items-center mt-2">
+        <CardContent>
         <div className="grid gap-4 py-4">
           <div className="flex">
             <div className="w-1/2 pr-4">
@@ -218,16 +222,21 @@ export function AddNewTenant() {
               <Input required value={formData.email} onChange={(e) => handleChange('email', e.target.value)} className={formErrors.email ? 'invalid' : ''} />
             </div>
             <div className="w-1/2 pr-4">
-              <Label htmlFor="password" className="text-right">
-                Password
-              </Label>
-              <Input required type='password' value={formData.passwordHash} onChange={(e) => handleChange('passwordHash', e.target.value)} className={formErrors.passwordHash ? 'invalid' : ''}/>
-            </div>
-            <div className="w-1/2 pr-4">
               <Label htmlFor="contactNo" className="text-right">
                 Contact No.
               </Label>
               <Input required value={formData.contactNo} onChange={(e) => handleChange('contactNo', e.target.value)} className={formErrors.contactNo ? 'invalid' : ''} />
+            </div>
+            <div className="w-1/2 pr-4">
+              <Label htmlFor="monthlyRent" className="text-right">
+                Monthly Rent
+              </Label>
+              <Input 
+                required 
+                value={formData.monthlyRent ? formData.monthlyRent.toLocaleString() : ''} 
+                onChange={(e) => handleChange('monthlyRent', parseFloat(e.target.value.replace(/,/g, '')))} 
+                className={formErrors.monthlyRent ? 'invalid' : ''}
+              />
             </div>
           </div>
           <div className="flex">
@@ -247,30 +256,29 @@ export function AddNewTenant() {
             </Select>
             </div>
             <div className="w-1/2 pr-4">
-            <Label htmlFor="leasePeriod" className="text-right">
-                  Lease Period
-                </Label>
-                <DatePicker
-                id="leasePeriod" 
-                required 
-                selected={new Date(formData.leasePeriod)}
-                onSelect={(date: Date | undefined) => handleChange('leasePeriod', date)} 
-                className={formErrors.expiryDate ? 'invalid' : ''}
-                />
-
-            </div>
-            <div className="w-1/2 pr-4">
-            <Label htmlFor="expiryDate" className="text-right">
-                  Expiry Date
-                </Label>
-                <DatePicker
-                id="expiryDate" 
-                required 
-                selected={new Date(formData.expiryDate)}
-                onSelect={(date: Date | undefined) => handleChange('expiryDate', date)} 
-                className={formErrors.expiryDate ? 'invalid' : ''}
-                />
-            </div>
+  <Label htmlFor="leasePeriod" className="text-right">
+    Lease Period
+  </Label>
+  <DatePicker2
+    id="leasePeriod" 
+    required 
+    selected={formData.leasePeriod}
+    onSelect={(date: Date | undefined) => handleChange('leasePeriod', date)} 
+    className={formErrors.leasePeriod ? 'invalid' : ''}
+    />
+</div>
+<div className="w-1/2 pr-4">
+  <Label htmlFor="expiryDate" className="text-right">
+    Expiry Date
+  </Label>
+  <DatePicker
+  id="expiryDate" 
+  required 
+  selected={formData.expiryDate}
+  onSelect={(date: Date | undefined) => handleChange('expiryDate', date)} 
+  className={formErrors.expiryDate ? 'invalid' : ''}
+  />
+</div>
           </div>
             <div className="flex">
               <div className="w-full pr-4">
@@ -301,14 +309,19 @@ export function AddNewTenant() {
             </div>
           </div>
           </div>
-          <div className="flex flex-col justify-center items-center">
-          </div>
+          </CardContent>
+          </Card>
+          <Card className="mt-2">
+            <CardContent>
+              <Label>Tenant Image</Label>
           <FileUpload 
               apiEndpoint="tenantImage"
               value={formData.tenantImage} 
               onChange={(url) => url && handleChange('tenantImage', url)}
               className={`${formErrors.tenantImage ? 'invalid' : ''} items-right`}
               />
+              </CardContent>
+              </Card>
           <div className="flex flex-col justify-center items-center">
               <Separator />
           </div>
