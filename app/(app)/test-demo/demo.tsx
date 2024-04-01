@@ -238,7 +238,7 @@ export function Dashboard() {
                     <Table>
                       <TableHeader>
                         <TableRow>
-                          <TableHead>Customer</TableHead>
+                          <TableHead>Property Name</TableHead>
                           <TableHead className="hidden sm:table-cell">
                             Type
                           </TableHead>
