@@ -458,7 +458,7 @@ export function Dashboard() {
               </CardHeader>
               <CardContent className="p-6 text-sm">
                 <div className="grid gap-3">
-                  <div className="font-semibold">Property Details</div>
+                  <div className="font-semibold">Property Address</div>
                   <ul className="grid gap-3">
                     <li className="flex items-center justify-between">
                       <span className="text-muted-foreground">
