@@ -18,7 +18,8 @@ import { useState } from "react"
 import { toast } from 'react-hot-toast';
 import { useRouter } from "next/navigation"
 import GoogleIcon from "@/components/ui/GoogleIcon"
-import { EnvelopeOpenIcon } from "@radix-ui/react-icons"
+import { EnvelopeClosedIcon, EnvelopeOpenIcon } from "@radix-ui/react-icons"
+import { EnvelopeIcon } from "@heroicons/react/24/solid"
 
 
 
@@ -75,48 +76,47 @@ export default function LoginAccount() {
     <div className="relative flex flex-col justify-center items-center min-h-screen overflow-hidden rounded">
       <div className="w-full m-auto bg-white lg:max-w-lg rounded">
         <Card className="rounded">
-          <CardHeader className="space-y-1 rounded">
+          <CardHeader>
             <CardTitle className="text-2xl text-center rounded">Sign in</CardTitle>
             <CardDescription className="text-center rounded">
               Enter your email and password to login
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-4 rounded">
-            <div className="grid gap-2 rounded">
-              <EnvelopeOpenIcon />Login with Email
+          <CardContent className="grid gap-4">
+            <div className="grid gap-2">
+              Login
               <Input 
               id="email" 
               type="email"
-               placeholder=""
+               placeholder="Email"
                required
                value={email}
                onChange={(e) => setEmail(e.target.value)}
                />
             </div>
-            <div className="grid gap-2 rounded">
+            <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
               <Input 
               id="password"
+              placeholder="Password"
                type="password"
                required
                value={password}
                onChange={(e) => setPassword(e.target.value)}
                />
             </div>
-            <div className="flex items-center space-x-2 rounded">
-              <Checkbox id="terms" />
-              <label
-                htmlFor="terms"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Remember me
-              </label>
+            <div className="flex items-center space-x-2">
+            <p className="text-sm text-center text-gray-700 mb-2">
+                <Link href="/reset-password" className="text-blue-500 hover:underline">
+                    Forgot your password?
+                 </Link>
+              </p>
             </div>
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button className="w-full" onClick={onSubmit}>Login</Button>
+            <Button className="w-full" onClick={onSubmit}>Login with Email<EnvelopeClosedIcon className="ml-2"/></Button>
           </CardFooter>
-          <div className="relative mb-2 rounded">
+          <div className="relative mb-2">
             <div className="absolute inset-0 flex items-center rounded">
               <span className="w-full border-t" />
             </div>
@@ -131,15 +131,15 @@ export default function LoginAccount() {
             callbackUrl: `${window.location.origin}/dashboard` })} 
             variant="outline" className="w-full py-2 px-4 text-sm">
               <GoogleIcon className="mr-2 h-6 w-6" />
-            Sign U
+            Sign-in with Google
             </Button>
           </div>
 
-          <p className="mt-2 text-xs text-center text-gray-700 mb-2">
+          {/*<p className="mt-2 text-xs text-center text-gray-700 mb-2">
             {" "}
             Dont have an account? <Link className="text-indigo-500 hover:underline" href="/register" />{" "}
             <span className=" text-blue-600 hover:underline">Sign up</span>
-          </p>
+          </p> */}
         </Card>
       </div>
     </div>

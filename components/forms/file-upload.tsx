@@ -16,24 +16,25 @@ const FileUpload = ({ apiEndpoint, onChange, value }: Props) => {
 
   if (value) {
     return (
-      <div className="flex flex-col items-center">
+      <div className="flex">
         {type !== 'pdf' ? (
-          <div className="relative w-40 h-40 items-center">
+          <div className="relative w-auto h-auto items-center">
             <Image
               src={value}
               alt="uploaded image"
               className="object-contain"
-              fill
+              width={400}
+              height={400}
             />
           </div>
         ) : (
-          <div className="relative flex items-center p-2 mt-2 rounded-md bg-background/10">
+          <div className="relative flex items-center p-2 mt-2 rounded-md">
             <FileIcon className='h-4 w-4' />
             <a
               href={value}
               target="_blank"
               rel="noopener_noreferrer"
-              className="ml-2 text-sm text-indigo-500 dark:text-indigo-400 hover:underline w-40"
+              className="ml-2 text-sm"
             >
               View PDF
             </a>
@@ -44,21 +45,21 @@ const FileUpload = ({ apiEndpoint, onChange, value }: Props) => {
           variant="secondary"
           type="button"
         >
-          <X className="h-4 w-4" />
+          <X className="flex flex-col h-4 w-4" />
           Remove file.
         </Button>
       </div>
     )
   }
   return (
-    <div className="w-full bg-muted/30 items-center">
-      <UploadDropzone
+    <div className="w-full items-center">
+      <UploadButton
      appearance={{
       button:
-        "ut-ready:bg-green-500 ut-uploading:cursor-not-allowed rounded-r-none bg-blue-500 bg-none after:bg-blue-400",
-      container: "w-full h-25 flex rounded-md border-cyan-300 bg-slate-800",
+        "ut-ready:bg-green-500 ut-uploading:cursor-not-allowed rounded-r-none bg-blue-500 bg-none after:bg-blue-400 mb-2",
+      container: "w-full h-15",
       allowedContent:
-        "flex h-auto flex-col items-center justify-center px-2 text-white",
+        "flex h-1.5 flex-col justify-center px-2 text-white",
     }}
         endpoint={apiEndpoint}
         onClientUploadComplete={(res) => {

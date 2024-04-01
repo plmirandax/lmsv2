@@ -61,7 +61,7 @@ export function DataTableToolbar<TData>({
             <Cross2Icon className="ml-2 h-4 w-4" />
           </Button>
         )}
-      <Button variant="outline" onClick={async () => await downloadToExcel(prisma)} className="h-8 px-2 lg:px-3">Export to Excel <AiFillFileExcel className="ml-2 h-4 w-4"></AiFillFileExcel></Button>
+      <Button variant="outline" className="h-8 px-2 lg:px-3">Export to Excel <AiFillFileExcel className="ml-2 h-4 w-4"></AiFillFileExcel></Button>
       </div>
       <DataTableViewOptions table={table} />
     </div>

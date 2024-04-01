@@ -5,15 +5,15 @@ const f = createUploadthing()
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {
   // Define as many FileRoutes as you like, each with a unique routeSlug
-  image: f({ image: { maxFileSize: '4MB', maxFileCount: 5 } })
+  image: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
     .onUploadComplete(() => {}),
-  tenantImage: f({ image: { maxFileSize: '4MB', maxFileCount: 5 } })
+  tenantImage: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
     .onUploadComplete(() => {}),
-  propertyImage: f({ image: { maxFileSize: '4MB', maxFileCount: 5 } })
+  propertyImage: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
     .onUploadComplete(() => {}),
-  spacesImage: f({ image: { maxFileSize: '4MB', maxFileCount: 5 } })
+  spacesImage: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
     .onUploadComplete(() => {}),
-  media: f({ image: { maxFileSize: '4MB', maxFileCount: 5 } })
+  media: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
     .onUploadComplete(() => {}),
 } satisfies FileRouter
 

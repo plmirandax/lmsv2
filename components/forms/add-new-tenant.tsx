@@ -189,25 +189,24 @@ export function AddNewTenant() {
       <DialogTrigger asChild>
         <Button variant="outline"> <PlusCircleIcon className="pr-2"/> Add New Tenant</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[700px] pr-6">
+      <DialogContent className="sm:max-w-[600px] flex flex-col">
         <form onSubmit={handleSubmit}>
-        <DialogHeader>
+        <DialogHeader className="sm:max-w-[600px] flex flex-col items-center justify-center text-center">
           <DialogTitle>Tenants Details</DialogTitle>
           <DialogDescription>
             Fill all the required fields to add a new tenant.
           </DialogDescription>
         </DialogHeader>
-        <Card className="sm:max-auto flex flex-col justify-center items-center mt-2">
-        <CardContent>
-        <div className="grid gap-4 py-4">
+        <div className="flex flex-col gap-4 py-4">
+          <Card><CardContent>
           <div className="flex">
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 pr-4 mt-2">
                 <Label htmlFor="propertyCode" className="text-right">
                   Tenant Code
                 </Label>
-                <Input required value={formData.tenantCode} onChange={(e) => handleChange('tenantCode', e.target.value)} className={formErrors.tenantCode ? 'invalid' : ''} />
+                <Input required placeholder="Tenant Code" value={formData.tenantCode} onChange={(e) => handleChange('tenantCode', e.target.value)} className={formErrors.tenantCode ? 'invalid' : ''} />
             </div>
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 mt-2">
                 <Label htmlFor="propertyName" className="text-right">
                   Tenant Name
                 </Label>
@@ -215,19 +214,19 @@ export function AddNewTenant() {
             </div>
           </div>
           <div className="flex">
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 mt-2 pr-4">
                 <Label htmlFor="email" className="text-right">
                   Email
                 </Label>
               <Input required value={formData.email} onChange={(e) => handleChange('email', e.target.value)} className={formErrors.email ? 'invalid' : ''} />
             </div>
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 mt-2 pr-4">
               <Label htmlFor="contactNo" className="text-right">
                 Contact No.
               </Label>
               <Input required value={formData.contactNo} onChange={(e) => handleChange('contactNo', e.target.value)} className={formErrors.contactNo ? 'invalid' : ''} />
             </div>
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 mt-2">
               <Label htmlFor="monthlyRent" className="text-right">
                 Monthly Rent
               </Label>
@@ -240,11 +239,11 @@ export function AddNewTenant() {
             </div>
           </div>
           <div className="flex">
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 mt-2 pr-4">
             <Label>Select Space</Label>
               <Select onValueChange={(value: string) => handleSelectChange(value)}>
-              <SelectTrigger id="status" aria-label="Select status">
-                <SelectValue placeholder="Select status" />
+              <SelectTrigger id="space" aria-label="Select space" className="w-auto">
+                <SelectValue placeholder="Select space.." />
               </SelectTrigger>
               <SelectContent>
                 {spaces.map(space => (
@@ -255,7 +254,7 @@ export function AddNewTenant() {
               </SelectContent>
             </Select>
             </div>
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 mt-2 pr-4">
   <Label htmlFor="leasePeriod" className="text-right">
     Lease Period
   </Label>
@@ -267,7 +266,7 @@ export function AddNewTenant() {
     className={formErrors.leasePeriod ? 'invalid' : ''}
     />
 </div>
-<div className="w-1/2 pr-4">
+<div className="w-1/2 mt-2">
   <Label htmlFor="expiryDate" className="text-right">
     Expiry Date
   </Label>
@@ -281,7 +280,7 @@ export function AddNewTenant() {
 </div>
           </div>
             <div className="flex">
-              <div className="w-full pr-4">
+              <div className="w-full mt-2">
               <Label htmlFor="address" className="text-right">
                 Address
               </Label>
@@ -289,28 +288,27 @@ export function AddNewTenant() {
               </div>
             </div>
             <div className="flex">
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 mt-2 pr-4">
                 <Label htmlFor="city" className="text-right">
                   City
                 </Label>
               <Input required value={formData.city} onChange={(e) => handleChange('city', e.target.value)} className={formErrors.city ? 'invalid' : ''} />
             </div>
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 mt-2 pr-4">
               <Label htmlFor="province" className="text-right">
                 Province
               </Label>
               <Input required value={formData.province} onChange={(e) => handleChange('province', e.target.value)} className={formErrors.province ? 'invalid' : ''} />
             </div>
-            <div className="w-1/2 pr-4">
+            <div className="w-1/2 mt-2">
               <Label htmlFor="zipCode" className="text-right">
                 Zip Code
               </Label>
               <Input required value={formData.zipCode} onChange={(e) => handleChange('zipCode', e.target.value)} className={formErrors.zipCode ? 'invalid' : ''} />
             </div>
           </div>
+          </CardContent></Card>
           </div>
-          </CardContent>
-          </Card>
           <Card className="mt-2">
             <CardContent>
               <Label>Tenant Image</Label>
@@ -322,9 +320,6 @@ export function AddNewTenant() {
               />
               </CardContent>
               </Card>
-          <div className="flex flex-col justify-center items-center">
-              <Separator />
-          </div>
           <DialogFooter className="mt-4">
               <div className="flex justify-center w-full">
               <Button className="w-full" type="submit">
