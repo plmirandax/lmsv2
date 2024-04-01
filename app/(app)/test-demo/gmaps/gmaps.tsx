@@ -32,8 +32,6 @@ export default function GoogleMaps() {
 			};
 
 			const map = new Map(mapRef.current as HTMLDivElement, options);
-
-			// add the marker in the map
 			const marker = new Marker({
 				map: map,
 				position: locationInMap,
