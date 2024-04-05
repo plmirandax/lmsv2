@@ -82,7 +82,7 @@ export async function downloadToExcel(prisma: PrismaClient) {
         { label: "Expiry Date", value: (row) => row.expiryDate instanceof Date ? new Date(row.expiryDate).toLocaleDateString() : null }, 
         { label: "Mothly Rent", value: "monthlyRent" },
         { label: "Property", value: "space.property.propertyName" },
-        { label: "Sys User", value: "sysUser.name" },
+        { label: "System User", value: "sysUser.name" },
       ],
       content: tenants,
     },
