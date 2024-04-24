@@ -34,7 +34,7 @@ const authOptions: NextAuthOptions = {
             select: {
                 id: true,
                 email: true,
-                firstName: true,
+                name: true,
                 role: true, // Make sure to select the role
                 createdAt: true,
                 password: true,
@@ -59,7 +59,7 @@ const authOptions: NextAuthOptions = {
             ? {
                 id: user.id,
                 email: user.email,
-                name: user.firstName,
+                name: user.name,
                 role: user.role, // Return the role
                 createdAt: user.createdAt,
                 accessToken

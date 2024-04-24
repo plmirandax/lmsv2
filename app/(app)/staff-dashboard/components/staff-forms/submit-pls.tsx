@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useSession as useNextAuthSession } from 'next-auth/react'
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import toast from "react-hot-toast"
 import { CheckCircledIcon, ReloadIcon } from "@radix-ui/react-icons"
 import "@uploadthing/react/styles.css";
@@ -24,10 +24,13 @@ import { Card, CardContent } from "@/components/ui/card"
 
 import { PLSType } from "@prisma/client"
 import { Textarea } from "@/components/ui/textarea"
+import { DatePicker } from "@/components/ui/datepicker"
+
 
 interface User {
   id: string
-  name: string | null
+  firstName: string | null
+  lastName: string | null
   email: string | null
   image: string | null
   role: string
@@ -40,6 +43,7 @@ description: z.string(),
 timeIn: z.string().optional(),
 timeOut: z.string().optional(),
 userId: z.string(),
+plsDate: z.date(),
 });
 
 export function SubmitPLSForm() {
@@ -50,6 +54,7 @@ export function SubmitPLSForm() {
    destination: '',
     timeIn: '',
     timeOut: '',
+    plsDate: new Date(),
    userId: (session?.user as User)?.id || '',
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof typeof formData, boolean>>>({});
@@ -94,6 +99,7 @@ export function SubmitPLSForm() {
         destination: '',
          timeIn: '',
          timeOut: '',
+          plsDate: new Date(),
         userId: SeshUserId,
       });
       toast.success('Tenant added successfully.');
@@ -121,6 +127,23 @@ export function SubmitPLSForm() {
         </DialogHeader>
         <div className="flex flex-col gap-4 py-4">
           <Card><CardContent>
+          <div className="flex">
+  <div className="w-1/2 pr-4">
+    <Label htmlFor="name">
+      PLS Date
+    </Label>
+    <DatePicker
+      value={formData.plsDate ? new Date(formData.plsDate) : undefined}
+      onChange={date => handleChange('plsDate', date)}
+    />
+  </div>
+  <div className="w-1/2">
+    <Label htmlFor="name" className="text-right">
+      Name
+    </Label>
+    <Input readOnly disabled value={session?.user.name || ''} />
+  </div>
+</div>
           <div className="flex">
             <div className="w-1/2 pr-4 mt-2">
                 <Label htmlFor="propertyCode" className="text-right">
@@ -151,16 +174,19 @@ export function SubmitPLSForm() {
                 className={formErrors.destination ? 'invalid' : ''} />
             </div>
           </div>
-          <div className="flex">
-            <div className="w-1/2 mt-2 pr-4">
-                <Label htmlFor="email" className="text-right">
-                  Purpose
-                </Label>
-              <Textarea required 
-              value={formData.description} 
-              onChange={(e) => handleChange('description', e.target.value)} 
-              className={formErrors.description ? 'invalid' : ''} />
-            </div>
+          <div className="flex flex-col w-full mt-2 pr-4">
+  <Label htmlFor="email" className="ml-2 mb-1">
+    Purpose
+  </Label>
+  <Textarea 
+    required 
+    value={formData.description} 
+    onChange={(e) => handleChange('description', e.target.value)} 
+    className={`${formErrors.description ? 'invalid' : ''} flex flex-col w-full items-center justify-center ml-2`} 
+  />
+</div>
+
+            <div className="flex">
             <div className="w-1/2 mt-2 pr-4">
               <Label htmlFor="contactNo" className="text-right">
                 Time In
@@ -181,9 +207,6 @@ export function SubmitPLSForm() {
               onChange={(e) => handleChange('timeOut', e.target.value)} 
               className={formErrors.timeOut ? 'invalid' : ''} />
             </div>
-          </div>
-
-            <div className="flex">
           </div>
           </CardContent></Card>
           </div>

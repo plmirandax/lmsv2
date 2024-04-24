@@ -5,6 +5,7 @@ import { SessionProvider, getSession, useSession } from 'next-auth/react'
 import { Toaster } from '@/components/ui/sonner';
 import Header from './components/header/header';
 import { Sidebar } from './components/sidebar/SideNavbar';
+import { ThemeProvider } from '@/providers/theme-provider';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -26,7 +27,14 @@ export default async function StaffLayout({
         <Toaster />
         <Header />
         <Sidebar />
+        <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+        >
         <main className='mx-5 mt-16 sm:ml-[300px] sm:mt-3'>{children}</main>
+        </ThemeProvider>
       </body>
       </html>
   )

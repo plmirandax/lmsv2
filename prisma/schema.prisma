@@ -34,8 +34,7 @@ enum Statuses {
 model User {
   id            String       @id @default(cuid()) @unique
   empId         String       @unique
-  firstName     String
-  lastName      String
+  name          String
   contactNo     String?
   address       String?
   email         String       @unique

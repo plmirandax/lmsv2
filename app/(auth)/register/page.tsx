@@ -18,8 +18,7 @@ import toast from "react-hot-toast"
 const SignUpForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
+  const [name, setName] = useState('')
   const [contactNo, setContactNo] = useState('')
   const [address, setAddress] = useState('')
   const [empId, setEmpId] = useState('')
@@ -29,7 +28,7 @@ const SignUpForm = () => {
     e.preventDefault();
   
     // Input validation
-    if (!email || !password || !firstName) {
+    if (!email || !password || !name) {
       toast.error('All fields are required.');
       return;
     }
@@ -50,8 +49,7 @@ const SignUpForm = () => {
         body: JSON.stringify({
           email,
           password,
-          firstName,
-          lastName,
+          name,
           contactNo,
           address,
           empId
@@ -70,8 +68,7 @@ const SignUpForm = () => {
       // Clear input fields
       setEmail('');
       setPassword('');
-      setFirstName('');
-      setLastName('');
+      setName('');
       setContactNo('');
       setAddress('');
       setEmpId('');
@@ -108,23 +105,13 @@ const SignUpForm = () => {
               />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="firstName">First Name</Label>
+              <Label htmlFor="firstName">Full Name</Label>
               <Input id="firstName" type="text" 
               disabled={isLoading}
               required
               placeholder=""
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" type="text" 
-              disabled={isLoading}
-              required
-              placeholder=""
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               />
             </div>
             <div className="grid gap-2">
