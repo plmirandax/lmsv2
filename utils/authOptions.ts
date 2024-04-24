@@ -48,8 +48,7 @@ export const authOptions: NextAuthOptions = {
         return {
           id: user.id + '',
           email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          name: user.name,
           role: user.role,
           randomKey: 'Hey cool'
         }
