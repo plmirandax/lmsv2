@@ -10,7 +10,7 @@ export async function POST() {
       include: {
         user: {
           select: {
-            firstName: true,
+            name: true,
           },
         },
       },
