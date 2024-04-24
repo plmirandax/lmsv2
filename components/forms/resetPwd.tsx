@@ -36,7 +36,7 @@ const ResetPwdModal = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Card className="flex flex-col justify-center items-center h-screen">
+        <Card className="flex flex-col justify-center items-center h-[350px]">
           <CardContent className="sm:max-w-[425px]">
             <CardHeader className="space-y-1 rounded">
               <CardTitle className="text-2xl text-center rounded">Reset Password</CardTitle>

@@ -11,10 +11,9 @@ import toast from "react-hot-toast";
 import { useSession as useNextAuthSession } from 'next-auth/react';
 import "@uploadthing/react/styles.css";
 import { z } from 'zod';
-import { DatePicker } from "./customCalendar";
 import FileUpload from "./file-upload";
-import { SelectGroup, SelectLabel, SelectSeparator } from "../ui/select";
-import { CircleCheck, PlusCircleIcon } from "lucide-react";
+import { SelectGroup } from "../ui/select";
+import { PlusCircleIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Card, CardContent } from "../ui/card";
 

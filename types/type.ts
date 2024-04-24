@@ -1,3 +1,5 @@
+import { LucideIcon } from 'lucide-react';
+import { ReactNode } from 'react';
 
 export type SideNavItem = {
   title: string;
@@ -10,4 +12,13 @@ export type SideNavItem = {
 export type SideNavItemGroup = {
   title: string;
   menuList: SideNavItem[]
+}
+
+export interface SidebarItems {
+  links: Array<{
+    label: string;
+    href: string;
+    icon?: LucideIcon;
+  }>;
+  extras?: ReactNode;
 }

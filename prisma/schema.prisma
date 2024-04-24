@@ -15,8 +15,9 @@ datasource db {
 
 enum Role {
   Administrator
-  SysUser
-  Tenant
+  Staff
+  PMD
+  Approver
 }
 
 model User {
@@ -24,7 +25,7 @@ model User {
   name          String
   email         String       @unique
   password      String
-  role          Role @default(Administrator)
+  role          Role @default(Staff)
   image         String?   @db.Text
   resetPasswordToken String? @unique
   resetPasswordTokenExpiry DateTime?
