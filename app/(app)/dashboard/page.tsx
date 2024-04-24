@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from "@/components/ui/button"
+
 import {
   Card,
   CardContent,
@@ -14,49 +14,17 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs"
-import { CalendarDateRangePicker } from "@/app/(app)/dashboard/components/date-range-picker"
 import { Overview } from "@/app/(app)/dashboard/components/overview"
 import { Search } from "@/app/(app)/dashboard/components/search"
 import TeamSwitcher from "@/app/(app)/dashboard/components/team-switcher"
 import { UserNav } from "@/app/(app)/dashboard/components/user-nav"
 import { ModeToggle } from "@/components/mode-toggle"
-import { TenantAnniv } from "./components/tenant-anniv"
 import { SystemMenu } from "./components/system-menu"
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense } from 'react';
 import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export default function DashboardPage() {
-
-  const [tenants, setTenants] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/fetchtenants', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({}), // Send any necessary data in the request body
-        });
-  
-        if (!response.ok) {
-          throw new Error('Failed to fetch property data');
-        }
-  
-        const responseData = await response.json();
-        setTenants(responseData.tenants); // Set only the properties field to state
-  
-        // Log the properties data to the console
-        console.log(responseData.tenants);
-      } catch (error) {
-        console.error('Error fetching property data:', error);
-      }
-    }
-  
-    fetchData();
-  }, []);// This useEffect will run only once after the initial render
 
   return (
     <>
@@ -194,7 +162,7 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{tenants.length}</div>
+                    <div className="text-2xl font-bold"></div>
                     <p className="text-xs text-muted-foreground">
                       +201 since last year.
                     </p>
@@ -214,7 +182,7 @@ export default function DashboardPage() {
                   <CardHeader>
                     <CardTitle>New Tenants. 🥳✨</CardTitle>
                     <CardDescription>
-                      You have {tenants.length} new tenants for this month.
+                      You have  new tenants for this month.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex">
@@ -232,15 +200,15 @@ export default function DashboardPage() {
                   <CardHeader>
                     <CardTitle>Tenant Anniversaries 🎉🎉</CardTitle>
                     <CardDescription>
-                      You have {tenants.length} tenants that is celebrating their anniversary this month.
+                      You have tenants that is celebrating their anniversary this month.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex">
                     <div className="w-1/2">
-                    <TenantAnniv tenants={tenants.slice(0,5)}/>
+          
                     </div>
                     <div className="w-1/2">
-                    <TenantAnniv tenants={tenants.slice(5,10)}/>
+
                     </div>
                   </CardContent>
                 </Card>
@@ -345,7 +313,7 @@ export default function DashboardPage() {
                     </svg>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{tenants.length}</div>
+                    <div className="text-2xl font-bold"></div>
                     <p className="text-xs text-muted-foreground">
                       +201 since last year.
                     </p>
@@ -365,7 +333,7 @@ export default function DashboardPage() {
                   <CardHeader>
                     <CardTitle>New Tenants.</CardTitle>
                     <CardDescription>
-                      You have {tenants.length} new tenants for this month.
+                      You have new tenants for this month.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -376,11 +344,11 @@ export default function DashboardPage() {
                   <CardHeader>
                     <CardTitle>Tenant Anniversaries 🎉🎉</CardTitle>
                     <CardDescription>
-                      You have {tenants.length} tenants that is celebrating their anniversary this month.
+                      You have tenants that is celebrating their anniversary this month.
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <TenantAnniv tenants={tenants}/>
+
                   </CardContent>
                 </Card>
               </div>
