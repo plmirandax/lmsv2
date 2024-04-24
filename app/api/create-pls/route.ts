@@ -14,20 +14,21 @@ const schema = z.object({
 
 export async function POST(req: Request) {
     try {
-        const { plsType, destination, description, timeIn, timeOut, userId} = await req.json()
+        const { plsType, plsDate, destination, description, timeIn, timeOut, userId} = await req.json()
 
         // Validate the request body against the schema
-        schema.parse({ plsType, destination, description, timeIn, timeOut, userId });
+        schema.parse({ plsType, plsDate, destination, description, timeIn, timeOut, userId });
 
         const pls = await prisma.pLS.create({
             data: {
-                plsType, destination, description, timeIn, timeOut, userId
+                plsType, plsDate, destination, description, timeIn, timeOut, userId
             }
         })
 
         return NextResponse.json({
             pls: {
                 plsType: pls.plsType,
+                plsDate: pls.plsDate,
                 destination: pls.destination,
                 description: pls.description,
                 timeIn: pls.timeIn,

@@ -31,6 +31,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SubmitLeave } from "../../components/staff-forms/submit-leave";
 
 
 
@@ -113,7 +114,7 @@ export function PeopleDataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-        <div className="ml-auto"><Button>Submit Leave</Button></div>
+        <div className="ml-auto"><SubmitLeave /></div>
       </div>
 
       {/* table */}

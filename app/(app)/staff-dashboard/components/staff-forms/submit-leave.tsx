@@ -11,21 +11,19 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectSeparator, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { getSession, useSession as useNextAuthSession, useSession } from 'next-auth/react'
-import React, { useState } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useSession } from 'next-auth/react'
+import React, { useEffect, useState } from 'react';
 import toast from "react-hot-toast"
 import { CheckCircledIcon, ReloadIcon } from "@radix-ui/react-icons"
 import "@uploadthing/react/styles.css";
 import { z } from "zod"
 import { PlusCircleIcon } from "lucide-react"
 
-import { Card, CardContent } from "@/components/ui/card"
-
-import { PLSType } from "@prisma/client"
 import { Textarea } from "@/components/ui/textarea"
 import { DatePicker } from "@/components/ui/datepicker"
 import { Separator } from "@/components/ui/separator"
+
 
 
 interface User {
@@ -36,31 +34,45 @@ interface User {
   role: string
 }
 
+interface LeaveType {
+  id: string
+  name: string
+}
+
 const plsSchema = z.object({
-plsType: z.string(),
-destination: z.string(),
-description: z.string(),
-timeIn: z.string().optional(),
-timeOut: z.string().optional(),
+leaveType: z.string(),
+reason: z.string(),
+approverRemarks: z.string(),
+startDate: z.string().optional(),
+endDate: z.string().optional(),
 userId: z.string(),
-plsDate: z.date(),
 });
 
-export function SubmitPLSForm() {
-
+export function SubmitLeave() {
+  const [leaveTypes, setLeaveTypes] = useState<LeaveType[]>([]);
   const { data: session } = useSession();
   const [formData, setFormData] = useState({
-   plsType: '',
-   description: '',
-   destination: '',
-    timeIn: '',
-    timeOut: '',
-    plsDate: new Date(),
-   userId: (session?.user as User)?.id || '',
+    leaveType: '',
+    reason: '',
+    approverRemarks: '',
+    startDate: new Date(),
+    endDate: new Date(),
+    userId: (session?.user as User)?.id || '',
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof typeof formData, boolean>>>({});
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    fetch('/api/fetch-leave-type') // replace with your API route
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => setLeaveTypes(data.leaveTypes))
+      .catch(() => toast.error('An error occurred while fetching leave types. Please try again.'));
+  }, []);
   const handleChange = (key: keyof typeof formData, value: string | number | Date | undefined) => {
     if (value !== undefined) {
       setFormData(prevState => ({
@@ -80,22 +92,31 @@ export function SubmitPLSForm() {
         throw new Error('User ID is not available. Please log in again.');
       }
   
-     // Validate the form data with plsSchema before converting plsDate to a string
-     plsSchema.parse(formData);
+    // Adjust the date to UTC before converting to string
+    const utcStartDate = new Date(
+      Date.UTC(
+        formData.startDate.getFullYear(),
+        formData.startDate.getMonth(),
+        formData.startDate.getDate()
+      )
+    );
 
-     // Adjust the date to UTC before converting to string
-     const utcDate = new Date(
-       Date.UTC(
-         formData.plsDate.getFullYear(),
-         formData.plsDate.getMonth(),
-         formData.plsDate.getDate()
-       )
-     );
- 
-     const formattedData = {
-       ...formData,
-       plsDate: utcDate.toISOString(),
-     };
+    const utcEndDate = new Date(
+      Date.UTC(
+        formData.endDate.getFullYear(),
+        formData.endDate.getMonth(),
+        formData.endDate.getDate()
+      )
+    );
+
+    const formattedData = {
+      ...formData,
+      startDate: utcStartDate.toISOString(),
+      endDate: utcEndDate.toISOString(),
+    };
+
+    // Validate the form data with plsSchema after converting startDate and endDate to strings
+    plsSchema.parse(formattedData);
   
       const response = await fetch('/api/create-pls', {
         method: 'POST',
@@ -110,18 +131,17 @@ export function SubmitPLSForm() {
         throw new Error(response.statusText);
       }
       setFormData({
-        plsType: '',
-        description: '',
-        destination: '',
-         timeIn: '',
-         timeOut: '',
-          plsDate: new Date(),
+        leaveType: '',
+        reason: '',
+        approverRemarks: '',
+        startDate: new Date(),
+        endDate: new Date(),
         userId: SeshUserId,
       });
-      toast.success('PLS has been submitted successfully.');
+      toast.success('Tenant added successfully.');
     } catch (error) {
       const err = error as Error;
-      toast.error(err.message || 'Failed to create new PLS. Please try again.');
+      toast.error(err.message || 'Tenant could not be added. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -130,14 +150,14 @@ export function SubmitPLSForm() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline"> <PlusCircleIcon className="pr-2"/>Submit PLS</Button>
+        <Button variant="outline"> <PlusCircleIcon className="pr-2"/>Sumbit Leave</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[400px] flex flex-col items-center">
         <form onSubmit={handleSubmit} className="w-full">
         <DialogHeader className="sm:max-w-[400px] flex justify-center">
-          <DialogTitle>Personnel Locator Slip (PLS)</DialogTitle>
+          <DialogTitle>Leave Details</DialogTitle>
           <DialogDescription>
-            Fill all the required fields to create new PLS.
+            Fill all the required fields to create submit new leave.
           </DialogDescription>
         </DialogHeader>
         <Separator />
@@ -146,54 +166,40 @@ export function SubmitPLSForm() {
           <div className="flex justify-between mt-2">
   <div className="w-1/2 pr-4">
     <Label htmlFor="name">
-      PLS Date
+      Start Date
     </Label>
     <DatePicker
-      value={formData.plsDate ? new Date(formData.plsDate) : undefined}
-      onChange={date => handleChange('plsDate', date)}
+      value={formData.startDate ? new Date(formData.startDate) : undefined}
+      onChange={date => handleChange('startDate', date)}
     />
   </div>
   <div className="w-1/2">
+    <Label htmlFor="name">
+      End Date
+    </Label>
+    <DatePicker
+      value={formData.endDate ? new Date(formData.endDate) : undefined}
+      onChange={date => handleChange('endDate', date)}
+    />
+  </div>
+</div>
+<div className="w-1/2">
   <Label htmlFor="propertyCode" className="text-right">
-                  PLS Type
+                  Leave Type
                 </Label>
-                <Select onValueChange={(value: string) => handleChange('plsType', value)}>
+                <Select onValueChange={(value: string) => handleChange('leaveType', value)}>
   <SelectTrigger id="space" aria-label="Select type">
     <SelectValue placeholder="Select type.." />
   </SelectTrigger>
   <SelectContent>
-    <SelectItem value={PLSType.Official}>
-      Official
-    </SelectItem>
-    <SelectItem value={PLSType.Personal}>
-      Personal
-    </SelectItem>
+  {leaveTypes.map((leaveType: LeaveType) => (
+  <SelectItem key={leaveType.id} value={leaveType.name}>
+    {leaveType.name}
+  </SelectItem>
+))}
   </SelectContent>
 </Select>
   </div>
-</div>
-<div className="flex justify-between">
-            <div className="w-1/2 pr-4">
-              <Label htmlFor="contactNo" className="text-right">
-                Time In
-              </Label>
-              <Input required
-              type="date"
-              value={formData.timeIn} 
-              onChange={(e) => handleChange('timeIn', e.target.value)} 
-              className={formErrors.timeIn ? 'invalid' : ''} />
-            </div>
-            <div className="w-1/2">
-              <Label htmlFor="monthlyRent" className="text-right">
-                Time Out
-              </Label>
-              <Input required
-              type="date"
-              value={formData.timeOut} 
-              onChange={(e) => handleChange('timeOut', e.target.value)} 
-              className={formErrors.timeOut ? 'invalid' : ''} />
-            </div>
-          </div>
 <div className="flex justify-center">
             <div className="w-full">
             <Label htmlFor="name" className="text-right">
@@ -205,25 +211,13 @@ export function SubmitPLSForm() {
           <div className="flex justify-center">
             <div className="w-full">
                 <Label htmlFor="propertyName" className="text-right flex">
-                  Destination
-                </Label>
-                <Input required 
-                type="text"
-                value={formData.destination} 
-                onChange={(e) => handleChange('destination', e.target.value)} 
-                className={formErrors.destination ? 'invalid' : ''} />
-            </div>
-          </div>
-          <div className="flex justify-center">
-            <div className="w-full">
-                <Label htmlFor="propertyName" className="text-right flex">
                   Purpose
                 </Label>
                 <Textarea 
     required 
-    value={formData.description} 
-    onChange={(e) => handleChange('description', e.target.value)} 
-    className={`${formErrors.description ? 'invalid' : ''} flex w-full items-center justify-center`} 
+    value={formData.reason} 
+    onChange={(e) => handleChange('reason', e.target.value)} 
+    className={`${formErrors.reason ? 'invalid' : ''} flex w-full items-center justify-center`} 
   />
             </div>
           </div>

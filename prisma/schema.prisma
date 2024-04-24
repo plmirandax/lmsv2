@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -21,8 +15,8 @@ enum Role {
 }
 
 enum PLSType {
-Official
-Personal
+  Official
+  Personal
 }
 
 enum Statuses {
@@ -50,6 +44,23 @@ model User {
   pls           PLS[]
   payslip       Payslip[]
   leave         Leave[]
+  approver      Approval[]
+  approverId    String? 
+  staff         User[] @relation("ApproverToStaff")
+  approvedBy    User? @relation("ApproverToStaff", fields: [approverId], references: [id])
+}
+
+model Approval {
+  id          String @id @default(cuid()) @unique
+  approverId  String
+  approver    User @relation(fields: [approverId], references: [id])
+  plsId       String?
+  pls         PLS? @relation(fields: [plsId], references: [id])
+  payslipId   String?
+  payslip     Payslip? @relation(fields: [payslipId], references: [id])
+  leaveId     String?
+  leave       Leave? @relation(fields: [leaveId], references: [id])
+  createdAt   DateTime @default(now())
 }
 
 model Department {
@@ -65,6 +76,7 @@ model Department {
 
 model PLS {
   id          String @id @default(cuid()) @unique
+  plsDate     DateTime
   plsType     PLSType
   destination String
   description String?
@@ -74,16 +86,18 @@ model PLS {
   createdAt   DateTime @default(now())
   userId      String
   user        User @relation(fields: [userId], references: [id])
+  approver    Approval[]
 }
 
 model Payslip {
   id          String @id @default(cuid()) @unique
   month       String
   year        String
-  firstHalf     String
-  secondHalf     String
+  firstHalf   String
+  secondHalf  String
   userId      String
   user        User @relation(fields: [userId], references: [id])
+  approver    Approval[]
 }
 
 model Leave {
@@ -91,12 +105,14 @@ model Leave {
   startDate   DateTime
   endDate     DateTime
   reason      String
+  approverRemarks String?
   status      Statuses @default(Pending)
   leaveBalance Float
   createdAt   DateTime @default(now())
   userId      String
   user        User @relation(fields: [userId], references: [id])
   leaveType   LeaveType[]
+  approver    Approval[]
 }
 
 model LeaveType {
@@ -104,8 +120,6 @@ model LeaveType {
   name        String
   description String?
   createdAt   DateTime @default(now())
-  leaveId     String
-  leave       Leave @relation(fields: [leaveId], references: [id])
+  leaveId     String?
+  leave       Leave? @relation(fields: [leaveId], references: [id])
 }
-
-

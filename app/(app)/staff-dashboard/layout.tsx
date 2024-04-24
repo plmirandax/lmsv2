@@ -22,7 +22,7 @@ export default async function StaffLayout({
 }) {
 
   return (
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en">
       <body className={inter.className}>
         <Toaster />
         <Header />
