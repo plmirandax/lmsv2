@@ -34,38 +34,20 @@ const authOptions: NextAuthOptions = {
             select: {
                 id: true,
                 email: true,
-                name: true,
+                firstName: true,
                 role: true, // Make sure to select the role
                 createdAt: true,
                 password: true,
             }
         })
     
-        const tenant = await prisma.tenant.findUnique({
-          where: {
-              email: credentials.email
-          },
-          select: {
-              id: true,
-              email: true,
-              name: true,
-              createdAt: true,
-              passwordHash: true,
-              emailVerified: true, // Make sure to select the emailVerified field
-          }
-      })
-      
-      if (tenant && !tenant.emailVerified) {
-          throw new Error('Email not verified')
-      }
     
-        if (!user && !tenant) {
+        if (!user) {
             return null
         }
     
         const isPasswordValid = user
-            ? await compare(credentials.password, user.password)
-            : tenant && tenant.passwordHash ? await compare(credentials.password, tenant.passwordHash) : false;
+            ? await compare(credentials.password, user.password): false;
     
         if (!isPasswordValid) {
             return null
@@ -77,18 +59,11 @@ const authOptions: NextAuthOptions = {
             ? {
                 id: user.id,
                 email: user.email,
-                name: user.name,
+                name: user.firstName,
                 role: user.role, // Return the role
                 createdAt: user.createdAt,
                 accessToken
-            }
-            : tenant ? {
-                id: tenant.id,
-                email: tenant.email,
-                name: tenant.name,
-                createdAt: tenant.createdAt,
-                accessToken
-            } : null;
+            } : null
     }
     })
   ],

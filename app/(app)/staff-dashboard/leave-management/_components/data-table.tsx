@@ -116,7 +116,7 @@ export function PeopleDataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-        <div className="ml-auto"><Button>Submit PLS</Button></div>
+        <div className="ml-auto"><Button>Submit Leave</Button></div>
       </div>
 
       {/* table */}

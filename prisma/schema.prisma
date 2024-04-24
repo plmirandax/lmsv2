@@ -20,203 +20,93 @@ enum Role {
   Approver
 }
 
+enum PLSType {
+Official
+Personal
+}
+
+enum Statuses {
+  Approved
+  Pending
+  Declined
+}
+
 model User {
   id            String       @id @default(cuid()) @unique
-  name          String
+  empId         String       @unique
+  firstName     String
+  lastName      String
+  contactNo     String?
+  address       String?
   email         String       @unique
   password      String
   role          Role @default(Staff)
   image         String?   @db.Text
   resetPasswordToken String? @unique
   resetPasswordTokenExpiry DateTime?
-  properties    Properties[]
-  tenants       Tenant[]
-  billing       Billing[]
-  spaces        Spaces[]
-  Pipeline      Pipeline[]
-  Tags          Tag[]
-  ticket        Ticket[]
   createdAt     DateTime @default(now())
-  createdBy     String?
   updatedBy     String?
   deletedAt     DateTime?
+  department    Department[]
+  pls           PLS[]
+  payslip       Payslip[]
+  leave         Leave[]
 }
 
-model Tenant {
-  id            String       @id @default(cuid())
-  name          String
-  email         String       @unique
-  passwordHash  String?
-  contactNo     String
-  tenantCode    String?       @unique
-  address       String
-  city          String
-  province      String
-  zipCode       String
-  leasePeriod   DateTime?
-  expiryDate    DateTime?
-  monthlyRent   Float?
-  tenantImage   String?     @db.Text
-  sysUserId        String?
-  TenantResetPasswordToken String? @unique
-  TenantResetPasswordTokenExpiry DateTime?
-  emailVerified Boolean @default(false)
-  emailVerificationToken String? @unique
-  sysUser          User?      @relation(fields: [sysUserId], references: [id])
-  spaceId       String?
-  space         Spaces?      @relation(fields: [spaceId], references: [id])
-  billing       Billing[]
-  ticket        Ticket[]
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime?     @updatedAt
-  deletedAt     DateTime?
-}
-model Properties {
-  id            String       @id @default(cuid())
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime?     @updatedAt
-  propertyCode  String       @unique
-  propertyName  String
-  regOwnerName  String
-  titleNo       String
-  landBuilding  String
-  lotNo         String
-  address       String
-  city          String
-  province      String
-  zipCode       String
-  classification String
-  leasableArea  Float
-  orate         Float
-  taxDecNo      String
-  propertyImage String     @db.Text
-  sysUserId     String
-  sysUser       User      @relation(fields: [sysUserId], references: [id])
-  spaces        Spaces[]
-  deletedAt     DateTime?
-}
-
-model Spaces {
-  id            String       @id @default(cuid())
-  spaceCode     String       @unique
-  spaceName     String
-  oStatus       String
-  gFloorArea    Float?
-  mezFloor      Float?
-  secFloor      Float?
-  thirdFloor    Float?
-  roofTop       Float?
-  totalArea     Float
-  spacesImage   String?     @db.Text
-  sysUserId     String
-  sysUser       User      @relation(fields: [sysUserId], references: [id])
-  tenants       Tenant[]
-  propertyId    String
-  property      Properties   @relation(fields: [propertyId], references: [id])
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime?     @updatedAt
-  deletedAt     DateTime?
-}
-
-model Billing {
-  id            String       @id @default(cuid())
-  billName      String
-  billAmount    String
-  dueDate       DateTime
-  sysUserId     String
-  sysUser       User      @relation(fields: [sysUserId], references: [id])
-  tenantId      String
-  tenant        Tenant       @relation(fields: [tenantId], references: [id])
-  attachmentId  String?      @unique
-  attachment    Attachment? @relation(fields: [attachmentId], references: [id])
-  createdAt DateTime @default(now())
-  createdBy     String
-  updatedBy     String
-  deletedAt     DateTime?
-}
-
-model Attachment {
-  id        String @id @default(cuid())
-  filePath  String
-  fileName  String
-  fileType  String
-  fileSize  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  billing   Billing?
-}
-
-model Utilities {
-  id           String       @id @default(cuid())
-  electrictMeterNo String
-  electrictIdNo String
-  electrictAcctNo String
-  electrictAcctName String
-  waterMeterNo String
-  waterAcctNo String
-  waterAcctName String
-  createdAt    DateTime @default(now())
-  updatedAt   DateTime?     @updatedAt
-}
-
-model Tag {
-  id           String   @id @default(uuid())
-  name         String
-  color        String
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  sysUserId String
-
-  sysUser User @relation(fields: [sysUserId], references: [id], onDelete: Cascade)
-  Ticket     Ticket[]
-
-  @@index([sysUserId])
-}
-
-model Pipeline {
-  id           String     @id @default(uuid())
-  name         String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  Lane         Lane[]
-  sysUser      User @relation(fields: [sysUserId], references: [id], onDelete: Cascade)
-  sysUserId String
-
-  @@index([sysUserId])
-}
-
-model Lane {
-  id         String   @id @default(uuid())
-  name       String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  Pipeline   Pipeline @relation(fields: [pipelineId], references: [id], onDelete: Cascade)
-  pipelineId String
-  Tickets    Ticket[]
-  order      Int      @default(0)
-
-  @@index([pipelineId])
-}
-
-model Ticket {
-  id          String   @id @default(uuid())
+model Department {
+  id          String @id @default(cuid()) @unique
   name        String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  laneId      String
-  order       Int      @default(0)
-  Lane        Lane     @relation(fields: [laneId], references: [id], onDelete: Cascade)
-  value       Decimal?
   description String?
-  Tags        Tag[]
-
-  tenantId String?
-  Tenant   Tenant? @relation(fields: [tenantId], references: [id], onDelete: SetNull)
-
-  AssignedsysUserId String?
-  AssignedsysUser       User?   @relation(fields: [AssignedsysUserId], references: [id], onDelete: SetNull)
-
-  @@index([laneId])
-  @@index([tenantId])
-  @@index([AssignedsysUserId])
+  createdAt   String 
+  updatedBy   String?
+  deletedAt   DateTime?
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
 }
+
+model PLS {
+  id          String @id @default(cuid()) @unique
+  plsType     PLSType
+  destination String
+  description String?
+  timeIn      String?
+  timeOut     String?
+  status      Statuses @default(Pending)
+  createdAt   DateTime @default(now())
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
+}
+
+model Payslip {
+  id          String @id @default(cuid()) @unique
+  month       String
+  year        String
+  firstHalf     String
+  secondHalf     String
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
+}
+
+model Leave {
+  id          String @id @default(cuid()) @unique
+  startDate   DateTime
+  endDate     DateTime
+  reason      String
+  status      Statuses @default(Pending)
+  leaveBalance Float
+  createdAt   DateTime @default(now())
+  userId      String
+  user        User @relation(fields: [userId], references: [id])
+  leaveType   LeaveType[]
+}
+
+model LeaveType {
+  id          String @id @default(cuid()) @unique
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  leaveId     String
+  leave       Leave @relation(fields: [leaveId], references: [id])
+}
+
+

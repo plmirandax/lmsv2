@@ -4,9 +4,9 @@ import { prisma } from "@/lib/prisma";
 
 export async function POST(req: Request) {
   try {
-    const { email, password, name } = await req.json();
+    const { email, password, firstName, lastName, contactNo, address, empId } = await req.json();
 
-    if (!email || !password || !name) {
+    if (!email || !password || !firstName ||!lastName || !contactNo || !address || !empId) {
       return NextResponse.json({
         status: 'error',
         message: 'Please provide all required fields: email, password, name',
@@ -27,7 +27,11 @@ export async function POST(req: Request) {
     const user = await prisma.user.create({
       data: {
         email,
-        name,
+        empId,
+        firstName,
+        lastName,
+        contactNo,
+        address,
         password: hashed,
       },
     });
@@ -36,7 +40,11 @@ export async function POST(req: Request) {
       status: 'success',
       user: {
         email: user.email,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        contactNo: user.contactNo,
+        address: user.address,
+        empId: user.empId,
       },
     });
   } catch (error) {

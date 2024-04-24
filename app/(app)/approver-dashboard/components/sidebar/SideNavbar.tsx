@@ -27,6 +27,16 @@ const sidebarItems: SidebarItems = {
       label: 'Payslip Management',
     },
     {
+      href: '/staff-dashboard/employee-management',
+      icon: Users,
+      label: 'Employee Management',
+    },
+    {
+      href: '/staff-dashboard/reports',
+      icon: LineChart,
+      label: 'Reports',
+    },
+    {
       href: '/staff-dashboard/profile',
       icon: User,
       label: 'Profile',

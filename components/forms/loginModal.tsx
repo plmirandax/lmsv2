@@ -13,6 +13,7 @@ import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 import { getSession, signIn } from "next-auth/react"
 import { useState } from "react"
+import { Key, KeyIcon, KeyRoundIcon } from "lucide-react"
 
 export function LoginModal() {
 
@@ -29,7 +30,6 @@ export function LoginModal() {
   
     const onSubmit = async (e: React.FormEvent) => {
       e.preventDefault()
-      setIsLoading(true) // Start loading animation
       if (!email.trim()) {
         toast.error('Email is required.')
         return
@@ -65,7 +65,7 @@ export function LoginModal() {
             } else if (session && session.user.role === 'Approver') {
               router.push('/approver-dashboard')
             }
-          }, 1000)
+          })
         } else {
           toast.error('Invalid email or password. Please try again.')
         }
@@ -125,7 +125,7 @@ export function LoginModal() {
           </CardContent>
           <CardFooter className="flex flex-col">
           <Button className="w-full" onClick={onSubmit} disabled={isLoading} >
-            Sign in
+            Sign in <KeyRoundIcon className="w-4 h-4 ml-2" />
         </Button>
           </CardFooter>
           <div className="relative mb-2 rounded">

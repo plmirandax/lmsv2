@@ -35,7 +35,6 @@ import { downloadToExcel } from "@/lib/xlsx";
 import { File } from "buffer";
 import { FaFileExcel, FaRegFileExcel } from "react-icons/fa";
 import { PlusCircleIcon } from "lucide-react";
-import { SubmitPLSForm } from "../../components/staff-forms/submit-pls";
 
 
 interface DataTableProps<TData, TValue> {
@@ -117,7 +116,7 @@ export function PeopleDataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-        <div className="ml-auto"><SubmitPLSForm /></div>
+        <div className="ml-auto"><Button>View Payslip</Button></div>
       </div>
 
       {/* table */}
