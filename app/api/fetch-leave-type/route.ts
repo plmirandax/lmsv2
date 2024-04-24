@@ -8,6 +8,7 @@ export async function GET() {
     // Fetch all properties from the database
     const leaveTypes = await prisma.leaveType.findMany({
           select: {
+            id: true,
             name: true,
           },
     });

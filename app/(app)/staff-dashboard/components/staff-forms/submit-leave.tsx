@@ -40,27 +40,35 @@ interface LeaveType {
 }
 
 const plsSchema = z.object({
-leaveType: z.string(),
-reason: z.string(),
-approverRemarks: z.string(),
-startDate: z.string().optional(),
-endDate: z.string().optional(),
-userId: z.string(),
+  leaveTypeId: z.string(),
+  reason: z.string(),
+  approverRemarks: z.string(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+  userId: z.string(),
 });
 
 export function SubmitLeave() {
   const [leaveTypes, setLeaveTypes] = useState<LeaveType[]>([]);
+  const [selectedLeaveTypeId, setSelectedLeaveTypeId] = useState<string>('');
   const { data: session } = useSession();
   const [formData, setFormData] = useState({
-    leaveType: '',
+    leaveTypeId: '',
     reason: '',
     approverRemarks: '',
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: '',
+    endDate: '',
     userId: (session?.user as User)?.id || '',
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof typeof formData, boolean>>>({});
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    setFormData(prevState => ({
+      ...prevState,
+      leaveTypeId: selectedLeaveTypeId,
+    }));
+  }, [selectedLeaveTypeId]);
 
   useEffect(() => {
     fetch('/api/fetch-leave-type') // replace with your API route
@@ -81,44 +89,42 @@ export function SubmitLeave() {
       }));
     }
   };
+
+  const handleSelectChange = (value: string) => {
+    const selectedLeaveType = leaveTypes.find(leaveTypes => leaveTypes.name === value);
+    if (selectedLeaveType) {
+      setSelectedLeaveTypeId(selectedLeaveType.id);
+    }
+  };
   
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsLoading(true);
-  
+    console.log('clicked')
     try {
       const SeshUserId = (session?.user as User)?.id;
       if (!SeshUserId) {
         throw new Error('User ID is not available. Please log in again.');
       }
   
-    // Adjust the date to UTC before converting to string
-    const utcStartDate = new Date(
-      Date.UTC(
-        formData.startDate.getFullYear(),
-        formData.startDate.getMonth(),
-        formData.startDate.getDate()
-      )
-    );
-
-    const utcEndDate = new Date(
-      Date.UTC(
-        formData.endDate.getFullYear(),
-        formData.endDate.getMonth(),
-        formData.endDate.getDate()
-      )
-    );
-
-    const formattedData = {
-      ...formData,
-      startDate: utcStartDate.toISOString(),
-      endDate: utcEndDate.toISOString(),
-    };
-
-    // Validate the form data with plsSchema after converting startDate and endDate to strings
-    plsSchema.parse(formattedData);
+      const startDate = new Date(formData.startDate);
+      const endDate = new Date(formData.endDate);
   
-      const response = await fetch('/api/create-pls', {
+      const formattedData = {
+        ...formData,
+        startDate: isNaN(startDate.getTime()) ? formData.startDate : startDate.toISOString(),
+        endDate: isNaN(endDate.getTime()) ? formData.endDate : endDate.toISOString(),
+      };
+  
+      try {
+        plsSchema.parse(formattedData);
+      } catch (error) {
+        console.error('Form validation failed:', error);
+        toast.error('Form validation failed. Please check your input and try again.');
+        return;
+      }
+  
+      const response = await fetch('/api/create-leave', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -126,16 +132,18 @@ export function SubmitLeave() {
         },
         body: JSON.stringify(formattedData)
       });
-
+  
       if (!response.ok) {
+        console.error('Network request failed:', response);
         throw new Error(response.statusText);
       }
+  
       setFormData({
-        leaveType: '',
+        leaveTypeId: '',
         reason: '',
         approverRemarks: '',
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: '',
+        endDate: '',
         userId: SeshUserId,
       });
       toast.success('Tenant added successfully.');
@@ -187,19 +195,20 @@ export function SubmitLeave() {
   <Label htmlFor="propertyCode" className="text-right">
                   Leave Type
                 </Label>
-                <Select onValueChange={(value: string) => handleChange('leaveType', value)}>
-  <SelectTrigger id="space" aria-label="Select type">
-    <SelectValue placeholder="Select type.." />
-  </SelectTrigger>
-  <SelectContent>
-  {leaveTypes.map((leaveType: LeaveType) => (
-  <SelectItem key={leaveType.id} value={leaveType.name}>
-    {leaveType.name}
-  </SelectItem>
-))}
-  </SelectContent>
-</Select>
+                <Select onValueChange={(value: string) => handleSelectChange(value)}>
+                  <SelectTrigger id="status" aria-label="Select status">
+                  <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                  {leaveTypes.map(leaveTypes => (
+                  <SelectItem key={leaveTypes.id} value={leaveTypes.name}>
+                  {leaveTypes.name}
+                  </SelectItem>
+                  ))}
+                  </SelectContent>
+                  </Select>
   </div>
+  <Label>selected Id: <p>{selectedLeaveTypeId}</p></Label>
 <div className="flex justify-center">
             <div className="w-full">
             <Label htmlFor="name" className="text-right">

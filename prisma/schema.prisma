@@ -102,16 +102,17 @@ model Payslip {
 
 model Leave {
   id          String @id @default(cuid()) @unique
-  startDate   DateTime
-  endDate     DateTime
+  startDate   String
+  endDate     String
   reason      String
   approverRemarks String?
   status      Statuses @default(Pending)
-  leaveBalance Float
+  leaveBalance Float?
   createdAt   DateTime @default(now())
   userId      String
   user        User @relation(fields: [userId], references: [id])
-  leaveType   LeaveType[]
+  leaveTypeId String
+  leaveType   LeaveType @relation(fields: [leaveTypeId], references: [id])
   approver    Approval[]
 }
 
@@ -120,6 +121,5 @@ model LeaveType {
   name        String
   description String?
   createdAt   DateTime @default(now())
-  leaveId     String?
-  leave       Leave? @relation(fields: [leaveId], references: [id])
+  leave       Leave[]
 }
