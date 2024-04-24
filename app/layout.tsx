@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Providers } from "../providers/providers";
 import ToasterProvider from "@/components/ToasterProvider";
 import IdleTimeout from '../components/IdleTimeout' // Import the new component
-import ModalProvider from "@/providers/modal-provider";
+
 
 
 
@@ -31,10 +31,8 @@ export default function RootLayout({
             disableTransitionOnChange>
        <Providers>
         <ToasterProvider />
-        <ModalProvider>
         <IdleTimeout /> {/* Include the new component */}
         {children}
-        </ModalProvider>
         </Providers>
         </ThemeProvider>
         </body>
