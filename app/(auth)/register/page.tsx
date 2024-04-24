@@ -10,18 +10,10 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Icons } from "@/components/ui/icons"
 import Link from "next/link"
 import { useState } from "react"
 import React from "react"
 import toast from "react-hot-toast"
-import TeamSwitcher from "@/app/(app)/dashboard/components/team-switcher"
-import { Search } from "@/app/(app)/dashboard/components/search"
-import { ModeToggle } from "@/components/mode-toggle"
-import { UserNav } from "@/app/(app)/dashboard/components/user-nav"
-import { SystemMenu } from "@/app/(app)/dashboard/components/system-menu"
-import { set } from "lodash"
-
 
 const SignUpForm = () => {
   const [email, setEmail] = useState('')
