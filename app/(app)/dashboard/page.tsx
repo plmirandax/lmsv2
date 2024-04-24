@@ -16,7 +16,6 @@ import {
 } from "@/components/ui/tabs"
 import { CalendarDateRangePicker } from "@/app/(app)/dashboard/components/date-range-picker"
 import { Overview } from "@/app/(app)/dashboard/components/overview"
-import { ActiveTenants } from "@/app/(app)/dashboard/components/recent-sales"
 import { Search } from "@/app/(app)/dashboard/components/search"
 import TeamSwitcher from "@/app/(app)/dashboard/components/team-switcher"
 import { UserNav } from "@/app/(app)/dashboard/components/user-nav"
@@ -221,10 +220,10 @@ export default function DashboardPage() {
                   <CardContent className="flex">
                     <Suspense fallback={<Skeleton />}>
                   <div className="w-1/2">
-                      <ActiveTenants tenants={tenants.slice(0,5)}/>
+
                   </div>
                   <div className="w-1/2">
-                      <ActiveTenants tenants={tenants.slice(5,10)}/>
+
                   </div>
                    </Suspense>
                   </CardContent>
@@ -370,7 +369,7 @@ export default function DashboardPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <ActiveTenants tenants={tenants}/>
+
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">
