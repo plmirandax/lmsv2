@@ -23,7 +23,7 @@ import { PlusCircleIcon } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
 import { DatePicker } from "@/components/ui/datepicker"
 import { Separator } from "@/components/ui/separator"
-import { FormSuccess } from "@/components/ui/form-success"
+
 
 
 
@@ -33,6 +33,7 @@ interface User {
   email: string | null
   image: string | null
   role: string
+  approverId: string
 }
 
 interface LeaveType {
@@ -47,6 +48,7 @@ const leaveSchema = z.object({
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   userId: z.string(),
+  approverId: z.string()
 });
 
 export function SubmitLeave() {
@@ -59,6 +61,7 @@ export function SubmitLeave() {
     approverRemarks: '',
     startDate: '',
     endDate: '',
+    approverId: (session?.user as User)?.approverId || '', // replace with approver ID (if applicable
     userId: (session?.user as User)?.id || '',
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof typeof formData, boolean>>>({});
@@ -145,6 +148,7 @@ export function SubmitLeave() {
         approverRemarks: '',
         startDate: '',
         endDate: '',
+        approverId: (session?.user as User)?.approverId || '',
         userId: SeshUserId,
       });
     } catch (error) {

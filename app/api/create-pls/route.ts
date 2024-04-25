@@ -10,18 +10,19 @@ const schema = z.object({
     timeIn: z.string().optional(),
     timeOut: z.string().optional(),
     userId: z.string(),
+    approverId: z.string(),
 });
 
 export async function POST(req: Request) {
     try {
-        const { plsType, plsDate, destination, description, timeIn, timeOut, userId} = await req.json()
+        const { plsType, plsDate, destination, description, timeIn, timeOut, userId, approverId} = await req.json()
 
         // Validate the request body against the schema
-        schema.parse({ plsType, plsDate, destination, description, timeIn, timeOut, userId });
+        schema.parse({ plsType, plsDate, destination, description, timeIn, timeOut, userId, approverId });
 
         const pls = await prisma.pLS.create({
             data: {
-                plsType, plsDate, destination, description, timeIn, timeOut, userId
+                plsType, plsDate, destination, description, timeIn, timeOut, userId, approverId
             }
         })
 
@@ -34,6 +35,7 @@ export async function POST(req: Request) {
                 timeIn: pls.timeIn,
                 timeOut: pls.timeOut,
                 userId: pls.userId,
+                approverId: pls.approverId
             }
         })
     } catch (error) {

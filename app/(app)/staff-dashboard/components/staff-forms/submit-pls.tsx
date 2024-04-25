@@ -34,6 +34,7 @@ interface User {
   email: string | null
   image: string | null
   role: string
+  approverId: string
 }
 
 const plsSchema = z.object({
@@ -44,6 +45,7 @@ timeIn: z.string().optional(),
 timeOut: z.string().optional(),
 userId: z.string(),
 plsDate: z.date(),
+approverId: z.string(),
 });
 
 export function SubmitPLSForm() {
@@ -56,6 +58,7 @@ export function SubmitPLSForm() {
     timeIn: '',
     timeOut: '',
     plsDate: new Date(),
+    approverId: (session?.user as User)?.approverId || '',
    userId: (session?.user as User)?.id || '',
   });
   const [formErrors, setFormErrors] = useState<Partial<Record<keyof typeof formData, boolean>>>({});
@@ -116,6 +119,7 @@ export function SubmitPLSForm() {
          timeIn: '',
          timeOut: '',
           plsDate: new Date(),
+          approverId: (session?.user as User)?.approverId || '',
         userId: SeshUserId,
       });
       toast.success('PLS has been submitted successfully.');

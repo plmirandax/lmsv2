@@ -38,6 +38,7 @@ const authOptions: NextAuthOptions = {
                 role: true, // Make sure to select the role
                 createdAt: true,
                 password: true,
+                approverId: true
             }
         })
     
@@ -61,6 +62,7 @@ const authOptions: NextAuthOptions = {
                 email: user.email,
                 name: user.name,
                 role: user.role, // Return the role
+                approverId: user.approverId,
                 createdAt: user.createdAt,
                 accessToken
             } : null
@@ -76,6 +78,7 @@ const authOptions: NextAuthOptions = {
           ...session.user,
           id: token.id,
           role: token.role, // Add role to session
+          approverId: token.approverId,
           createdAt: token.createdAt,
         }
       }
@@ -87,6 +90,7 @@ const authOptions: NextAuthOptions = {
           ...token,
           id: u.id,
           role: u.role, // Add role to JWT token
+          approverId: u.approverId,
           createdAt: u.createdAt,
           accessToken: u.accessToken,
         }

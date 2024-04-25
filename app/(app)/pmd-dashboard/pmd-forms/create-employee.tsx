@@ -326,7 +326,6 @@ export function CreateEmployee() {
                   </SelectContent>
                   </Select>
   </div>
-  <Label>Approver ID: <p>{selectedApproverId}</p></Label>
           </div>
           <DialogFooter className="mt-8">
               <div className="flex justify-center w-full">

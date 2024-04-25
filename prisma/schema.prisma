@@ -43,28 +43,15 @@ model User {
   deletedAt     DateTime?
   deptId        String?
   department    Department? @relation(fields: [deptId], references: [id])
- 
-  pls           PLS[]
-  payslip       Payslip[]
-  leave         Leave[]
-  approver      Approval[]
+  pls           PLS[] @relation("PLSToUser")
+  forApprovalPLS PLS[] @relation("ApproverToPLS")
+  payslip       Payslip[] @relation("UserToPayslip")
+  forApprovalPayslip Payslip[] @relation("ApproverToPayslip")
+  leave         Leave[] @relation("UserToLeave")
+  forApprovalLeaves Leave[] @relation("ApproverToLeave")
   approverId    String? 
-  staff         User[] @relation("ApproverToStaff")
-  approvedBy    User? @relation("ApproverToStaff", fields: [approverId], references: [id])
 }
 
-model Approval {
-  id          String @id @default(cuid()) @unique
-  approverId  String
-  approver    User @relation(fields: [approverId], references: [id])
-  plsId       String?
-  pls         PLS? @relation(fields: [plsId], references: [id])
-  payslipId   String?
-  payslip     Payslip? @relation(fields: [payslipId], references: [id])
-  leaveId     String?
-  leave       Leave? @relation(fields: [leaveId], references: [id])
-  createdAt   DateTime @default(now())
-}
 
 model Department {
   id          String @id @default(cuid()) @unique
@@ -87,8 +74,9 @@ model PLS {
   status      Statuses @default(Pending)
   createdAt   DateTime @default(now())
   userId      String
-  user        User @relation(fields: [userId], references: [id])
-  approver    Approval[]
+  user        User @relation("PLSToUser",fields: [userId], references: [id])
+  approverId  String?
+  approver    User? @relation("ApproverToPLS", fields: [approverId], references: [id])
 }
 
 model Payslip {
@@ -98,8 +86,9 @@ model Payslip {
   firstHalf   String
   secondHalf  String
   userId      String
-  user        User @relation(fields: [userId], references: [id])
-  approver    Approval[]
+  user        User @relation("UserToPayslip",fields: [userId], references: [id])
+  approverId  String
+  approver    User @relation("ApproverToPayslip", fields: [approverId], references: [id])
 }
 
 model Leave {
@@ -112,10 +101,11 @@ model Leave {
   leaveBalance Float?
   createdAt   DateTime @default(now())
   userId      String
-  user        User @relation(fields: [userId], references: [id])
+  user        User @relation("UserToLeave", fields: [userId], references: [id])
   leaveTypeId String
   leaveType   LeaveType @relation(fields: [leaveTypeId], references: [id])
-  approver    Approval[]
+  approverId  String?
+  approver    User? @relation("ApproverToLeave", fields: [approverId], references: [id])
 }
 
 model LeaveType {

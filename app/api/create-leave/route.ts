@@ -9,18 +9,28 @@ const schema = z.object({
     reason: z.string(),
     approverRemarks: z.string().optional(),
     leaveTypeId: z.string(),
+    approverId: z.string(),
 });
 
 export async function POST(req: Request) {
     try {
-        const { startDate, endDate, reason, approverRemarks, leaveTypeId, userId} = await req.json()
+        const { startDate, endDate, reason, approverRemarks, leaveTypeId, userId, approverId} = await req.json()
 
         // Validate the request body against the schema
-        schema.parse({ startDate, endDate, reason, approverRemarks, leaveTypeId, userId });
+        schema.parse({ startDate, endDate, reason, approverRemarks, leaveTypeId, userId, approverId });
+
+        // Check if the approverId exists in the User table
+        const approverExists = await prisma.user.findUnique({
+            where: { id: approverId },
+        });
+
+        if (!approverExists) {
+            throw new Error('Approver not found');
+        }
 
         const leaves = await prisma.leave.create({
             data: {
-                startDate, endDate, reason, approverRemarks, leaveTypeId, userId
+                startDate, endDate, reason, approverRemarks, leaveTypeId, userId, approverId
             }
         })
 
@@ -32,6 +42,7 @@ export async function POST(req: Request) {
                 approverRemarks: leaves.approverRemarks,
                 leaveTypeId: leaves.leaveTypeId,
                 userId: leaves.userId,
+                approverId: leaves.approverId
             }
         })
     } catch (error) {
