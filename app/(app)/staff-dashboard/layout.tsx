@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/sonner';
 import Header from './components/header/header';
 import { Sidebar } from './components/sidebar/SideNavbar';
 import { ThemeProvider } from '@/providers/theme-provider';
+import ToasterProvider from '@/components/ToasterProvider';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -33,7 +34,9 @@ export default async function StaffLayout({
               enableSystem
               disableTransitionOnChange
         >
+        <ToasterProvider />
         <main className='mx-5 mt-16 sm:ml-[300px] sm:mt-3'>{children}</main>
+     
         </ThemeProvider>
       </body>
       </html>

@@ -23,6 +23,7 @@ import { PlusCircleIcon } from "lucide-react"
 import { Textarea } from "@/components/ui/textarea"
 import { DatePicker } from "@/components/ui/datepicker"
 import { Separator } from "@/components/ui/separator"
+import { FormSuccess } from "@/components/ui/form-success"
 
 
 
@@ -39,7 +40,7 @@ interface LeaveType {
   name: string
 }
 
-const plsSchema = z.object({
+const leaveSchema = z.object({
   leaveTypeId: z.string(),
   reason: z.string(),
   approverRemarks: z.string(),
@@ -117,7 +118,7 @@ export function SubmitLeave() {
       };
   
       try {
-        plsSchema.parse(formattedData);
+        leaveSchema.parse(formattedData);
       } catch (error) {
         console.error('Form validation failed:', error);
         toast.error('Form validation failed. Please check your input and try again.');
@@ -137,7 +138,7 @@ export function SubmitLeave() {
         console.error('Network request failed:', response);
         throw new Error(response.statusText);
       }
-  
+      toast.success('Leave submitted successfully.');
       setFormData({
         leaveTypeId: '',
         reason: '',
@@ -146,10 +147,9 @@ export function SubmitLeave() {
         endDate: '',
         userId: SeshUserId,
       });
-      toast.success('Tenant added successfully.');
     } catch (error) {
       const err = error as Error;
-      toast.error(err.message || 'Tenant could not be added. Please try again.');
+      toast.error(err.message || 'Leave could not be submitted. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -158,7 +158,7 @@ export function SubmitLeave() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline"> <PlusCircleIcon className="pr-2"/>Sumbit Leave</Button>
+        <Button size='lg'> <PlusCircleIcon className="pr-2"/>Submit Leave</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[400px] flex flex-col items-center">
         <form onSubmit={handleSubmit} className="w-full">
@@ -173,7 +173,7 @@ export function SubmitLeave() {
           
           <div className="flex justify-between mt-2">
   <div className="w-1/2 pr-4">
-    <Label htmlFor="name">
+    <Label htmlFor="startDate">
       Start Date
     </Label>
     <DatePicker
@@ -182,22 +182,30 @@ export function SubmitLeave() {
     />
   </div>
   <div className="w-1/2">
-    <Label htmlFor="name">
+    <Label htmlFor="endDate">
       End Date
     </Label>
     <DatePicker
       value={formData.endDate ? new Date(formData.endDate) : undefined}
       onChange={date => handleChange('endDate', date)}
+      
     />
   </div>
 </div>
+<div className="flex justify-between mt-2">
+<div className="w-1/2 mr-2">
+            <Label htmlFor="totalDays" className="text-right">
+      Total Days
+    </Label>
+    <Input readOnly disabled value={session?.user.name || ''} />
+            </div>
 <div className="w-1/2">
-  <Label htmlFor="propertyCode" className="text-right">
+  <Label htmlFor="leaveType" className="text-right">
                   Leave Type
                 </Label>
-                <Select onValueChange={(value: string) => handleSelectChange(value)}>
-                  <SelectTrigger id="status" aria-label="Select status">
-                  <SelectValue placeholder="Select status" />
+                <Select onValueChange={(value: string) => handleSelectChange(value)} disabled={isLoading}>
+                  <SelectTrigger id="leaveType" aria-label="Select type">
+                  <SelectValue placeholder="Select type.." />
                   </SelectTrigger>
                   <SelectContent>
                   {leaveTypes.map(leaveTypes => (
@@ -208,7 +216,7 @@ export function SubmitLeave() {
                   </SelectContent>
                   </Select>
   </div>
-  <Label>selected Id: <p>{selectedLeaveTypeId}</p></Label>
+  </div>
 <div className="flex justify-center">
             <div className="w-full">
             <Label htmlFor="name" className="text-right">
@@ -219,11 +227,12 @@ export function SubmitLeave() {
           </div>
           <div className="flex justify-center">
             <div className="w-full">
-                <Label htmlFor="propertyName" className="text-right flex">
+                <Label htmlFor="purpose" className="text-right flex">
                   Purpose
                 </Label>
                 <Textarea 
-    required 
+    required
+    disabled={isLoading} 
     value={formData.reason} 
     onChange={(e) => handleChange('reason', e.target.value)} 
     className={`${formErrors.reason ? 'invalid' : ''} flex w-full items-center justify-center`} 
@@ -234,7 +243,7 @@ export function SubmitLeave() {
           </div>
           <DialogFooter className="mt-4">
               <div className="flex justify-center w-full">
-              <Button className="w-full" type="submit">
+              <Button className="w-full" type="submit" disabled={isLoading}>
                 {isLoading ? <ReloadIcon className="mr-2 h-4 w-4 animate-spin" /> : <CheckCircledIcon className="mr-2 h-4 w-4" />}
                 {isLoading ? 'Adding tenant..' : 'Submit'}
               </Button>

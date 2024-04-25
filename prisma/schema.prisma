@@ -38,9 +38,12 @@ model User {
   resetPasswordToken String? @unique
   resetPasswordTokenExpiry DateTime?
   createdAt     DateTime @default(now())
+  createdBy     String?
   updatedBy     String?
   deletedAt     DateTime?
-  department    Department[]
+  deptId        String?
+  department    Department? @relation(fields: [deptId], references: [id])
+ 
   pls           PLS[]
   payslip       Payslip[]
   leave         Leave[]
@@ -70,8 +73,7 @@ model Department {
   createdAt   String 
   updatedBy   String?
   deletedAt   DateTime?
-  userId      String
-  user        User @relation(fields: [userId], references: [id])
+  user        User[]
 }
 
 model PLS {
