@@ -41,15 +41,6 @@ export async function POST(req: Request) {
             }
         })
         
-        if (employees.approverId) {
-            await prisma.approval.create({
-                data: {
-                    approverId: employees.approverId,
-                    // Add any other necessary fields here
-                }
-            })
-        }
-
         return NextResponse.json({
             employees: {
                 empId: employees.empId,

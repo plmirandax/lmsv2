@@ -18,31 +18,26 @@ import { SidebarMobile } from './sidebar-mobile';
 
 const sidebarItems: SidebarItems = {
   links: [
-    { label: 'Dashboard', href: '/staff-dashboard', icon: HomeIcon },
-    { label: 'Leave Management', href: '/staff-dashboard/leave-management', icon: CalendarCheck2 },
-    { label: 'PLS Management', href: '/staff-dashboard/pls-management', icon: FileClockIcon },
+    { label: 'Dashboard', href: '/approver-dashboard', icon: HomeIcon },
+    { label: 'Leave Management', href: '/approver-dashboard/leave-management', icon: CalendarCheck2 },
+    { label: 'PLS Management', href: '/approver-dashboard/pls-management', icon: FileClockIcon },
     {
-      href: '/staff-dashboard/payslip-management',
+      href: '/approver-dashboard/payslip-management',
       icon: Scroll,
       label: 'Payslip Management',
     },
     {
-      href: '/staff-dashboard/employee-management',
-      icon: Users,
-      label: 'Employee Management',
-    },
-    {
-      href: '/staff-dashboard/reports',
+      href: '/approver-dashboard/reports',
       icon: LineChart,
       label: 'Reports',
     },
     {
-      href: '/staff-dashboard/profile',
+      href: '/approver-dashboard/profile',
       icon: User,
       label: 'Profile',
     },
     {
-      href: '/staff-dashboard/settings',
+      href: '/approver-dashboard/settings',
       icon: Settings,
       label: 'System Settings',
     },

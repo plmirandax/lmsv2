@@ -1,7 +1,12 @@
-'use client'
-import {
-  File,
-} from "lucide-react"
+"use client";
+
+import * as z from "zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTransition, useState } from "react";
+import { useSession } from "next-auth/react";
+
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -10,22 +15,34 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useSession } from "next-auth/react"
+import { File } from "lucide-react";
+import PeopleDataTable from "./_components/data-table";
+import { columns } from "./_components/columns";
+import { people } from "@/people";
+type Props = {};
 
-export default function DashboardPage() {
-  const { data: session, status: loading } = useSession();
+
+const LeaveManagementPage = (props: Props) => {
+
+
+  const [error, setError] = useState<string | undefined>();
+  const [success, setSuccess] = useState<string | undefined>();
+  const { update } = useSession();
+  const [isPending, startTransition] = useTransition();
+
+  
   return (
     <div className="grid min-h-screen w-full">
       <div className="flex flex-col">
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
         <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Welcome to your dashboard, {session?.user?.name}!</h2>
+            <h2 className="text-3xl font-bold tracking-tight">Leave Management</h2>
           </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Approved Leaves
+                      Pending Leaves
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -50,7 +67,7 @@ export default function DashboardPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Approved PLS
+                      Approved Leaves
                     </CardTitle>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -127,14 +144,16 @@ export default function DashboardPage() {
                   </CardContent>
                 </Card>
               </div>
+              <div className=" flex flex-col" suppressHydrationWarning>
+                <PeopleDataTable columns={columns} data={people}/>
+              </div>
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-6">
                 <Card className="col-span-2">
                   <CardHeader>
-                    <CardTitle>Pending PLS</CardTitle>
-                    <CardDescription>You have 3 pending PLS.</CardDescription>
+                    <CardTitle>Leave History</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
-    
+         
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">
@@ -145,7 +164,7 @@ export default function DashboardPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-         
+      
                   </CardContent>
                 </Card>
                 <Card className="col-span-2">
@@ -156,7 +175,7 @@ export default function DashboardPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-      
+          
                   </CardContent>
                 </Card>
               </div>
@@ -165,3 +184,4 @@ export default function DashboardPage() {
     </div>
   )
 }
+export default LeaveManagementPage;
